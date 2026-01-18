@@ -32,12 +32,12 @@ export function ClimateSnacksCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={cn('flex overflow-hidden mx-auto bg-white', className)}
-      style={{ width: 1000, height: 259, gap: 20 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
+      className={cn('flex flex-col md:flex-row overflow-hidden mx-auto bg-white w-full max-w-[1000px]', className)}
+      style={{ gap: 20 }}
     >
-      {/* YouTube Embed - Left */}
-      <div style={{ width: 486, flexShrink: 0, height: '100%' }}>
+      {/* YouTube Embed - Top on mobile, Left on desktop */}
+      <div className="w-full md:w-1/2 flex-shrink-0" style={{ aspectRatio: '16/9' }}>
         <iframe
           width="100%"
           height="100%"
@@ -49,13 +49,13 @@ export function ClimateSnacksCard({
         />
       </div>
 
-      {/* Content - Right */}
-      <div style={{ flex: 1 }}>
+      {/* Content - Bottom on mobile, Right on desktop */}
+      <div className="flex-1">
         {/* Title (Speaker + Affiliation) */}
-        <h3 className="text-[24px] font-semibold text-black">
+        <h3 className="text-xl md:text-[24px] font-semibold text-black">
           {speaker}
           {affiliation && (
-            <span className="text-[#666] font-normal text-[18px] ml-2">
+            <span className="text-[#666] font-normal text-base md:text-[18px] ml-2">
               ({affiliation})
             </span>
           )}
@@ -65,7 +65,7 @@ export function ClimateSnacksCard({
         <div className="w-full h-[1px] bg-gray-200" style={{ marginTop: 10, marginBottom: 10 }} />
 
         {/* Description */}
-        <p className="text-[18px] text-black leading-relaxed">
+        <p className="text-base md:text-[18px] text-black leading-relaxed">
           {description}
         </p>
       </div>

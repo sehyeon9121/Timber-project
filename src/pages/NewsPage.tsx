@@ -13,8 +13,7 @@ export function NewsPage() {
     <DetailPageLayout
       title={t('news.title')}
       subtitle={t('news.subtitle')}
-      heroImage="/leeseunglab/images/terrerlab/hero-background.jpg"
-      heroHeight={830}
+      heroImage="/images/leeseunglab/hero-background.jpg"
     >
       {/* Latest News Header */}
       <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 100 }}>

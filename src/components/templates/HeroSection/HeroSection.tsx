@@ -20,6 +20,7 @@ export interface HeroSectionProps {
   overlayOpacity?: number;
   minHeight?: 'screen' | 'three-quarter' | 'half' | 'auto';
   height?: number;
+  aspectRatio?: string; // e.g., "16/9", "7/4"
   variant?: 'landing' | 'subpage';
   backLink?: {
     href: string;
@@ -37,7 +38,8 @@ export function HeroSection({
   scrollTarget,
   overlayOpacity = 0.65,
   minHeight = 'screen',
-  height,
+  height: _height,
+  aspectRatio,
   variant = 'landing',
   backLink,
   children,
@@ -53,35 +55,35 @@ export function HeroSection({
   // Subpage variant
   if (variant === 'subpage') {
     const hasBackgroundImage = !!backgroundImage;
+    const BASE_URL = import.meta.env.BASE_URL || '/';
+    // 이미지 경로에 BASE_URL 추가 (이미 포함되어 있지 않은 경우)
+    const imageSrc = backgroundImage && !backgroundImage.startsWith(BASE_URL)
+      ? `${BASE_URL}${backgroundImage.startsWith('/') ? backgroundImage.slice(1) : backgroundImage}`
+      : backgroundImage;
 
     return (
       <section
-        className={cn('relative overflow-hidden', className)}
-        style={{
-          height: hasBackgroundImage ? (height || 450) : 'auto',
-          minHeight: hasBackgroundImage ? (height || 450) : 'auto',
-          backgroundColor: hasBackgroundImage ? undefined : '#f8f8f8',
-          paddingTop: hasBackgroundImage ? undefined : 120,
-          paddingBottom: hasBackgroundImage ? undefined : 60,
-        }}
+        className={cn('hero-section relative overflow-hidden', className)}
+        style={!hasBackgroundImage ? { backgroundColor: '#f8f8f8', paddingTop: 120, paddingBottom: 60 } : undefined}
       >
         {hasBackgroundImage && (
           <>
-            <BackgroundImage
-              src={backgroundImage}
-              className="absolute inset-0 w-full h-full"
-              size="cover"
+            {/* 이미지가 자연스럽게 종횡비를 유지하도록 img 태그 사용 */}
+            <img
+              src={imageSrc}
+              alt=""
+              className="w-full h-auto block"
             />
             <Overlay opacity={overlayOpacity} />
           </>
         )}
 
-        <div className="relative z-10 h-full flex flex-col justify-center" style={{ marginLeft: 'calc(100vw / 6)' }}>
+        <div className="absolute inset-0 z-10 flex flex-col justify-center hero-content-container">
           {backLink && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.2 }}
               className="mb-6"
             >
               <Link
@@ -98,7 +100,7 @@ export function HeroSection({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.25 }}
           >
             <Heading
               level={1}
@@ -133,10 +135,11 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        'relative flex items-center justify-start overflow-hidden',
-        minHeightClasses[minHeight],
+        'hero-section relative flex items-center justify-start overflow-hidden',
+        !aspectRatio && minHeightClasses[minHeight],
         className
       )}
+      style={aspectRatio ? { aspectRatio, width: '100%' } : undefined}
     >
       {backgroundImage && (
         <>
@@ -149,10 +152,7 @@ export function HeroSection({
         </>
       )}
 
-      <div
-        className="relative z-10"
-        style={{ marginLeft: 'calc(100vw / 6)' }}
-      >
+      <div className="relative z-10 w-full md:w-auto hero-content-container">
         {children || (
           <HeroContent
             subtitle={subtitle || ''}
@@ -168,7 +168,7 @@ export function HeroSection({
           className="absolute bottom-8 right-8 z-20"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
+          transition={{ delay: 0.3, duration: 0.2 }}
         >
           <ScrollIndicator href={scrollTarget} color="white" />
         </motion.div>

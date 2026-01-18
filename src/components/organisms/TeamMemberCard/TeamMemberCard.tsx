@@ -25,11 +25,12 @@ export function TeamMemberCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
       className={cn('w-full', className)}
+      style={{ marginTop: 40 }}
     >
       {/* Content */}
-      <div className="flex" style={{ paddingTop: 40, paddingBottom: 32, gap: 49 }}>
+      <div className="flex flex-col md:flex-row items-start gap-8 md:gap-[49px] pb-8">
         {/* Left: Photo + Social Icons */}
         <MemberProfileImage
           image={image}
@@ -44,7 +45,7 @@ export function TeamMemberCard({
       </div>
 
       {/* Bottom Line */}
-      <div className="w-full h-[1px] bg-gray-200" />
+      <div className="w-full h-[1px] bg-gray-200" style={{ marginTop: 30 }} />
     </motion.article>
   );
 }

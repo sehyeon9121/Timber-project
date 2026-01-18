@@ -19,7 +19,7 @@ export function AlumniCard({
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: 0.15, delay: index * 0.03 }}
       className={cn('group', className)}
     >
       <AlumniProfileCard image={image} name={name} />

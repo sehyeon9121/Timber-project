@@ -42,7 +42,7 @@ export function HomePage() {
         padding="xl"
       >
         <AboutContent
-          image="/images/terrerlab/test-homepage.jpg"
+          image="/images/leeseunglab/test-homepage.jpg"
           imageAlt="Terrer Lab"
           title={t('home.about.title')}
           description={t('home.about.description')}
@@ -68,7 +68,7 @@ export function HomePage() {
             id={theme.id}
             title={theme.title}
             description={theme.description}
-            backgroundImage={theme.backgroundImage || '/images/terrerlab/hero-background.jpg'}
+            backgroundImage={theme.backgroundImage || '/images/leeseunglab/hero-background.jpg'}
             href={theme.href}
             index={index}
           />
@@ -93,42 +93,15 @@ export function HomePage() {
           </div>
           <Spacer size="2xl" />
 
-          {/* First row - 4 cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-6xl">
-            {translatedQuestions.slice(0, 4).map((question, index) => (
+          {/* Questions Grid - 1 col mobile, 2 col md, 4 col lg */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
+            {translatedQuestions.map((question, index) => (
               <BigQuestionCard
                 key={question.id}
                 {...question}
                 index={index}
               />
             ))}
-          </div>
-
-          {/* Divider lines */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-6xl" style={{ marginTop: 20, marginBottom: 20 }}>
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
-          </div>
-
-          {/* Second row - 4 cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-6xl">
-            {translatedQuestions.slice(4, 8).map((question, index) => (
-              <BigQuestionCard
-                key={question.id}
-                {...question}
-                index={index + 4}
-              />
-            ))}
-          </div>
-
-          {/* Bottom divider lines */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full max-w-6xl" style={{ marginTop: 20 }}>
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
-            <div className="w-full h-[1px] bg-[#84889A]" />
           </div>
         </div>
       </ContentSection>

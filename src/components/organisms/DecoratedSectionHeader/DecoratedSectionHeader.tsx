@@ -57,7 +57,7 @@ export function DecoratedSectionHeader({
       {/* 위 마커 */}
       <motion.div variants={itemVariants} className="flex items-center justify-center" style={{ marginBottom: '15px' }}>
         <img
-          src={getImageSrc('/images/terrerlab/up_green.png')}
+          src={getImageSrc('/images/leeseunglab/up_green.png')}
           alt=""
           style={{ filter: markerFilter }}
         />
@@ -79,7 +79,7 @@ export function DecoratedSectionHeader({
       {/* 아래 마커 */}
       <motion.div variants={itemVariants} className="flex items-center justify-center" style={{ marginTop: '15px' }}>
         <img
-          src={getImageSrc('/images/terrerlab/down_green.png')}
+          src={getImageSrc('/images/leeseunglab/down_green.png')}
           alt=""
           style={{ filter: markerFilter }}
         />

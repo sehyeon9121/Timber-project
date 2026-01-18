@@ -68,7 +68,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute top-full left-0 min-w-[120px] bg-white border border-gray-200 shadow-sm z-50"
+            className="absolute top-full left-0 min-w-[200px] bg-white border border-gray-200 shadow-sm z-50"
             style={{ marginTop: 0 }}
           >
             {languages.map((lang) => (
@@ -81,7 +81,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
                 )}
                 style={{ paddingLeft: '20px' }}
               >
-                <Text size="sm" color="text" className="font-normal">
+                <Text size="sm" color="text" weight={500}>
                   {lang.label}
                 </Text>
               </button>

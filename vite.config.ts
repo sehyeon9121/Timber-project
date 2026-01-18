@@ -7,10 +7,13 @@ import yaml from '@modyfi/vite-plugin-yaml'
 export default defineConfig({
   base: '/leeseunglab/',
   plugins: [react(), tailwindcss(), yaml()],
+  server: {
+    host: true,
+  },
   resolve: {
     alias: {
       '@': '/src',
-      '@content': '/content',
+      '@content': '/public/content',
     },
   },
 })

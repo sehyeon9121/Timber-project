@@ -11,13 +11,13 @@ export function LandingHero({ className }: LandingHeroProps) {
 
   return (
     <HeroSection
-      backgroundImage="/images/terrerlab/hero_section.jpg"
+      backgroundImage="/images/leeseunglab/hero_section.jpg"
       subtitle={t('home.hero.subtitle')}
       title={t('home.hero.title')}
       description={t('home.hero.description')}
       scrollTarget="#about"
       overlayOpacity={0.5}
-      minHeight="three-quarter"
+      aspectRatio="7/4"
       className={cn(className)}
     />
   );

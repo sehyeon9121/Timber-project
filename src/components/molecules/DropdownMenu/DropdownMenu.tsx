@@ -75,7 +75,7 @@ export function DropdownMenu({
                 style={{ paddingLeft: '20px' }}
                 onClick={() => setIsOpen(false)}
               >
-                <Text size="sm" color="text" className="font-normal">
+                <Text size="sm" color="text" weight={500}>
                   {item.label}
                 </Text>
               </Link>

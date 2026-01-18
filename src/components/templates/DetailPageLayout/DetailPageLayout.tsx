@@ -32,7 +32,7 @@ export function DetailPageLayout({
         variant="subpage"
         title={title}
         subtitle={subtitle}
-        backgroundImage={noHeroImage ? undefined : (heroImage || '/images/terrerlab/hero-background.jpg')}
+        backgroundImage={noHeroImage ? undefined : (heroImage || '/images/leeseunglab/hero-background.jpg')}
         height={heroHeight}
         backLink={backLink}
       />

@@ -18,8 +18,8 @@ interface RawPublication {
   authors: string;
   journal: string;
   year: number;
-  doi?: string;
-  abstract_url?: string;
+  link?: string;
+  abstract?: string;
 }
 
 // Raw 데이터를 Publication 타입으로 변환
@@ -30,8 +30,8 @@ function transformPublications(raw: RawPublication[]): Publication[] {
     authors: pub.authors,
     journal: pub.journal,
     year: pub.year,
-    doi: pub.doi,
-    abstractUrl: pub.abstract_url,
+    link: pub.link,
+    abstract: pub.abstract,
   }));
 }
 

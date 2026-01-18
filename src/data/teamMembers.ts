@@ -20,6 +20,9 @@ interface RawTeamMember {
   email: string;
 }
 
+// Base URL for static assets
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 // Raw 데이터를 TeamMember 타입으로 변환
 function transformTeamMembers(raw: RawTeamMember[], type: 'team' | 'alumni'): TeamMember[] {
   return raw.map((member) => ({
@@ -27,7 +30,8 @@ function transformTeamMembers(raw: RawTeamMember[], type: 'team' | 'alumni'): Te
     name: member.name,
     position: member.position,
     bio: member.bio,
-    image: member.image,
+    // 이미지 경로를 BASE_URL + /content/team/ 기준으로 변환
+    image: member.image ? `${BASE_URL}content/team/${member.image}` : '',
     scholarUrl: member.scholar_url,
     email: member.email,
     type,

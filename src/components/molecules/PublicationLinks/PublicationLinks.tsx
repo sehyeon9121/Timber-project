@@ -1,19 +1,25 @@
 import { cn } from '@/utils/cn';
 
 export interface PublicationLinksProps {
-  doi?: string;
-  abstractUrl?: string;
+  link?: string;
+  abstract?: string;
+  onAbstractToggle?: () => void;
   className?: string;
 }
 
-export function PublicationLinks({ doi, abstractUrl, className }: PublicationLinksProps) {
-  if (!doi && !abstractUrl) return null;
+export function PublicationLinks({
+  link,
+  abstract,
+  onAbstractToggle,
+  className
+}: PublicationLinksProps) {
+  if (!link && !abstract) return null;
 
   return (
     <div className={cn('flex items-center gap-4 mt-2', className)}>
-      {doi && (
+      {link && (
         <a
-          href={`https://doi.org/${doi}`}
+          href={link}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-[#222D48] hover:text-[var(--color-primary)]"
@@ -22,16 +28,15 @@ export function PublicationLinks({ doi, abstractUrl, className }: PublicationLin
           [Paper]
         </a>
       )}
-      {abstractUrl && (
-        <a
-          href={abstractUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-semibold text-[#222D48] hover:text-[var(--color-primary)]"
+      {abstract && (
+        <button
+          type="button"
+          onClick={onAbstractToggle}
+          className="font-semibold text-[#222D48] hover:text-[var(--color-primary)] cursor-pointer"
           style={{ fontSize: 16 }}
         >
           [Abstract]
-        </a>
+        </button>
       )}
     </div>
   );

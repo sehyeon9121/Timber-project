@@ -18,6 +18,9 @@ interface RawNewsItem {
   href: string;
 }
 
+// Base URL for static assets
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 // Raw 데이터를 NewsItemData 타입으로 변환
 function transformNews(raw: RawNewsItem[]): NewsItemData[] {
   return raw.map((item) => ({
@@ -25,7 +28,8 @@ function transformNews(raw: RawNewsItem[]): NewsItemData[] {
     title: item.title,
     date: item.date,
     excerpt: item.excerpt,
-    image: item.image,
+    // 이미지 경로를 BASE_URL + /content/news/ 기준으로 변환
+    image: item.image ? `${BASE_URL}content/news/${item.image}` : undefined,
     href: item.href,
   }));
 }

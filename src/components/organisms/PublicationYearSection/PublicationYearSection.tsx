@@ -26,7 +26,7 @@ export function PublicationYearSection({
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
         className="text-3xl text-[#00380A]"
         style={{ fontWeight: 700, marginBottom: 10 }}
       >
@@ -38,7 +38,7 @@ export function PublicationYearSection({
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
+        transition={{ duration: 0.2, delay: 0.05, ease: 'easeOut' }}
         className="w-full h-[1px] bg-[#e5e5e5] mb-4 origin-left"
       />
 

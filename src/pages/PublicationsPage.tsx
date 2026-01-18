@@ -14,7 +14,7 @@ export function PublicationsPage() {
     <DetailPageLayout
       title={t('publications.title')}
       subtitle={t('publications.subtitle')}
-      heroImage="/images/terrerlab/publications-hero.jpg"
+      heroImage="/images/leeseunglab/publications-hero.jpg"
     >
       <div style={{ height: 60 }} />
       <ContentSection background="white" padding="lg">

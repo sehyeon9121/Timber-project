@@ -92,6 +92,41 @@ button {
   padding: 0 20px;
 }
 
+/* Global minimum padding for all sections - always maintain 20px minimum */
+/* Hero section은 전체 너비로 표시되어야 하므로 제외 */
+main > section:not(.hero-section),
+main > div {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Navigation Bar */
+.nav-container {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 768px) {
+  .nav-container {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+/* Hero Content Container */
+.hero-content-container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+@media (min-width: 768px) {
+  .hero-content-container {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: calc(100vw / 6);
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {

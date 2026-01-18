@@ -61,7 +61,7 @@ export function SectionTitle({
           className="flex items-center justify-center"
         >
           <img
-            src={getImageSrc('/images/terrerlab/up_green.png')}
+            src={getImageSrc('/images/leeseunglab/up_green.png')}
             alt=""
             className="w-5 h-5"
           />
@@ -94,7 +94,7 @@ export function SectionTitle({
           className="flex items-center justify-center"
         >
           <img
-            src={getImageSrc('/images/terrerlab/down_green.png')}
+            src={getImageSrc('/images/leeseunglab/down_green.png')}
             alt=""
             className="w-5 h-5"
           />

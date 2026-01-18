@@ -21,7 +21,7 @@ export interface AffiliationsSectionProps {
 }
 
 export function AffiliationsSection({ className }: AffiliationsSectionProps) {
-  const imageSrc = getImageSrc('/images/terrerlab/affiliations.jpg');
+  const imageSrc = getImageSrc('/images/leeseunglab/affiliations.jpg');
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -68,7 +68,10 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
         />
 
         {/* Logos */}
-        <div className="flex items-center justify-center" style={{ gap: 20, marginTop: 45 }}>
+        <div
+          className="flex items-center justify-center"
+          style={{ marginTop: 45, gap: 20, width: 'calc(100% - 40px)', maxWidth: 620 }}
+        >
           {affiliations.map((affiliation) => (
             <AffiliationLogo
               key={affiliation.id}

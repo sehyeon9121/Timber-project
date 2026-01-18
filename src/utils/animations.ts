@@ -3,9 +3,9 @@ import type { Variants, Transition } from 'framer-motion';
 // Standard transitions
 export const transitions = {
   spring: { type: 'spring', stiffness: 300, damping: 30 } as Transition,
-  smooth: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } as Transition,
-  fast: { duration: 0.2, ease: 'easeOut' } as Transition,
-  slow: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } as Transition,
+  smooth: { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] } as Transition,
+  fast: { duration: 0.15, ease: 'easeOut' } as Transition,
+  slow: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } as Transition,
 };
 
 // Fade animations
@@ -128,7 +128,7 @@ export const imageHover: Variants = {
   initial: { scale: 1 },
   hover: {
     scale: 1.1,
-    transition: { duration: 0.4, ease: 'easeOut' },
+    transition: { duration: 0.2, ease: 'easeOut' },
   },
 };
 
@@ -197,12 +197,12 @@ export const pageTransition: Variants = {
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] },
   },
   exit: {
     opacity: 0,
     y: -20,
-    transition: { duration: 0.3 },
+    transition: { duration: 0.15 },
   },
 };
 
@@ -212,7 +212,7 @@ export const heroTitle: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 },
+    transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.1 },
   },
 };
 
@@ -221,7 +221,7 @@ export const heroSubtitle: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.4 },
+    transition: { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 },
   },
 };
 
@@ -230,7 +230,7 @@ export const heroDescription: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.6 },
+    transition: { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.3 },
   },
 };
 
@@ -285,7 +285,7 @@ export const sectionReveal: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] },
   },
 };
 
@@ -294,7 +294,7 @@ export const createParallax = (yOffset: number = 50): Variants => ({
   hidden: { y: yOffset },
   visible: {
     y: 0,
-    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] },
   },
 });
 
@@ -303,7 +303,7 @@ export const iconSpin: Variants = {
   initial: { rotate: 0 },
   hover: {
     rotate: 360,
-    transition: { duration: 0.5, ease: 'easeInOut' },
+    transition: { duration: 0.25, ease: 'easeInOut' },
   },
 };
 

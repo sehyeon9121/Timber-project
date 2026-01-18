@@ -41,7 +41,7 @@ export function AboutContent({
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.25 }}
         className="w-full md:w-1/2 flex-shrink-0"
       >
         <img
@@ -55,7 +55,7 @@ export function AboutContent({
         initial={{ opacity: 0, x: 30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        transition={{ duration: 0.25, delay: 0.1 }}
         className="flex-1"
       >
         <AboutTextBox title={title} description={description} />

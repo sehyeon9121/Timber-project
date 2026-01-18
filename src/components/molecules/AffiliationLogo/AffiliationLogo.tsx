@@ -25,15 +25,15 @@ export function AffiliationLogo({ name, logo, url, className }: AffiliationLogoP
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        'flex items-center justify-center border border-white bg-black/10 transition-opacity hover:opacity-80',
+        'flex items-center justify-center border border-white bg-black/10 transition-opacity hover:opacity-80 overflow-hidden',
         className
       )}
-      style={{ width: 300, height: 146 }}
+      style={{ flex: '1 1 0', maxWidth: 300, aspectRatio: '300 / 146', minHeight: 0 }}
     >
       <img
         src={getImageSrc(logo)}
         alt={name}
-        style={{ maxHeight: 70, maxWidth: 260, objectFit: 'contain' }}
+        style={{ maxHeight: 70, maxWidth: '85%', objectFit: 'contain' }}
       />
     </a>
   );

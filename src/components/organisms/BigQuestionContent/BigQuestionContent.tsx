@@ -25,7 +25,7 @@ export function BigQuestionContent({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.25 }}
         className="text-center mb-12"
       >
         <div
@@ -50,7 +50,7 @@ export function BigQuestionContent({
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        transition={{ duration: 0.25, delay: 0.1 }}
         className="prose prose-lg max-w-none"
       >
         {content.map((paragraph, idx) => (

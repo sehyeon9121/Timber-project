@@ -2,16 +2,16 @@ import { cn } from '@/utils/cn';
 
 export interface PublicationTitleProps {
   title: string;
-  doi?: string;
+  link?: string;
   className?: string;
 }
 
-export function PublicationTitle({ title, doi, className }: PublicationTitleProps) {
+export function PublicationTitle({ title, link, className }: PublicationTitleProps) {
   return (
     <h4 className={cn('font-bold leading-relaxed text-black', className)} style={{ fontSize: 19, marginBottom: 10 }}>
-      {doi ? (
+      {link ? (
         <a
-          href={`https://doi.org/${doi}`}
+          href={link}
           target="_blank"
           rel="noopener noreferrer"
           className="text-black hover:text-[var(--color-primary)]"

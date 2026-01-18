@@ -90,16 +90,8 @@ export function Link({
             window.history.pushState(null, '', href);
           }
         } else {
-          // Different page - navigate first, then scroll after page loads
-          navigate(targetPath);
-          // Use setTimeout to allow page to render before scrolling
-          setTimeout(() => {
-            const element = document.getElementById(hash);
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth' });
-              window.history.pushState(null, '', href);
-            }
-          }, 100);
+          // Different page - navigate with scroll target in state
+          navigate(targetPath, { state: { scrollTo: hash } });
         }
       }
     }

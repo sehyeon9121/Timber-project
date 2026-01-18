@@ -11,8 +11,8 @@ interface ResearchAccordionProps extends ResearchTheme {
 export function ResearchAccordion({
   title,
   description,
-  expandIcon = '/images/terrerlab/6523f4c51588c6155ad77195_down green.png',
-  collapseIcon = '/images/terrerlab/6523f4c60927b19b46b5ec99_up green.png',
+  expandIcon = '/images/leeseunglab/6523f4c51588c6155ad77195_down green.png',
+  collapseIcon = '/images/leeseunglab/6523f4c60927b19b46b5ec99_up green.png',
   index = 0,
   defaultExpanded = false,
 }: ResearchAccordionProps) {
@@ -27,7 +27,7 @@ export function ResearchAccordion({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
       className="border-b border-gray-200"
     >
       {/* Accordion Header */}

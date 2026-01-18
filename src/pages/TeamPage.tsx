@@ -13,8 +13,7 @@ export function TeamPage() {
   return (
     <DetailPageLayout
       title={t('team.title')}
-      heroImage="/images/terrerlab/people-hero.png"
-      heroHeight={830}
+      heroImage="/images/leeseunglab/people-hero.png"
     >
       {/* Team Section */}
       <ContentSection background="white" padding="lg" style={{ paddingTop: 100 }}>

@@ -15,8 +15,7 @@ export function JoinUsPage() {
     <DetailPageLayout
       title={t('joinUs.title')}
       subtitle={t('joinUs.subtitle')}
-      heroImage="/images/terrerlab/joinus-hero.jpg"
-      heroHeight={830}
+      heroImage="/images/leeseunglab/joinus-hero.jpg"
     >
       <div style={{ height: 60 }} />
 
@@ -34,7 +33,7 @@ export function JoinUsPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.2 }}
           >
             <SectionHeader
               title={t('joinUs.values')}
@@ -50,7 +49,7 @@ export function JoinUsPage() {
               {t('joinUs.valuesDescription')}
             </TextBlock>
             <img
-              src="/leeseunglab/images/terrerlab/valuemit.png"
+              src="/leeseunglab/images/leeseunglab/valuemit.png"
               alt="MIT Values"
               className="w-full rounded-lg"
             />
@@ -65,7 +64,7 @@ export function JoinUsPage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.2 }}
           >
             <BelongingStatement />
           </motion.div>

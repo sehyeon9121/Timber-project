@@ -32,7 +32,7 @@ export function HeroContent({
 }: HeroContentProps) {
   return (
     <motion.div
-      className={cn('flex flex-col items-start text-left', className)}
+      className={cn('flex flex-col items-center text-center md:items-start md:text-left', className)}
       style={{ maxWidth: '620px' }}
       variants={containerVariants}
       initial={false}
