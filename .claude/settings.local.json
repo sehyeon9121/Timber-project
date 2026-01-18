@@ -60,7 +60,8 @@
       "Bash(git -C \"X:\\\\project_files_git\\\\leeseunglab\" commit -m \"$\\(cat <<''EOF''\nReduce hero title font size\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C \"X:\\\\project_files_git\\\\leeseunglab\" commit -m \"$\\(cat <<''EOF''\nFurther reduce hero title font size\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git -C \"X:\\\\project_files_git\\\\leeseunglab\" commit -m \"$\\(cat <<''EOF''\nReduce hero title font size to lg/xl\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(nslookup:*)"
     ]
   }
 }
