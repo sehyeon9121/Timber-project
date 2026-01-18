@@ -49,7 +49,7 @@ export function JoinUsPage() {
               {t('joinUs.valuesDescription')}
             </TextBlock>
             <img
-              src="/leeseunglab/images/leeseunglab/valuemit.png"
+              src="/images/leeseunglab/valuemit.png"
               alt="MIT Values"
               className="w-full rounded-lg"
             />

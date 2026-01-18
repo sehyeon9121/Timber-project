@@ -5,7 +5,7 @@ import yaml from '@modyfi/vite-plugin-yaml'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/leeseunglab/',
+  base: '/',
   plugins: [react(), tailwindcss(), yaml()],
   server: {
     host: true,
