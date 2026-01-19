@@ -26,7 +26,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Home Page - Hero
     'home.hero.subtitle': 'TERRER LAB | Department of Civil and Environmental Engineering, MIT',
-    'home.hero.title': 'Ecological Understanding for a Sustainable Future',
+    'home.hero.title': '^____^   Ecological Understanding for a Sustainable Future',
     'home.hero.description': 'We leverage field and satellite data to advance knowledge about the terrestrial carbon cycle.',
     // Home Page - About
     'home.about.title': 'Terrer Lab',
@@ -141,10 +141,10 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Home Page - Hero
     'home.hero.subtitle': 'TERRER LAB | MIT 토목환경공학과',
-    'home.hero.title': '지속 가능한 미래를 위한 생태학적 이해',
+    'home.hero.title': '^^ 지속 가능한 미래를 위한 생태학적 이해',
     'home.hero.description': '현장 및 위성 데이터를 활용하여 육상 탄소 순환에 대한 지식을 발전시킵니다.',
     // Home Page - About
-    'home.about.title': 'Terrer Lab',
+    'home.about.title': 'Leeseung Lab',
     'home.about.description': 'Terrer Lab은 육상 생태계 생태학에 초점을 맞추고 있습니다. 우리는 기후 변화와 인간 활동이 생태계에 어떤 영향을 미치는지, 그리고 반대로 생태계 역학이 기후 변화를 어떻게 조절하는지 연구합니다. 메타 분석, 머신 러닝 및 기타 통계적 방법을 사용하여 현장 관측과 원격 탐사 데이터의 대규모 데이터셋을 종합하여 육상 생태계의 전지구적 기능을 더 잘 이해하고자 합니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '우리의 교차 연구',
