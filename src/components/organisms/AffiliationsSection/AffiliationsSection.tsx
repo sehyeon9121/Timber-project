@@ -61,8 +61,8 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center">
         <DecoratedSectionHeader
-          title="Affiliations"
-          subtitle="TERRER LAB"
+          title="Associated Institutions"
+          subtitle="ACT LAB"
           variant="light"
           useOriginalMarker
         />
