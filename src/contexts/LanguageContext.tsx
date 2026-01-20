@@ -25,11 +25,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.climateSnacks': 'Climate Snacks',
 
     // Home Page - Hero
-    'home.hero.subtitle': 'TERRER LAB | Department of Civil and Environmental Engineering, MIT',
-    'home.hero.title': '^____^   Ecological Understanding for a Sustainable Future',
-    'home.hero.description': 'We leverage field and satellite data to advance knowledge about the terrestrial carbon cycle.',
+    'home.hero.subtitle': 'ACT INSTITUTE LAB | Korea University of Technology and Department of Architectural Engineering, KOREATECH',
+    'home.hero.title': 'AI Carbon-Neutral Timber Research Institute',
+    'home.hero.description': 'Acting for the Planet, Innovating Technology for Timber.',
     // Home Page - About
-    'home.about.title': 'Terrer Lab',
+    'home.about.title': ' Lab',
     'home.about.description': 'The focus of the Terrer Lab is terrestrial ecosystem ecology. We study how climate change and anthropogenic activities affect ecosystems, and, conversely, how ecosystem dynamics modulate climate change. We synthesize large datasets of field observations and remote sensing data using meta-analysis, machine learning, and other statistical methods to better understand the global functioning of terrestrial ecosystems.',
     'home.research.title': 'Research Themes',
     'home.research.subtitle': 'OUR INTERSECTED STUDIES',
@@ -140,14 +140,14 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.climateSnacks': '기후 스낵',
 
     // Home Page - Hero
-    'home.hero.subtitle': 'TERRER LAB | MIT 토목환경공학과',
-    'home.hero.title': '^^ 지속 가능한 미래를 위한 생태학적 이해',
-    'home.hero.description': '현장 및 위성 데이터를 활용하여 육상 탄소 순환에 대한 지식을 발전시킵니다.',
+    'home.hero.subtitle': 'ACT INSITUTE LAB | 한국기술교육대학교 건축공학과',
+    'home.hero.title': 'AI 탄소중립 목조 연구소',
+    'home.hero.description': '지구를 위해 행동하고, 목재를 위해 기술을 혁신하다.',
     // Home Page - About
-    'home.about.title': 'Leeseung Lab',
-    'home.about.description': 'Terrer Lab은 육상 생태계 생태학에 초점을 맞추고 있습니다. 우리는 기후 변화와 인간 활동이 생태계에 어떤 영향을 미치는지, 그리고 반대로 생태계 역학이 기후 변화를 어떻게 조절하는지 연구합니다. 메타 분석, 머신 러닝 및 기타 통계적 방법을 사용하여 현장 관측과 원격 탐사 데이터의 대규모 데이터셋을 종합하여 육상 생태계의 전지구적 기능을 더 잘 이해하고자 합니다.',
+    'home.about.title': 'ACT Lab',
+    'home.about.description': 'ACT Lab은 AI와 건축 공학의 결합을 통해 대공간 목구조의 새로운 가능성을 탐구하는 연구소입니다. 우리는 목재라는 재료가 지닌 잠재력을 지능형 설계와 데이터 기반 기술로 확장하여, 구조적 안정성과 환경적 책임을 동시에 달성하고자 합니다. 설계검토에 그치지 않고 실제 건축 환경을 고려한 분석과 검증을 통해, 탄소중립 건축이 이론이 아닌 현실적인 선택이 될 수 있도록 연구를 이어가고 있습니다.',
     'home.research.title': '연구 주제',
-    'home.research.subtitle': '우리의 교차 연구',
+    'home.research.subtitle': '미래를 위한 연구',
     'home.bigQuestions.title': '우리의 큰 질문들',
     'home.bigQuestions.subtitle': '연구 관심사',
     'home.bigQuestions.q1': '농경지 복원을 통해 토양에서 얼마나 많은 탄소를 재포집할 수 있을까?',
@@ -160,10 +160,10 @@ const translations: Record<Language, Record<string, string>> = {
     'home.bigQuestions.q8': '이탄지가 전지구적 탄소 순환에 기여하는 바는 무엇인가?',
 
     // Research Themes
-    'research.terrestrialCarbon.title': '육상 탄소 생태학',
-    'research.terrestrialCarbon.description': '기후 변화 맥락(예: CO₂ 증가, 온난화, 화재, 극한 기상, 질소 침적)에서 육상 탄소 저장에 영향을 미치는 생태학적 역학에 대한 지식을 발전시킵니다. 주요 목표는 육상 탄소 흡수원의 메커니즘을 규명하고 기후 모델에서 흡수원에 대한 주요 불확실성을 줄이는 것입니다.',
-    'research.naturalClimate.title': '자연 기후 솔루션',
-    'research.naturalClimate.description': '자연 기후 솔루션의 완화 잠재력에 대한 데이터 기반 추정치를 개발합니다. 위성에서 수집한 데이터와 출판된 현장 연구를 종합하여 토양 및 산림 기반 경로의 효과에 대한 공간적, 시간적 불확실성을 줄이고자 합니다.',
+    'research.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',
+    'research.terrestrialCarbon.description': 'AI와 데이터 기반 설계를 통해 대공간 목구조의 구조적 한계를 확장합니다. 하중 전달, 재료 효율, 형상 최적화를 통합적으로 분석하여 안정성과 성능을 동시에 만족하는 차세대 목조 대공간 설계 해법을 연구합니다.',
+    'research.naturalClimate.title': '탄소중립 건축 실현 기술',
+    'research.naturalClimate.description': '목재 건축의 탄소 저감 효과를 정량적으로 분석하고, 설계·시공·운영 전 과정에서 탄소중립 성능을 검증합니다. AI 기반 분석과 시뮬레이션을 통해 실현 가능한 탄소중립 건축 기술을 제시합니다. ',
 
     // Research Page
     'research.title': '연구',
@@ -192,7 +192,7 @@ const translations: Record<Language, Record<string, string>> = {
     'people.researchAssistants': '연구 조교',
 
     // Team Page
-    'team.title': 'Terrer Lab을 소개합니다',
+    'team.title': 'ACT LAB을 소개합니다',
     'team.team': '팀',
     'team.alumni': '졸업생',
 
