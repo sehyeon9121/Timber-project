@@ -148,16 +148,16 @@ const translations: Record<Language, Record<string, string>> = {
     'home.about.description': 'ACT Lab은 AI와 건축 공학의 결합을 통해 대공간 목구조의 새로운 가능성을 탐구하는 연구소입니다. 우리는 목재라는 재료가 지닌 잠재력을 지능형 설계와 데이터 기반 기술로 확장하여, 구조적 안정성과 환경적 책임을 동시에 달성하고자 합니다. 설계검토에 그치지 않고 실제 건축 환경을 고려한 분석과 검증을 통해, 탄소중립 건축이 이론이 아닌 현실적인 선택이 될 수 있도록 연구를 이어가고 있습니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '미래를 위한 연구',
-    'home.bigQuestions.title': '우리의 큰 질문들',
-    'home.bigQuestions.subtitle': '연구 관심사',
-    'home.bigQuestions.q1': '농경지 복원을 통해 토양에서 얼마나 많은 탄소를 재포집할 수 있을까?',
-    'home.bigQuestions.q2': '생물다양성과 탄소 저장을 연결하는 피드백은 무엇인가?',
-    'home.bigQuestions.q3': '식물이 토양에서 매년 얼마나 많은 질소를 흡수할 수 있을까?',
-    'home.bigQuestions.q4': '기후 변화가 토양 탄소 격리에 도움이 되었을까?',
-    'home.bigQuestions.q5': '식생 역학의 변화가 육상 생태계의 생물물리학적 특성에 어떤 영향을 미치는가?',
-    'home.bigQuestions.q6': '증가하는 극한 폭풍이 육상 탄소 순환에 어떤 영향을 미치는가?',
-    'home.bigQuestions.q7': '영양분 제한이 육상 탄소 흡수원에 미치는 영향은 무엇인가?',
-    'home.bigQuestions.q8': '이탄지가 전지구적 탄소 순환에 기여하는 바는 무엇인가?',
+    'home.bigQuestions.title': '핵심 연구 구성',
+    'home.bigQuestions.subtitle': '연구 과제',
+    'home.bigQuestions.q1': '200m급 탄소제로 목조 대공간 건축물 기술 개발',
+    'home.bigQuestions.q2': '[1세부] 고성능 하이브리드 대단면 목조 구조 기술 개발',
+    'home.bigQuestions.q3': '[2세부] OSC 기반 목조 대공간 모듈화·탄소중립 설계 기술 개발',
+    'home.bigQuestions.q4': '[3세부] 목조 대공간 건축물 친환경·에너지 성능 평가 기술 개발',
+    'home.bigQuestions.q5': '[4세부] 목조 대공간 건축물 스마트 시공 및 유지관리 기술 개발',
+    'home.bigQuestions.q6': '학술 공동 연구 기관',
+    'home.bigQuestions.q7': '연구·시험·실증 협력 기관',
+    'home.bigQuestions.q8': '산업 연계 및 기술 확산 파트너',
 
     // Research Themes
     'research.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',
@@ -174,9 +174,9 @@ const translations: Record<Language, Record<string, string>> = {
     'research.bigQuestionsSubtitle': '우리 연구를 이끄는 근본적인 질문들',
 
     // Big Questions Page
-    'bigQuestions.title': '큰 질문들',
-    'bigQuestions.subtitle': '육상 탄소 역학에 대한 연구를 이끄는 근본적인 질문들.',
-    'bigQuestions.intro': '우리의 연구는 육상 생태계가 어떻게 기능하고 전지구적 변화에 어떻게 반응하는지에 대한 근본적인 질문에 의해 이끌립니다. 이러한 "큰 질문들"은 탄소 저장, 영양분 순환, 기후 피드백에 대한 우리의 조사를 안내합니다.',
+    'bigQuestions.title': '연구 과제',
+    'bigQuestions.subtitle': '국책 연구과제에서의 연구 과제 구성.',
+    'bigQuestions.intro': '우리의 연구는 200m급 목조 대공간 건축물의 실현 가능성과 탄소중립 건설 기술의 미래라는 근본적인 질문에 의해 이끌립니다. 이러한 질문들은 구조 시스템, 모듈화 설계, 환경·에너지 성능, 그리고 시공 및 유지관리 기술에 대한 통합적인 연구 방향을 제시합니다.',
     'bigQuestions.backTo': '큰 질문들로 돌아가기',
 
     // Publications Page

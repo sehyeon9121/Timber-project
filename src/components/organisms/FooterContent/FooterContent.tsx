@@ -26,14 +26,14 @@ export function FooterContent({ className }: FooterContentProps) {
           className="text-white/80"
           style={{ fontSize: 16 }}
         >
-          © Copyright {currentYear} | Terrer Lab |{' '}
+          © Copyright {currentYear} | ACT Lab |{' '}
           <Link
-            href="https://accessibility.mit.edu/"
+            href="https://www.koreatech.ac.kr/kor/index.jsp"
             variant="white"
             className="hover:text-white"
             style={{ textDecoration: 'underline' }}
           >
-            MIT Accessibility
+            Koreatech.ac.kr
           </Link>
         </motion.div>
       </div>

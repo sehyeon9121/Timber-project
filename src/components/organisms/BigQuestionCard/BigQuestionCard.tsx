@@ -42,16 +42,16 @@ export function BigQuestionCard({
         )}
         style={{ transitionDelay: `${index * 0.05}s` }}
       >
-        <Link href={`/big-questions/${id}`} className="flex flex-col flex-1" style={{ padding: '30px' }} disableAnimation>
+        <Link href={`/big-questions/${id}`} className="flex flex-col flex-1" style={{ padding: '32px' }} disableAnimation>
           {/* Icon Section - Centered at top */}
           {image && (
-            <div className="flex justify-center items-center" style={{ paddingBottom: '30px' }}>
-              <div className="w-12 h-12 flex items-center justify-center">
+            <div className="flex justify-center items-center" style={{ paddingBottom: '24px' }}>
+              <div className="w-20 h-20 flex items-center justify-center">
                 <Image
                   src={image}
                   alt=""
                   className="object-contain"
-                  style={{ width: 49, height: 49, filter: 'brightness(0)' }}
+                  style={{ width: 80, height: 80 }}
                 />
               </div>
             </div>
