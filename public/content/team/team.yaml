@@ -19,10 +19,10 @@
   scholar_url: "https://sites.google.com/view/leedonwoo/people"
   email: "lov1004ely@koreatech.ac.kr"
 
-- id: "Ha Ju Lee"
-  name: "Ha Ju Lee"
+- id: "Hyeon Ju Ha"
+  name: "Hyeon Ju Ha"
   position: "Postdoctoral Researcher"
-  bio: "He conducts research in structural optimization, dynamic analysis, and seismic design, with particular emphasis on quantum-based algorithms, meta-heuristics, and machine learning for optimal structural systems. His work spans truss, dome, and large-scale timber structures, focusing on form-finding, topology optimization, vibration control (TMD), and advanced building hardware, supported by multiple national research projects funded by the NRF and KAIA."
+  bio: "This research explores quantum circuit–based structural analysis and shape control using variational quantum circuits, integrating classical structural methods with quantum computing to improve the efficiency and scalability of structural systems."
   image: "images/IMG_1627.jpg"
   scholar_url: ""
   email: "hayezii@koreatech.ac.kr"
