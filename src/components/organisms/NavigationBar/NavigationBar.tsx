@@ -24,7 +24,14 @@ export function NavigationBar({ className }: NavigationBarProps) {
   const mainNavItems = [
     { label: t('nav.home'), href: '/' },
     { label: t('nav.research'), href: '/#research' },
-    { label: t('nav.publications'), href: '/publications' },
+  ];
+
+  const publicationsDropdownItems = [
+    { label: 'SCIE', href: '/publications/scie' },
+    { label: 'KCI', href: '/publications/kci' },
+    { label: 'Int. Conference', href: '/publications/international-conference' },
+    { label: 'Dom. Conference', href: '/publications/domestic-conference' },
+    { label: 'SCOPUS', href: '/publications/scopus' },
   ];
 
   const peopleDropdownItems = [
@@ -147,6 +154,11 @@ export function NavigationBar({ className }: NavigationBarProps) {
           ))}
 
           <DropdownMenu
+            label={t('nav.publications')}
+            items={publicationsDropdownItems}
+          />
+
+          <DropdownMenu
             label={t('nav.people')}
             items={peopleDropdownItems}
           />
@@ -210,6 +222,51 @@ export function NavigationBar({ className }: NavigationBarProps) {
                   </Text>
                 </Link>
               ))}
+
+              {/* Publications Accordion */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => toggleSubmenu('publications')}
+                  className="flex items-center justify-between w-full h-12 hover:bg-gray-50 transition-colors"
+                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
+                >
+                  <Text size="sm" weight={500} color="text">
+                    {t('nav.publications')}
+                  </Text>
+                  <motion.div
+                    animate={{ rotate: expandedMenu === 'publications' ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Icon name="ChevronDown" size="sm" color="text" />
+                  </motion.div>
+                </button>
+                <AnimatePresence>
+                  {expandedMenu === 'publications' && (
+                    <motion.div
+                      variants={submenuVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      className="overflow-hidden bg-gray-50"
+                    >
+                      {publicationsDropdownItems.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center h-11 hover:bg-gray-100 transition-colors"
+                          style={{ paddingLeft: '40px', paddingRight: '20px' }}
+                          onClick={handleNavClick}
+                        >
+                          <Text size="sm" weight={500} color="text">
+                            {item.label}
+                          </Text>
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* People Accordion */}
               <div>

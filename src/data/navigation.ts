@@ -3,7 +3,14 @@ import type { NavItem } from '@/types';
 export const mainNavItems: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Research', href: '/#research' },
-  { label: 'Publications', href: '/publications' },
+];
+
+export const publicationsDropdownItems: NavItem[] = [
+  { label: 'SCIE', href: '/publications/scie' },
+  { label: 'KCI', href: '/publications/kci' },
+  { label: 'Int. Conference', href: '/publications/international-conference' },
+  { label: 'Dom. Conference', href: '/publications/domestic-conference' },
+  { label: 'SCOPUS', href: '/publications/scopus' },
 ];
 
 export const peopleDropdownItems: NavItem[] = [

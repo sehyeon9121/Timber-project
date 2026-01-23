@@ -47,7 +47,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/research" element={<ResearchPage />} />
         <Route path="/team" element={<TeamPage />} />
-        <Route path="/publications" element={<PublicationsPage />} />
+        <Route path="/publications/:category?" element={<PublicationsPage />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/big-questions" element={<BigQuestionsPage />} />
         <Route path="/big-questions/:id" element={<BigQuestionDetailPage />} />

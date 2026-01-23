@@ -181,7 +181,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Publications Page
     'publications.title': '출판물',
-    'publications.subtitle': '출판된 연구 및 과학적 기여를 살펴보세요',
+    'publications.subtitle': '출판된 연구 성과와 학술적 기여를 확인하세요',
 
     // People Page
     'people.title': '연구실 구성원',
@@ -194,7 +194,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Team Page
     'team.title': 'ACT LAB을 소개합니다',
     'team.team': '팀',
-    'team.alumni': '졸업생',
+    'team.alumni': '협력기관',
 
     // Join Us Page
     'joinUs.title': '참여하기',
