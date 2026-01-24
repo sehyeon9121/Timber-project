@@ -2,7 +2,7 @@ export { HomePage } from './HomePage';
 export { ResearchPage } from './ResearchPage';
 export { TeamPage } from './TeamPage';
 export { PublicationsPage } from './PublicationsPage';
-export { NewsPage } from './NewsPage';
+// export { NewsPage } from './NewsPage';  // 임시 비활성화
 export { BigQuestionsPage } from './BigQuestionsPage';
 export { BigQuestionDetailPage } from './BigQuestionDetailPage';
 export { ContactPage } from './ContactPage';

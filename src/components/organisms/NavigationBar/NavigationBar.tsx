@@ -39,10 +39,11 @@ export function NavigationBar({ className }: NavigationBarProps) {
     { label: t('nav.joinUs'), href: '/join-us' },
   ];
 
-  const newsDropdownItems = [
-    { label: t('nav.newsUpdates'), href: '/news' },
-    { label: t('nav.climateSnacks'), href: '/climate-snacks' },
-  ];
+  // News 메뉴 임시 비활성화
+  // const newsDropdownItems = [
+  //   { label: t('nav.newsUpdates'), href: '/news' },
+  //   { label: t('nav.climateSnacks'), href: '/climate-snacks' },
+  // ];
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -163,10 +164,11 @@ export function NavigationBar({ className }: NavigationBarProps) {
             items={peopleDropdownItems}
           />
 
-          <DropdownMenu
+          {/* News 메뉴 임시 비활성화 */}
+          {/* <DropdownMenu
             label={t('nav.news')}
             items={newsDropdownItems}
-          />
+          /> */}
 
           <LanguageSwitcher />
         </nav>
@@ -313,8 +315,8 @@ export function NavigationBar({ className }: NavigationBarProps) {
                 </AnimatePresence>
               </div>
 
-              {/* News Accordion */}
-              <div>
+              {/* News Accordion - 임시 비활성화 */}
+              {/* <div>
                 <button
                   type="button"
                   onClick={() => toggleSubmenu('news')}
@@ -356,7 +358,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </div> */}
 
               {/* Language Toggle */}
               <div className="border-t border-gray-200 mt-2 pt-2">

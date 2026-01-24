@@ -4,7 +4,8 @@ import { NavLink } from '@/components/molecules/NavLink';
 import { Text } from '@/components/atoms/Text';
 import { cn } from '@/utils/cn';
 import { slideInRight, fadeIn, staggerContainerFast } from '@/utils/animations';
-import { mainNavItems, peopleDropdownItems, newsDropdownItems } from '@/data/navigation';
+import { mainNavItems, peopleDropdownItems } from '@/data/navigation';
+// newsDropdownItems 임시 비활성화
 
 export interface MobileNavigationProps {
   isOpen: boolean;
@@ -116,8 +117,8 @@ export function MobileNavigation({
                 </motion.div>
               </motion.div>
 
-              {/* News Section */}
-              <motion.div
+              {/* News Section - 임시 비활성화 */}
+              {/* <motion.div
                 variants={fadeIn}
                 initial="hidden"
                 animate="visible"
@@ -150,7 +151,7 @@ export function MobileNavigation({
                     </motion.div>
                   ))}
                 </motion.div>
-              </motion.div>
+              </motion.div> */}
             </Container>
           </motion.nav>
         </>
