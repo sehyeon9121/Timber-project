@@ -35,7 +35,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.research.subtitle': 'OUR INTERSECTED STUDIES',
     'home.bigQuestions.title': 'Our Big Questions',
     'home.bigQuestions.subtitle': 'RESEARCH INTERESTS',
-    'home.bigQuestions.q1': 'How much carbon can we recapture in soils with cropland restoration?',
+    'home.bigQuestions.q1': 'How can 200-meter-class timber large-span buildings achieve carbon-neutral construction?',
     'home.bigQuestions.q2': 'What are the feedbacks that link biodiversity and carbon storage?',
     'home.bigQuestions.q3': 'How much nitrogen can plants absorb from the soil yearly?',
     'home.bigQuestions.q4': 'Has climate change helped sequestering soil carbon?',
@@ -177,7 +177,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bigQuestions.title': '연구 과제',
     'bigQuestions.subtitle': '국책 연구과제에서의 연구 과제 구성.',
     'bigQuestions.intro': '우리의 연구는 200m급 목조 대공간 건축물의 실현 가능성과 탄소중립 건설 기술의 미래라는 근본적인 질문에 의해 이끌립니다. 이러한 질문들은 구조 시스템, 모듈화 설계, 환경·에너지 성능, 그리고 시공 및 유지관리 기술에 대한 통합적인 연구 방향을 제시합니다.',
-    'bigQuestions.backTo': '큰 질문들로 돌아가기',
+    'bigQuestions.backTo': 'ACT LAB으로 돌아가기',
 
     // Publications Page
     'publications.title': '출판물',

@@ -39,6 +39,13 @@ export interface TeamMember {
   type: 'team' | 'alumni';
 }
 
+// Participating Institution
+export interface ParticipatingInstitution {
+  name: string;
+  logo: string;
+  url?: string;
+}
+
 // Big Question
 export interface BigQuestion {
   id: number;
@@ -48,6 +55,7 @@ export interface BigQuestion {
   bulletPoints: string[];
   icon: string;
   image?: string;
+  participatingInstitutions?: ParticipatingInstitution[];
 }
 
 // Publication
