@@ -68,3 +68,11 @@
   scholar_url: ""
   email: "sdlrbals@koreatech.ac.kr"
 
+- id: "Hong In Pyo"
+  name: "Hong In Pyo"
+  position: "Master’s Program"
+  bio: "He focuses on optimizing damper placement in steel-framed structures through reinforcement learning–based algorithms to enhance structural performance under dynamic loading."
+  image: "images/Hong In Pyo.png"
+  scholar_url: ""
+  email: "sdlrbals@koreatech.ac.kr"
+
