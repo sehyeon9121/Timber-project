@@ -18,25 +18,23 @@ export function JoinUsCallToAction({ className }: JoinUsCallToActionProps) {
       className={cn(className)}
     >
       <SectionHeader
-        title="Interested in being part of this journey?"
+        title="INTERESTED IN SHAPING THE FUTURE OF TIMBER STRUCTURES?"
         headingClassName="text-[#00380A] uppercase"
         headingStyle={{ fontWeight: 700, letterSpacing: '0.05em', marginBottom: 20, fontSize: '24px' }}
         style={{ marginBottom: 36 }}
       />
       <TextBlock>
-        Even if you don't see an open position listed, we'd love to hear from you. We are always on the lookout for motivated and talented scientists excited to make a significant impact in ecology and climate change research.
+        ACT Institute is an open research platform exploring carbon-neutral timber structures through advanced structural engineering, computational design, and performance-based validation.
+
       </TextBlock>
       <br />
       <TextBlock>
-        Please contact Professor Cesar Terrer at{' '}
-        <Link href="mailto:cterrer@mit.edu" className="text-[#00380A] underline hover:text-[#004d0e]">
-          cterrer@mit.edu
-        </Link>
-        {' '}with your interests and qualifications.
+        Even when specific programs or positions are not listed, we welcome conversations with individuals who share an interest in sustainable structural systems and large-span timber architecture.
+        
       </TextBlock>
       <br />
       <TextBlock>
-        Let's explore how your expertise and interests align with the goals of the Terrer Lab.
+       
       </TextBlock>
     </motion.div>
   );

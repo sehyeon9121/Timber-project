@@ -20,7 +20,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.people': 'People',
     'nav.news': 'News',
     'nav.ourTeam': 'Our Team',
-    'nav.joinUs': 'Join Us',
+    'nav.joinUs': 'ACT INSTITUTE',
     'nav.newsUpdates': 'News & Updates',
     'nav.climateSnacks': 'Climate Snacks',
 
@@ -30,25 +30,25 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': 'Acting for the Planet, Innovating Technology for Timber.',
     // Home Page - About
     'home.about.title': ' Lab',
-    'home.about.description': 'The focus of the Terrer Lab is terrestrial ecosystem ecology. We study how climate change and anthropogenic activities affect ecosystems, and, conversely, how ecosystem dynamics modulate climate change. We synthesize large datasets of field observations and remote sensing data using meta-analysis, machine learning, and other statistical methods to better understand the global functioning of terrestrial ecosystems.',
-    'home.research.title': 'Research Themes',
-    'home.research.subtitle': 'OUR INTERSECTED STUDIES',
-    'home.bigQuestions.title': 'Our Big Questions',
-    'home.bigQuestions.subtitle': 'RESEARCH INTERESTS',
-    'home.bigQuestions.q1': 'How can 200-meter-class timber large-span buildings achieve carbon-neutral construction?',
-    'home.bigQuestions.q2': 'What are the feedbacks that link biodiversity and carbon storage?',
-    'home.bigQuestions.q3': 'How much nitrogen can plants absorb from the soil yearly?',
-    'home.bigQuestions.q4': 'Has climate change helped sequestering soil carbon?',
-    'home.bigQuestions.q5': 'How do changes in vegetation dynamics affect biophysical properties in terrestrial ecosystems?',
-    'home.bigQuestions.q6': 'How do the increasing extreme storms affect the terrestrial carbon cycle?',
-    'home.bigQuestions.q7': 'What is the impact of nutrient limitation on the terrestrial carbon sink?',
-    'home.bigQuestions.q8': 'What is the contribution of peatlands to the global carbon cycle?',
+    'home.about.description': 'ACT Lab is a research institute exploring new possibilities for large-span timber structures through the integration of artificial intelligence and architectural engineering. By extending the inherent potential of timber through intelligent design and data-driven technologies, we aim to achieve both structural reliability and environmental responsibility. Moving beyond conceptual design studies, our research focuses on analysis and validation grounded in real-world building conditions, advancing carbon-neutral architecture from theory to a practical and viable choice.',
+    'home.research.title': 'Research Topics',
+    'home.research.subtitle': 'Research for the Future',
+    'home.bigQuestions.title': 'Core Research Structure',
+    'home.bigQuestions.subtitle': 'Research Projects',
+    'home.bigQuestions.q1': 'Development of 200-Meter-Class Carbon-Neutral Large-Span Timber Architecture Technologies',
+    'home.bigQuestions.q2': '[Subtask 1] Development of High-Performance Hybrid Large-Section Timber Structural Technologies',
+    'home.bigQuestions.q3': '[Subtask 2] Development of OSC-Based Modularization and Carbon-Neutral Design Technologies for Large-Span Timber Structures',
+    'home.bigQuestions.q4': '[Subtask 3] Development of Environmental and Energy Performance Evaluation Technologies for Large-Span Timber Buildings',
+    'home.bigQuestions.q5': '[Subtask 4] Development of Smart Construction and Maintenance Technologies for Large-Span Timber Buildings',
+    'home.bigQuestions.q6': 'Academic Research Partners',
+    'home.bigQuestions.q7': 'Research, Testing, and Demonstration Partners?',
+    'home.bigQuestions.q8': 'Industry Partners for Technology Transfer and Dissemination',
 
     // Research Themes
-    'research.terrestrialCarbon.title': 'Terrestrial Carbon Ecology',
-    'research.terrestrialCarbon.description': 'We advance knowledge about the ecological dynamics impacting terrestrial carbon storage in a climate change context (e.g., elevated CO₂, warming, fire, extreme weather, nitrogen deposition). The primary goals are to unravel the mechanisms of the terrestrial carbon sink, and to reduce key uncertainties about the sink in climate models.',
-    'research.naturalClimate.title': 'Natural Climate Solutions',
-    'research.naturalClimate.description': 'We develop data-driven estimates of the mitigation potential of natural climate solutions. By synthesizing data collected by satellites and from published field studies, we seek to reduce spatial and temporal uncertainties about the effectiveness of soil- and forest-based pathways.',
+    'research.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',
+    'research.terrestrialCarbon.description': 'Through AI- and data-driven design approaches, we extend the structural limits of large-span timber systems. By integrally analyzing load transfer mechanisms, material efficiency, and geometric optimization, our research advances next-generation timber structural design methods that enhance both stability and performance.',
+    'research.naturalClimate.title': 'Technologies for Realizing Carbon-Neutral Architecture',
+    'research.naturalClimate.description': 'We quantitatively analyze the carbon reduction potential of timber construction and evaluate carbon-neutral performance across the entire building lifecycle, including design, construction, and operation. Through AI-based analysis and simulation, we present implementable technologies that enable carbon-neutral architecture in real-world applications.',
 
     // Research Page
     'research.title': 'Research',
@@ -59,9 +59,9 @@ const translations: Record<Language, Record<string, string>> = {
     'research.bigQuestionsSubtitle': 'The fundamental questions driving our research',
 
     // Big Questions Page
-    'bigQuestions.title': 'Big Questions',
-    'bigQuestions.subtitle': 'The fundamental questions driving our research into terrestrial carbon dynamics.',
-    'bigQuestions.intro': 'Our research is driven by fundamental questions about how terrestrial ecosystems function and respond to global change. These "big questions" guide our investigations into carbon storage, nutrient cycling, and climate feedbacks.',
+    'bigQuestions.title': 'Research Projects',
+    'bigQuestions.subtitle': 'Structure of research projects within a national government–funded research program.',
+    'bigQuestions.intro': 'Our research is driven by fundamental questions regarding the feasibility of 200-meter-class large-span timber buildings and the future of carbon-neutral construction technologies. These questions define an integrated research direction encompassing structural systems, modular design, environmental and energy performance, as well as construction and maintenance technologies.',
     'bigQuestions.backTo': 'Back to Big Questions',
 
     // Publications Page
@@ -77,19 +77,19 @@ const translations: Record<Language, Record<string, string>> = {
     'people.researchAssistants': 'Research Assistants',
 
     // Team Page
-    'team.title': 'Meet the Terrer Lab',
+    'team.title': 'Introducing ACT Lab',
     'team.team': 'Team',
-    'team.alumni': 'Alumni',
+    'team.alumni': 'Undergraduate Student',
 
     // Join Us Page
     'joinUs.title': 'Join Us',
     'joinUs.subtitle': 'Be a part of the Terrer Lab at MIT',
     'joinUs.values': 'VALUES',
-    'joinUs.valuesIntro': 'Inclusion in science starts by inclusion in the lab.',
-    'joinUs.valuesDescription': 'Climate change is a global challenge, but its impacts and solutions are different around the world. We believe diversity is a key factor to provide solutions to tackle this challenge worldwide. Thus, the Terrer Lab embrace diversity as a necessity and an advantage for our common goal.',
-    'joinUs.belonging1': 'We strive to foster belonging and empowerment.',
-    'joinUs.belonging2': 'We value the visible and invisible qualities that make you who you are.',
-    'joinUs.belonging3': 'We listen and engage with our diverse communities.',
+    'joinUs.valuesIntro': 'In science, inclusion begins with inclusion in the research environment.',
+    'joinUs.valuesDescription': 'At ACT Institute, research begins with mindset before it becomes technology. The challenges of climate change and carbon neutrality cannot be addressed through a single solution, and we believe that diverse perspectives and backgrounds are essential resources for solving structural problems. Through collaboration that transcends disciplinary boundaries, roles, and levels of experience, ACT Institute explores new possibilities for large-span timber structures.',
+    'joinUs.belonging1': 'We value problems over affiliations and questions over titles.',
+    'joinUs.belonging2': 'ACT Institute fosters an open research environment where diverse',
+    'joinUs.belonging3': 'expertise and perspectives are respected.',
 
     // Contact Page
     'contact.title': 'Contact Us',
@@ -135,7 +135,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.people': '구성원',
     'nav.news': '뉴스',
     'nav.ourTeam': '연구팀',
-    'nav.joinUs': '참여하기',
+    'nav.joinUs': 'ACT INSTITUTE',
     'nav.newsUpdates': '뉴스 및 업데이트',
     'nav.climateSnacks': '기후 스낵',
 
@@ -194,17 +194,18 @@ const translations: Record<Language, Record<string, string>> = {
     // Team Page
     'team.title': 'ACT LAB을 소개합니다',
     'team.team': '팀',
-    'team.alumni': '협력기관',
+    'team.alumni': '학부생',
 
     // Join Us Page
-    'joinUs.title': '참여하기',
+    'joinUs.title': 'ACT INSTITUTE',
     'joinUs.subtitle': 'MIT Terrer Lab의 일원이 되세요',
     'joinUs.values': '가치',
     'joinUs.valuesIntro': '과학에서의 포용은 연구실에서의 포용에서 시작됩니다.',
-    'joinUs.valuesDescription': '기후 변화는 전 세계적인 도전이지만, 그 영향과 해결책은 전 세계적으로 다릅니다. 우리는 다양성이 이 도전에 전 세계적으로 대응하기 위한 해결책을 제공하는 핵심 요소라고 믿습니다. 따라서 Terrer Lab은 다양성을 공동 목표를 위한 필수 요소이자 이점으로 받아들입니다.',
-    'joinUs.belonging1': '우리는 소속감과 역량 강화를 촉진하기 위해 노력합니다.',
-    'joinUs.belonging2': '우리는 당신을 당신답게 만드는 보이는 것과 보이지 않는 특성을 소중히 여깁니다.',
-    'joinUs.belonging3': '우리는 다양한 커뮤니티의 이야기를 듣고 함께합니다.',
+    'joinUs.valuesDescription': 'ACT Institute의 연구는 구조 기술 이전에 태도에서 시작됩니다. 기후 위기와 탄소 중립이라는 과제는 단일한 해법으로 해결될 수 없으며, 우리는 다양한 관점과 배경이 구조적 문제 해결의 핵심 자원이라고 믿습니다. ACT Institute는 전공, 역할, 경험의 경계를 넘는 협업을 통해 목구조 대공간 기술의 새로운 가능성을 탐구합니다.',
+
+    'joinUs.belonging1': '우리는 소속보다 문제를, 직함보다 질문을 중요하게 여깁니다.',
+    'joinUs.belonging2': 'ACT Institute는 열린 연구 환경 속에서',
+    'joinUs.belonging3': '각자의 전문성과 관점이 존중받는 공간을 지향합니다.',
 
     // Contact Page
     'contact.title': '연락처',
@@ -238,7 +239,7 @@ const translations: Record<Language, Record<string, string>> = {
     'language.korean': '한국어',
 
     // Footer
-    'footer.copyright': '© 2024 Terrer Lab. All rights reserved.',
+    'footer.copyright': '© 2024 ACT Lab. All rights reserved.',
     'footer.contact': '연락처',
     'footer.location': '위치',
   },

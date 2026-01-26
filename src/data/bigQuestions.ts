@@ -125,7 +125,7 @@ export const bigQuestions: BigQuestion[] = [
       { name: '포스코 이앤씨', logo: 'logo-institute1.png', url: 'https://www.example-institute1.org' },
       { name: '아리수 엔지니어링', logo: 'logo-institute2.jpg', url: 'https://www.example-institute2.org' },
       { name: '(주)하이멕', logo: 'logo-institute3.png', url: 'https://www.example-institute3.org' },
-      { name: '(주)행림종합건축사사무소', logo: 'logo-institute4.png' },
+      { name: 'dA architecture group', logo: 'logo-institute4.jpg' },
       { name: '티아이구조기술사사무소', logo: 'logo-institute5.jpg', url: 'https://www.example-institute5.org' },
       { name: 'CS구조엔지니어링', logo: 'logo-institute6.png', url: 'https://www.example-institute5.org' },
     ],
