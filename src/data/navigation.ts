@@ -19,6 +19,6 @@ export const peopleDropdownItems: NavItem[] = [
 ];
 
 export const newsDropdownItems: NavItem[] = [
-  // { label: 'News & Updates', href: '/news' },  // 임시 비활성화
-  { label: 'Climate Snacks', href: '/climate-snacks' },
+  { label: 'News & Updates', href: '/news' },
+  // { label: 'Climate Snacks', href: '/climate-snacks' },  // 비활성화
 ];

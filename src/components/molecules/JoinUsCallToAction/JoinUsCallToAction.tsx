@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from '@/components/atoms/Link';
 import { TextBlock } from '@/components/atoms/TextBlock';
 import { SectionHeader } from '@/components/molecules/SectionHeader';
 import { cn } from '@/utils/cn';
@@ -31,10 +30,6 @@ export function JoinUsCallToAction({ className }: JoinUsCallToActionProps) {
       <TextBlock>
         Even when specific programs or positions are not listed, we welcome conversations with individuals who share an interest in sustainable structural systems and large-span timber architecture.
         
-      </TextBlock>
-      <br />
-      <TextBlock>
-       
       </TextBlock>
     </motion.div>
   );

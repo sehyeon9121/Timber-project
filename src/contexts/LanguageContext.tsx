@@ -150,7 +150,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.research.subtitle': '미래를 위한 연구',
     'home.bigQuestions.title': '핵심 연구 구성',
     'home.bigQuestions.subtitle': '연구 과제',
-    'home.bigQuestions.q1': '200m급 탄소제로 목조 대공간 건축물 기술 개발',
+    'home.bigQuestions.q1': '탄소제로 목조 대공간 건축물 기술 개발',
     'home.bigQuestions.q2': '[1세부] 고성능 하이브리드 대단면 목조 구조 기술 개발',
     'home.bigQuestions.q3': '[2세부] OSC 기반 목조 대공간 모듈화·탄소중립 설계 기술 개발',
     'home.bigQuestions.q4': '[3세부] 목조 대공간 건축물 친환경·에너지 성능 평가 기술 개발',
@@ -198,7 +198,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Join Us Page
     'joinUs.title': 'ACT INSTITUTE',
-    'joinUs.subtitle': 'MIT Terrer Lab의 일원이 되세요',
+    'joinUs.subtitle': 'ACT Labd의 태도',
     'joinUs.values': '가치',
     'joinUs.valuesIntro': '과학에서의 포용은 연구실에서의 포용에서 시작됩니다.',
     'joinUs.valuesDescription': 'ACT Institute의 연구는 구조 기술 이전에 태도에서 시작됩니다. 기후 위기와 탄소 중립이라는 과제는 단일한 해법으로 해결될 수 없으며, 우리는 다양한 관점과 배경이 구조적 문제 해결의 핵심 자원이라고 믿습니다. ACT Institute는 전공, 역할, 경험의 경계를 넘는 협업을 통해 목구조 대공간 기술의 새로운 가능성을 탐구합니다.',

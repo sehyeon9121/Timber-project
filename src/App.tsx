@@ -7,7 +7,7 @@ import {
   ResearchPage,
   TeamPage,
   PublicationsPage,
-  // NewsPage,  // 임시 비활성화
+  NewsPage,
   BigQuestionsPage,
   BigQuestionDetailPage,
   ContactPage,
@@ -48,7 +48,7 @@ function App() {
         <Route path="/research" element={<ResearchPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/publications/:category?" element={<PublicationsPage />} />
-        {/* <Route path="/news" element={<NewsPage />} /> */}  {/* 임시 비활성화 */}
+        <Route path="/news" element={<NewsPage />} />
         <Route path="/big-questions" element={<BigQuestionsPage />} />
         <Route path="/big-questions/:id" element={<BigQuestionDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
