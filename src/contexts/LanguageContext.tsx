@@ -83,7 +83,7 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Join Us Page
     'joinUs.title': 'Join Us',
-    'joinUs.subtitle': 'Be a part of the Terrer Lab at MIT',
+    'joinUs.subtitle': 'ACT LAB',
     'joinUs.values': 'VALUES',
     'joinUs.valuesIntro': 'In science, inclusion begins with inclusion in the research environment.',
     'joinUs.valuesDescription': 'At ACT Institute, research begins with mindset before it becomes technology. The challenges of climate change and carbon neutrality cannot be addressed through a single solution, and we believe that diverse perspectives and backgrounds are essential resources for solving structural problems. Through collaboration that transcends disciplinary boundaries, roles, and levels of experience, ACT Institute explores new possibilities for large-span timber structures.',
