@@ -17,6 +17,7 @@ export function TeamMemberCard({
   image,
   scholarUrl,
   email,
+  affiliation,
   className,
   index = 0,
 }: TeamMemberCardProps) {
@@ -41,7 +42,7 @@ export function TeamMemberCard({
         />
 
         {/* Right: Content */}
-        <MemberInfo name={name} position={position} bio={bio} />
+        <MemberInfo name={name} position={position} bio={bio} affiliation={affiliation} />
       </div>
 
       {/* Bottom Line */}

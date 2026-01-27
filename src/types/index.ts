@@ -27,6 +27,12 @@ export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'lin
 // Link variants
 export type LinkVariant = 'default' | 'nav' | 'footer' | 'button' | 'primary' | 'muted' | 'white';
 
+// Localized Text (다국어 지원)
+export interface LocalizedText {
+  en: string;
+  ko: string;
+}
+
 // Team Member
 export interface TeamMember {
   id: string;
@@ -37,6 +43,7 @@ export interface TeamMember {
   scholarUrl?: string;
   email: string;
   type: 'team' | 'alumni';
+  affiliation?: LocalizedText;
 }
 
 // Participating Institution

@@ -18,6 +18,10 @@ interface RawTeamMember {
   image: string;
   scholar_url?: string;
   email: string;
+  affiliation?: {
+    en: string;
+    ko: string;
+  };
 }
 
 // Base URL for static assets
@@ -35,6 +39,7 @@ function transformTeamMembers(raw: RawTeamMember[], type: 'team' | 'alumni'): Te
     scholarUrl: member.scholar_url,
     email: member.email,
     type,
+    affiliation: member.affiliation,
   }));
 }
 

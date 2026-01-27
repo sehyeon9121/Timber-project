@@ -7,6 +7,9 @@
   bio: ""
   image: ""
   email: ""
+  affiliation:
+    ko: "한국기술교육대학교 건축공학과"
+    en: "Dept. of Architectural Engineering, KOREATECH"
 
 - id: "Kim Se Hyeon"
   name: "Kim Se Hyeon"
@@ -14,6 +17,9 @@
   bio: ""
   image: ""
   email: ""
+  affiliation:
+    ko: "한국기술교육대학교 건축공학과"
+    en: "Dept. of Architectural Engineering, KOREATECH"
 
 - id: "Jang Ye Eun"
   name: "Jang Ye Eun"
@@ -21,3 +27,6 @@
   bio: ""
   image: ""
   email: ""
+  affiliation:
+    ko: "한국기술교육대학교 건축공학과"
+    en: "Dept. of Architectural Engineering, KOREATECH"
