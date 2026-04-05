@@ -36,7 +36,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
 
   const peopleDropdownItems = [
     { label: t('nav.ourTeam'), href: '/team' },
-    { label: t('nav.joinUs'), href: '/join-us' },
+    // { label: t('nav.joinUs'), href: '/join-us' },  // ACT INSTITUTE 비활성화
   ];
 
   const newsDropdownItems = [

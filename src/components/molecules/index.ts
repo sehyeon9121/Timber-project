@@ -34,3 +34,6 @@ export type { ScrollIndicatorProps } from './ScrollIndicator';
 
 export { CopyrightText } from './CopyrightText';
 export type { CopyrightTextProps } from './CopyrightText';
+
+export { DivisionCard } from './DivisionCard';
+export type { DivisionCardProps } from './DivisionCard';

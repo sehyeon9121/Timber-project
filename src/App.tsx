@@ -11,7 +11,7 @@ import {
   BigQuestionsPage,
   BigQuestionDetailPage,
   ContactPage,
-  JoinUsPage,
+  // JoinUsPage,  // ACT INSTITUTE 비활성화
   ClimateSnacksPage,
 } from '@/pages';
 
@@ -52,7 +52,7 @@ function App() {
         <Route path="/big-questions" element={<BigQuestionsPage />} />
         <Route path="/big-questions/:id" element={<BigQuestionDetailPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/join-us" element={<JoinUsPage />} />
+        {/* <Route path="/join-us" element={<JoinUsPage />} /> */}{/* ACT INSTITUTE 라우트 비활성화 */}
         <Route path="/climate-snacks" element={<ClimateSnacksPage />} />
         </Routes>
       </AnimatePresence>

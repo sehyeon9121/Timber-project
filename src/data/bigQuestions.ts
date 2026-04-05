@@ -89,6 +89,7 @@ export const bigQuestions: BigQuestion[] = [
       { name: '전남대학교', logo: 'logo-university7.png', url: 'https://www.jnu.ac.kr' },
       { name: '숭실대학교', logo: 'logo-university8.jpg', url: 'https://ssu.ac.kr' },
       { name: '한밭대학교', logo: 'logo-university9.png', url: 'https://www.hanbat.ac.kr' },
+      
     ],
   },
   {

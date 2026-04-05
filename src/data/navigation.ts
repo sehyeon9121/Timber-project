@@ -15,7 +15,7 @@ export const publicationsDropdownItems: NavItem[] = [
 
 export const peopleDropdownItems: NavItem[] = [
   { label: 'Our Team', href: '/team' },
-  { label: 'Join Us', href: '/join-us' },
+  // { label: 'Join Us', href: '/join-us' },  // ACT INSTITUTE 비활성화
 ];
 
 export const newsDropdownItems: NavItem[] = [
