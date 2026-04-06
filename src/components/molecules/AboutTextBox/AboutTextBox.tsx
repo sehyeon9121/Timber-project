@@ -8,31 +8,48 @@ export interface AboutTextBoxProps {
   title: string;
   description: string;
   className?: string;
+  variant?: 'default' | 'overlay';
 }
 
 export function AboutTextBox({
   title,
   description,
   className,
+  variant = 'default',
 }: AboutTextBoxProps) {
+  const isOverlay = variant === 'overlay';
+
   return (
     <div
       className={cn(
-        'p-8 bg-white',
+        'p-8',
+        isOverlay ? 'bg-transparent' : 'bg-white',
         className
       )}
     >
-      <Heading level={3} style={{ fontWeight: 700, color: '#00380A', paddingTop: '10px', paddingBottom: '10px' }}>
+      <Heading
+        level={3}
+        style={{
+          fontWeight: 700,
+          color: isOverlay ? '#ffffff' : '#00380A',
+          paddingTop: '10px',
+          paddingBottom: '10px',
+        }}
+      >
         {title}
       </Heading>
 
       <Spacer size="md" />
 
-      <Divider color="muted" thickness="thin" className="w-16" />
+      <Divider color={isOverlay ? 'white' : 'muted'} thickness="thin" className="w-16" />
 
       <Spacer size="md" />
 
-      <Paragraph color="dark" size="lg" className="leading-relaxed font-medium">
+      <Paragraph
+        color={isOverlay ? 'light' : 'dark'}
+        size="lg"
+        className={cn('leading-relaxed font-medium', isOverlay && 'text-white/90')}
+      >
         {description}
       </Paragraph>
     </div>

@@ -32,38 +32,49 @@ export function AboutContent({
   className,
 }: AboutContentProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col md:flex-row gap-8 md:gap-12 items-start',
-        className
+    <div className={cn('w-full', className)}>
+      {imageTitle && (
+        <motion.h3
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.25 }}
+          className="text-3xl font-extrabold text-black"
+          style={{ marginBottom: '18px', maxWidth: '1200px', margin: '0 auto 18px auto', padding: '0 24px' }}
+        >
+          {imageTitle}
+        </motion.h3>
       )}
-      style={{ maxWidth: '1200px', margin: '0 auto' }}
-    >
-      <motion.div
-        initial={{ opacity: 0, x: -30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.25 }}
-        className="w-full md:w-1/2 flex-shrink-0"
-      >
-        {imageTitle && (
-          <h3 className="text-3xl font-extrabold text-black" style={{ marginBottom: '18px' }}>{imageTitle}</h3>
-        )}
-        <img
-          src={getImageSrc(image)}
-          alt={imageAlt}
-          style={{ height: '374px', objectFit: 'cover', width: '100%' }}
-        />
-      </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.25, delay: 0.1 }}
-        className="flex-1"
+        transition={{ duration: 0.25 }}
+        className="relative w-full"
+        style={{
+          minHeight: '420px',
+          backgroundImage: `url(${getImageSrc(image)})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
-        <AboutTextBox title={title} description={description} />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Text overlay */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.25, delay: 0.1 }}
+          className="relative flex items-center justify-end"
+          style={{ padding: '40px', minHeight: '420px' }}
+        >
+          <div className="max-w-lg">
+            <AboutTextBox title={title} description={description} variant="overlay" />
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );

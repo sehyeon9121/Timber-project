@@ -153,10 +153,10 @@ export function NavigationBar({ className }: NavigationBarProps) {
             />
           ))}
 
-          <DropdownMenu
+          {/* <DropdownMenu
             label={t('nav.publications')}
             items={publicationsDropdownItems}
-          />
+          /> */}
 
           <DropdownMenu
             label={t('nav.people')}
@@ -223,8 +223,8 @@ export function NavigationBar({ className }: NavigationBarProps) {
                 </Link>
               ))}
 
-              {/* Publications Accordion */}
-              <div>
+              {/* Publications Accordion - 비활성화 */}
+              {/* <div>
                 <button
                   type="button"
                   onClick={() => toggleSubmenu('publications')}
@@ -266,7 +266,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </div> */}
 
               {/* People Accordion */}
               <div>

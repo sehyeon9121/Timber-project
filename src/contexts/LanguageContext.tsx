@@ -34,16 +34,20 @@ const translations: Record<Language, Record<string, string>> = {
     'home.about.description': 'ACT Lab is a research institute exploring new possibilities for large-span timber structures through the integration of artificial intelligence and architectural engineering. By extending the inherent potential of timber through intelligent design and data-driven technologies, we aim to achieve both structural reliability and environmental responsibility. Moving beyond conceptual design studies, our research focuses on analysis and validation grounded in real-world building conditions, advancing carbon-neutral architecture from theory to a practical and viable choice.',
     'home.research.title': 'Research Topics',
     'home.research.subtitle': 'Research for the Future',
-    'home.bigQuestions.title': 'Core Research Structure',
-    'home.bigQuestions.subtitle': 'Research Projects',
-    'home.bigQuestions.q1': 'Development of 200-Meter-Class Carbon-Neutral Large-Span Timber Architecture Technologies',
-    'home.bigQuestions.q2': '[Subtask 1] Development of High-Performance Hybrid Large-Section Timber Structural Technologies',
-    'home.bigQuestions.q3': '[Subtask 2] Development of OSC-Based Modularization and Carbon-Neutral Design Technologies for Large-Span Timber Structures',
-    'home.bigQuestions.q4': '[Subtask 3] Development of Environmental and Energy Performance Evaluation Technologies for Large-Span Timber Buildings',
-    'home.bigQuestions.q5': '[Subtask 4] Development of Smart Construction and Maintenance Technologies for Large-Span Timber Buildings',
-    'home.bigQuestions.q6': 'Academic Research Partners',
-    'home.bigQuestions.q7': 'Research, Testing, and Demonstration Partners?',
-    'home.bigQuestions.q8': 'Industry Partners for Technology Transfer and Dissemination',
+    'home.showcase.title': 'Our Vision',
+    'home.showcase.subtitle': 'Building a sustainable future through timber innovation',
+    'home.showcase.boxTitle': 'AI Carbon-Neutral Timber Research',
+    'home.showcase.boxDesc': 'We pursue innovative research that combines artificial intelligence with timber engineering to realize carbon-neutral large-span architecture.',
+
+    // Showcase Page
+    'showcase.heroTitle': 'AI Carbon-Neutral Timber Research',
+    'showcase.heroSubtitle': 'Building a sustainable future through timber innovation',
+    'showcase.block1Title': 'AI-Driven Structural Design',
+    'showcase.block1Desc': 'Leveraging artificial intelligence for next-generation timber structural design and optimization.',
+    'showcase.block2Title': 'Carbon-Neutral Architecture',
+    'showcase.block2Desc': 'Advancing carbon-neutral architecture from theory to practice through data-driven analysis.',
+    'showcase.block3Title': 'Smart Construction Technologies',
+    'showcase.block3Desc': 'Integrating smart technologies for efficient construction and long-term maintenance of timber buildings.',
 
     // Research Themes
     'research.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',
@@ -155,8 +159,8 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.climateSnacks': '기후 스낵',
 
     // Home Page - Hero
-    'home.hero.subtitle': 'Carbon-neutral Large-span Timber System',
-    'home.hero.title': '탄소중립 대공간 건축을 위한 국가 핵심 기술 개발 프로젝트',
+    'home.hero.subtitle': 'Development of 200m-scale Wooden Large Space Structure Building Technology',
+    'home.hero.title': '200m급 목구조 대공간 건축물 건설 기술개발 연구단',
     'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
     'home.about.imageTitle': 'Project Overview',
@@ -164,16 +168,20 @@ const translations: Record<Language, Record<string, string>> = {
     'home.about.description': '본 연구는 목조 구조를 기반으로 대공간 건축 기술을 고도화하고, 설계·시공·운영 전 과정을 통합하여 탄소중립 건축 실현을 목표로 합니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '미래를 위한 연구',
-    'home.bigQuestions.title': '핵심 연구 구성',
-    'home.bigQuestions.subtitle': '연구 과제',
-    'home.bigQuestions.q1': '탄소제로 목조 대공간 건축물 기술 개발',
-    'home.bigQuestions.q2': '[1세부] 고성능 하이브리드 대단면 목조 구조 기술 개발',
-    'home.bigQuestions.q3': '[2세부] OSC 기반 목조 대공간 모듈화·탄소중립 설계 기술 개발',
-    'home.bigQuestions.q4': '[3세부] 목조 대공간 건축물 친환경·에너지 성능 평가 기술 개발',
-    'home.bigQuestions.q5': '[4세부] 목조 대공간 건축물 스마트 시공 및 유지관리 기술 개발',
-    'home.bigQuestions.q6': '학술 공동 연구 기관',
-    'home.bigQuestions.q7': '연구·시험·실증 협력 기관',
-    'home.bigQuestions.q8': '산업 연계 및 기술 확산 파트너',
+    'home.showcase.title': '우리의 비전',
+    'home.showcase.subtitle': '목재 혁신을 통한 지속 가능한 미래 건설',
+    'home.showcase.boxTitle': 'AI 탄소중립 목조 건축 연구',
+    'home.showcase.boxDesc': '인공지능과 목조 공학을 결합하여 탄소중립 대공간 건축물을 실현하는 혁신적 연구를 추구합니다.',
+
+    // Showcase Page
+    'showcase.heroTitle': 'AI 탄소중립 목조 건축 연구',
+    'showcase.heroSubtitle': '목재 혁신을 통한 지속 가능한 미래 건설',
+    'showcase.block1Title': 'AI 기반 구조 설계',
+    'showcase.block1Desc': '인공지능을 활용한 차세대 목조 구조 설계 및 최적화.',
+    'showcase.block2Title': '탄소중립 건축',
+    'showcase.block2Desc': '데이터 기반 분석을 통해 탄소중립 건축을 이론에서 실천으로.',
+    'showcase.block3Title': '스마트 건설 기술',
+    'showcase.block3Desc': '목조 건축물의 효율적인 시공 및 장기 유지관리를 위한 스마트 기술 통합.',
 
     // Research Themes
     'research.terrestrialCarbon.title': '200m급 대공간 구조',

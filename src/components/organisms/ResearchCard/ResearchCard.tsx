@@ -42,34 +42,32 @@ export function ResearchCard({
       viewport={{ once: true }}
       transition={{ duration: 0.25, delay: index * 0.1 }}
       whileHover={{
-        scale: [1, 0.9, 1.02],
+        y: -6,
+        boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
         transition: {
-          duration: 1.4,
-          times: [0, 0.2, 1],
+          duration: 0.3,
           ease: "easeOut"
         }
       }}
       className={cn(
         'relative block overflow-hidden',
-        'h-[400px] max-h-[400px] w-full',
-        'group cursor-pointer',
+        'h-[200px] max-h-[200px] w-full',
+        'bg-gray-100 border border-gray-200 rounded-xl',
+        'shadow-md hover:border-gray-300',
+        'group cursor-pointer transition-colors duration-300',
         className
       )}
-      style={{
-        backgroundImage: `url(${getImageSrc(backgroundImage)})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
     >
-      {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-black/50" />
+      {/* 상단 컬러 액센트 바 */}
+      <div className="h-1.5 w-full bg-[var(--color-primary)]" />
 
       {/* Content */}
-      <div className="relative z-10 flex h-full flex-col justify-start pb-6 md:pb-8" style={{ paddingTop: '50px', paddingLeft: '48px', paddingRight: '48px' }}>
-        <h2 className="font-lato text-lg font-semibold text-white md:text-[28px] text-center" style={{ marginBottom: '25px' }}>
+      <div className="flex h-full flex-col justify-start pb-6 md:pb-8" style={{ paddingTop: '40px', paddingLeft: '48px', paddingRight: '48px' }}>
+        <h2 className="font-lato text-lg font-semibold text-gray-800 md:text-[28px] text-center" style={{ marginBottom: '20px' }}>
           {title}
         </h2>
-        <p className="font-open-sans text-base leading-relaxed text-white/90 md:text-lg">
+        <div className="w-12 h-px bg-gray-300 mx-auto mb-5" />
+        <p className="font-open-sans text-base leading-relaxed text-gray-500 md:text-lg">
           {description}
         </p>
       </div>

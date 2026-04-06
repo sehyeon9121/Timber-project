@@ -8,12 +8,11 @@ import {
   TeamPage,
   PublicationsPage,
   NewsPage,
-  BigQuestionsPage,
-  BigQuestionDetailPage,
   ContactPage,
   // JoinUsPage,  // ACT INSTITUTE 비활성화
   ClimateSnacksPage,
   ResearchDetailPage,
+  ShowcasePage,
 } from '@/pages';
 
 function App() {
@@ -51,10 +50,9 @@ function App() {
         <Route path="/team" element={<TeamPage />} />
         <Route path="/publications/:category?" element={<PublicationsPage />} />
         <Route path="/news" element={<NewsPage />} />
-        <Route path="/big-questions" element={<BigQuestionsPage />} />
-        <Route path="/big-questions/:id" element={<BigQuestionDetailPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+<Route path="/contact" element={<ContactPage />} />
         {/* <Route path="/join-us" element={<JoinUsPage />} /> */}{/* ACT INSTITUTE 라우트 비활성화 */}
+        <Route path="/showcase" element={<ShowcasePage />} />
         <Route path="/climate-snacks" element={<ClimateSnacksPage />} />
         </Routes>
       </AnimatePresence>

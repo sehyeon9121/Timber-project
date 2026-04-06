@@ -18,10 +18,6 @@ export type { AboutContentProps } from './AboutContent';
 export { ResearchThemeCard } from './ResearchThemeCard';
 export type { ResearchThemeCardProps } from './ResearchThemeCard';
 export { ResearchAccordion } from './ResearchAccordion';
-export { BigQuestionCard } from './BigQuestionCard';
-export type { BigQuestionCardProps } from './BigQuestionCard';
-export { BigQuestionContent } from './BigQuestionContent';
-export type { BigQuestionContentProps } from './BigQuestionContent';
 export { ResearchDetailContent } from './ResearchDetailContent';
 export type { ResearchDetailContentProps } from './ResearchDetailContent';
 
@@ -43,10 +39,10 @@ export type { NewsItemProps } from './NewsItem';
 export { FooterContent } from './FooterContent';
 export type { FooterContentProps } from './FooterContent';
 
+// Showcase
+export { ShowcaseSection } from './ShowcaseSection';
+export type { ShowcaseSectionProps } from './ShowcaseSection';
+
 // Affiliations
 export { AffiliationLogo } from './AffiliationLogo';
 export type { AffiliationLogoProps } from './AffiliationLogo';
-
-// Organization
-export { OrganizationChart } from './OrganizationChart';
-export type { OrganizationChartProps } from './OrganizationChart';
