@@ -13,6 +13,7 @@ import {
   ContactPage,
   // JoinUsPage,  // ACT INSTITUTE 비활성화
   ClimateSnacksPage,
+  ResearchDetailPage,
 } from '@/pages';
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
         <Routes location={location} key={location.pathname}>
         <Route path="/" element={<HomePage />} />
         <Route path="/research" element={<ResearchPage />} />
+        <Route path="/research/:id" element={<ResearchDetailPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/publications/:category?" element={<PublicationsPage />} />
         <Route path="/news" element={<NewsPage />} />

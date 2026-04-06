@@ -23,7 +23,8 @@ interface RawPublication {
 }
 
 // Raw 데이터를 Publication 타입으로 변환
-function transformPublications(raw: RawPublication[]): Publication[] {
+function transformPublications(raw: RawPublication[] | null | undefined): Publication[] {
+  if (!raw || !Array.isArray(raw)) return [];
   return raw.map((pub) => ({
     id: pub.id,
     title: pub.title,

@@ -22,6 +22,8 @@ export { BigQuestionCard } from './BigQuestionCard';
 export type { BigQuestionCardProps } from './BigQuestionCard';
 export { BigQuestionContent } from './BigQuestionContent';
 export type { BigQuestionContentProps } from './BigQuestionContent';
+export { ResearchDetailContent } from './ResearchDetailContent';
+export type { ResearchDetailContentProps } from './ResearchDetailContent';
 
 // Team
 export { TeamMemberCard } from './TeamMemberCard';

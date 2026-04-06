@@ -29,7 +29,8 @@ interface RawClimateSnackSession {
 }
 
 // Raw 데이터를 ClimateSnackSession 타입으로 변환
-function transformSessions(raw: RawClimateSnackSession[]): ClimateSnackSession[] {
+function transformSessions(raw: RawClimateSnackSession[] | null | undefined): ClimateSnackSession[] {
+  if (!raw || !Array.isArray(raw)) return [];
   return raw.map((session) => ({
     id: session.id,
     speaker: session.speaker,

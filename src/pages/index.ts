@@ -8,3 +8,4 @@ export { BigQuestionDetailPage } from './BigQuestionDetailPage';
 export { ContactPage } from './ContactPage';
 export { JoinUsPage } from './JoinUsPage';
 export { ClimateSnacksPage } from './ClimateSnacksPage';
+export { ResearchDetailPage } from './ResearchDetailPage';

@@ -27,7 +27,7 @@ export function BigQuestionDetailPage() {
       {/* Back Link */}
       <ContentSection background="white" padding="sm" className="pt-24">
         <Link
-          href="/big-questions"
+          href="/"
           variant="muted"
           className="inline-flex items-center gap-2 hover:text-[var(--color-primary)]"
         >

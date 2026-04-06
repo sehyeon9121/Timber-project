@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 
 // public 폴더 이미지에 base URL 자동 추가
@@ -24,16 +25,18 @@ export interface ResearchCardProps {
 }
 
 export function ResearchCard({
+  id,
   title,
   description,
   backgroundImage,
-  href = '#',
   index = 0,
   className,
 }: ResearchCardProps) {
+  const navigate = useNavigate();
+
   return (
-    <motion.a
-      href={href}
+    <motion.div
+      onClick={() => navigate(`/research/${id}`)}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -70,6 +73,6 @@ export function ResearchCard({
           {description}
         </p>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }

@@ -1,0 +1,35 @@
+# Climate Snacks 세션 목록
+# Accessible conversations about climate change
+
+- id: "josh-fisher"
+  speaker: "Josh Fisher"
+  topic: "The Fate of the Terrestrial Biosphere"
+  description: "Discusses the land component of the carbon cycle, the uncertainties and challenges in the field."
+  video_url: "https://www.youtube.com/watch?v=OEpnPtZ6W84"
+
+- id: "asmeret-berhe"
+  speaker: "Asmeret Asefaw Berhe"
+  topic: "What's soil got to do with climate change?"
+  description: "Explores soil's capacity for carbon sequestration as a nature-based solution."
+  video_url: "https://www.youtube.com/watch?v=XhOsMhBFK8Q"
+
+- id: "rob-jackson"
+  speaker: "Rob Jackson"
+  affiliation: "Stanford"
+  topic: "Energy, Climate and Methane Mitigation"
+  description: "Addresses methane's climate impact."
+  video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+- id: "sara-vicca"
+  speaker: "Sara Vicca"
+  affiliation: "University of Antwerp"
+  topic: "The land as a natural brake on climate change"
+  description: "Examines negative emission technologies and natural climate solutions."
+  video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+- id: "susan-cook-patton"
+  speaker: "Susan Cook-Patton"
+  affiliation: "Nature Conservancy"
+  topic: "Restoring Tree Cover as a Natural Climate Solution"
+  description: "Analyzes forest restoration's climate mitigation potential."
+  video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"

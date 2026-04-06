@@ -123,7 +123,7 @@ main > div {
   .hero-content-container {
     padding-left: 0;
     padding-right: 0;
-    margin-left: calc(100vw / 6);
+    margin-left: 40px;
   }
 }
 

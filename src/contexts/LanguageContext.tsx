@@ -29,6 +29,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.title': 'AI Carbon-Neutral Timber Research Institute',
     'home.hero.description': 'Acting for the Planet, Innovating Technology for Timber.',
     // Home Page - About
+    'home.about.imageTitle': 'About ACT Lab',
     'home.about.title': ' Lab',
     'home.about.description': 'ACT Lab is a research institute exploring new possibilities for large-span timber structures through the integration of artificial intelligence and architectural engineering. By extending the inherent potential of timber through intelligent design and data-driven technologies, we aim to achieve both structural reliability and environmental responsibility. Moving beyond conceptual design studies, our research focuses on analysis and validation grounded in real-world building conditions, advancing carbon-neutral architecture from theory to a practical and viable choice.',
     'home.research.title': 'Research Topics',
@@ -49,6 +50,20 @@ const translations: Record<Language, Record<string, string>> = {
     'research.terrestrialCarbon.description': 'Through AI- and data-driven design approaches, we extend the structural limits of large-span timber systems. By integrally analyzing load transfer mechanisms, material efficiency, and geometric optimization, our research advances next-generation timber structural design methods that enhance both stability and performance.',
     'research.naturalClimate.title': 'Technologies for Realizing Carbon-Neutral Architecture',
     'research.naturalClimate.description': 'We quantitatively analyze the carbon reduction potential of timber construction and evaluate carbon-neutral performance across the entire building lifecycle, including design, construction, and operation. Through AI-based analysis and simulation, we present implementable technologies that enable carbon-neutral architecture in real-world applications.',
+    'research.smartConstruction.title': 'Smart Construction & Maintenance Technologies',
+    'research.smartConstruction.description': 'We develop smart construction and maintenance technologies for large-span timber buildings by integrating IoT sensing, digital twin modeling, and AI-based predictive maintenance to ensure long-term structural safety and operational efficiency.',
+    'research.energyPerformance.title': 'Environmental & Energy Performance Evaluation',
+    'research.energyPerformance.description': 'We evaluate the environmental and energy performance of large-span timber buildings through lifecycle assessment and simulation technologies, developing standards and methodologies for green building certification and energy optimization.',
+
+    // Research Detail Pages (상세 페이지 전용)
+    'researchDetail.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',
+    'researchDetail.terrestrialCarbon.description': 'Through AI- and data-driven design approaches, we extend the structural limits of large-span timber systems.',
+    'researchDetail.naturalClimate.title': 'Technologies for Realizing Carbon-Neutral Architecture',
+    'researchDetail.naturalClimate.description': 'We quantitatively analyze the carbon reduction potential of timber construction and evaluate carbon-neutral performance across the entire building lifecycle.',
+    'researchDetail.smartConstruction.title': 'Smart Construction & Maintenance Technologies',
+    'researchDetail.smartConstruction.description': 'We develop smart construction and maintenance technologies for large-span timber buildings.',
+    'researchDetail.energyPerformance.title': 'Environmental & Energy Performance Evaluation',
+    'researchDetail.energyPerformance.description': 'We evaluate the environmental and energy performance of large-span timber buildings.',
 
     // Research Page
     'research.title': 'Research',
@@ -140,12 +155,13 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.climateSnacks': '기후 스낵',
 
     // Home Page - Hero
-    'home.hero.subtitle': 'ACT INSITUTE LAB | 한국기술교육대학교 건축공학과',
-    'home.hero.title': 'AI 탄소중립 목조 연구소',
-    'home.hero.description': '지구를 위해 행동하고, 목재를 위해 기술을 혁신하다.',
+    'home.hero.subtitle': 'Carbon-neutral Large-span Timber System',
+    'home.hero.title': '탄소중립 대공간 건축을 위한 국가 핵심 기술 개발 프로젝트',
+    'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
-    'home.about.title': 'ACT Lab',
-    'home.about.description': 'ACT Lab은 AI와 건축 공학의 결합을 통해 대공간 목구조의 새로운 가능성을 탐구하는 연구소입니다. 우리는 목재라는 재료가 지닌 잠재력을 지능형 설계와 데이터 기반 기술로 확장하여, 구조적 안정성과 환경적 책임을 동시에 달성하고자 합니다. 설계검토에 그치지 않고 실제 건축 환경을 고려한 분석과 검증을 통해, 탄소중립 건축이 이론이 아닌 현실적인 선택이 될 수 있도록 연구를 이어가고 있습니다.',
+    'home.about.imageTitle': 'Project Overview',
+    'home.about.title': 'Hi - Wood',
+    'home.about.description': '본 연구는 목조 구조를 기반으로 대공간 건축 기술을 고도화하고, 설계·시공·운영 전 과정을 통합하여 탄소중립 건축 실현을 목표로 합니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '미래를 위한 연구',
     'home.bigQuestions.title': '핵심 연구 구성',
@@ -160,10 +176,24 @@ const translations: Record<Language, Record<string, string>> = {
     'home.bigQuestions.q8': '산업 연계 및 기술 확산 파트너',
 
     // Research Themes
-    'research.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',
-    'research.terrestrialCarbon.description': 'AI와 데이터 기반 설계를 통해 대공간 목구조의 구조적 한계를 확장합니다. 하중 전달, 재료 효율, 형상 최적화를 통합적으로 분석하여 안정성과 성능을 동시에 만족하는 차세대 목조 대공간 설계 해법을 연구합니다.',
-    'research.naturalClimate.title': '탄소중립 건축 실현 기술',
-    'research.naturalClimate.description': '목재 건축의 탄소 저감 효과를 정량적으로 분석하고, 설계·시공·운영 전 과정에서 탄소중립 성능을 검증합니다. AI 기반 분석과 시뮬레이션을 통해 실현 가능한 탄소중립 건축 기술을 제시합니다. ',
+    'research.terrestrialCarbon.title': '200m급 대공간 구조',
+    'research.terrestrialCarbon.description': '국내 최초 초대형 목조 구조 실현',
+    'research.naturalClimate.title': '4대 핵심 기술',
+    'research.naturalClimate.description': '구조 · 설계 · 시공 · 운영 통합 기술',
+    'research.smartConstruction.title': '기간 2026 ~ 2029',
+    'research.smartConstruction.description': '단계별 기술 개발 및 실증 수행',
+    'research.energyPerformance.title': '탄소중립 건축',
+    'research.energyPerformance.description': '건설 분야 탄소 배출 저감',
+
+    // Research Detail Pages (상세 페이지 전용)
+    'researchDetail.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',
+    'researchDetail.terrestrialCarbon.description': 'AI와 데이터 기반 설계를 통해 대공간 목구조의 구조적 한계를 확장합니다.',
+    'researchDetail.naturalClimate.title': '탄소중립 건축 실현 기술',
+    'researchDetail.naturalClimate.description': '목재 건축의 탄소 저감 효과를 정량적으로 분석하고 검증합니다.',
+    'researchDetail.smartConstruction.title': '스마트 시공 및 유지관리 기술',
+    'researchDetail.smartConstruction.description': '목조 대공간 건축물의 스마트 시공·유지관리 기술을 개발합니다.',
+    'researchDetail.energyPerformance.title': '친환경·에너지 성능 평가 기술',
+    'researchDetail.energyPerformance.description': '목조 대공간 건축물의 환경·에너지 성능을 평가합니다.',
 
     // Research Page
     'research.title': '연구',

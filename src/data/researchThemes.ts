@@ -19,4 +19,22 @@ export const researchThemes: ResearchTheme[] = [
     expandIcon: '/images/leeseunglab/down_green.png',
     collapseIcon: '/images/leeseunglab/up_green.png',
   },
+  {
+    id: 'smart-construction',
+    title: 'Smart Construction & Maintenance',
+    description: 'We develop smart construction and maintenance technologies for large-span timber buildings, integrating IoT sensing, digital twin modeling, and AI-based predictive maintenance to ensure long-term structural safety and operational efficiency.',
+    href: '#',
+    backgroundImage: '/images/leeseunglab/research-carbon-ecology.png',
+    expandIcon: '/images/leeseunglab/down_green.png',
+    collapseIcon: '/images/leeseunglab/up_green.png',
+  },
+  {
+    id: 'energy-performance',
+    title: 'Environmental & Energy Performance',
+    description: 'We evaluate the environmental and energy performance of large-span timber buildings through lifecycle assessment and simulation technologies, developing standards and methodologies for green building certification and energy optimization.',
+    href: '#',
+    backgroundImage: '/images/leeseunglab/research-climate-solutions.png',
+    expandIcon: '/images/leeseunglab/down_green.png',
+    collapseIcon: '/images/leeseunglab/up_green.png',
+  },
 ];

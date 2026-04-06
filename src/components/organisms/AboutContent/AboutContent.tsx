@@ -17,6 +17,7 @@ const getImageSrc = (src: string): string => {
 export interface AboutContentProps {
   image: string;
   imageAlt: string;
+  imageTitle?: string;
   title: string;
   description: string;
   className?: string;
@@ -25,6 +26,7 @@ export interface AboutContentProps {
 export function AboutContent({
   image,
   imageAlt,
+  imageTitle,
   title,
   description,
   className,
@@ -44,6 +46,9 @@ export function AboutContent({
         transition={{ duration: 0.25 }}
         className="w-full md:w-1/2 flex-shrink-0"
       >
+        {imageTitle && (
+          <h3 className="text-3xl font-extrabold text-black" style={{ marginBottom: '18px' }}>{imageTitle}</h3>
+        )}
         <img
           src={getImageSrc(image)}
           alt={imageAlt}

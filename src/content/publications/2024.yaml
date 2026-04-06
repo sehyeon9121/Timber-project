@@ -1,0 +1,42 @@
+# 2024년 출판물 목록
+# Terrer Lab Publications
+
+- id: "hogan-2024-ppp"
+  title: "Anthromes and forest carbon responses to global change"
+  authors: "JA Hogan, et al."
+  journal: "Plants, People, Planet"
+  year: 2024
+  link: "https://doi.org/10.1002/ppp3.10456"
+  abstract: "Forest ecosystems absorb and store about 25% of global carbon dioxide emissions annually, playing a critical role in climate change mitigation."
+
+- id: "liu-2024-nph"
+  title: "Contrasting drought tolerance traits of woody plants is associated with mycorrhizal types at the global scale"
+  authors: "X Liu, et al."
+  journal: "New Phytologist"
+  year: 2024
+  link: "https://doi.org/10.1111/nph.19234"
+  abstract: "Understanding how mycorrhizal associations influence plant drought tolerance is essential for predicting forest responses to climate change."
+
+- id: "cen-2024-oneearth"
+  title: "Global patterns of nitrogen saturation in forests"
+  authors: "X Cen, et al."
+  journal: "One Earth"
+  year: 2024
+  link: "https://doi.org/10.1016/j.oneear.2024.01.001"
+  abstract: "Nitrogen deposition has increased dramatically over the past century, with important implications for forest carbon cycling and ecosystem health."
+
+- id: "peng-2024-nwater"
+  title: "Carbon restoration potential on global land under water resource constraints"
+  authors: "S Peng, et al."
+  journal: "Nature Water"
+  year: 2024
+  link: "https://doi.org/10.1038/s44221-024-00001-0"
+  abstract: "Water availability is a key constraint on the potential for land-based carbon sequestration through afforestation and reforestation."
+
+- id: "wu-2024-crs"
+  title: "Future soil organic carbon stocks in China under climate change"
+  authors: "J Wu, et al."
+  journal: "Cell Reports Sustainability"
+  year: 2024
+  link: "https://doi.org/10.1016/j.crsus.2024.100001"
+  abstract: "Soil organic carbon stocks in China are projected to change significantly under future climate scenarios, with implications for national carbon budgets."

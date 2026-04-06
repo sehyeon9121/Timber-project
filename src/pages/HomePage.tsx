@@ -16,10 +16,17 @@ export function HomePage() {
   const { t } = useLanguage();
 
   // 번역된 연구 주제 데이터
+  const themeKeyMap: Record<string, string> = {
+    'terrestrial-carbon': 'terrestrialCarbon',
+    'natural-climate': 'naturalClimate',
+    'smart-construction': 'smartConstruction',
+    'energy-performance': 'energyPerformance',
+  };
+
   const translatedResearchThemes = researchThemes.map((theme) => ({
     ...theme,
-    title: t(`research.${theme.id === 'terrestrial-carbon' ? 'terrestrialCarbon' : 'naturalClimate'}.title`),
-    description: t(`research.${theme.id === 'terrestrial-carbon' ? 'terrestrialCarbon' : 'naturalClimate'}.description`),
+    title: t(`research.${themeKeyMap[theme.id] || theme.id}.title`),
+    description: t(`research.${themeKeyMap[theme.id] || theme.id}.description`),
   }));
 
   // 번역된 Big Questions 데이터
@@ -44,6 +51,7 @@ export function HomePage() {
         <AboutContent
           image="/images/leeseunglab/test-homepage.jpg"
           imageAlt="Terrer Lab"
+          imageTitle={t('home.about.imageTitle')}
           title={t('home.about.title')}
           description={t('home.about.description')}
         />

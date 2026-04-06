@@ -28,7 +28,8 @@ interface RawTeamMember {
 const BASE_URL = import.meta.env.BASE_URL || '/';
 
 // Raw 데이터를 TeamMember 타입으로 변환
-function transformTeamMembers(raw: RawTeamMember[], type: 'team' | 'alumni'): TeamMember[] {
+function transformTeamMembers(raw: RawTeamMember[] | null | undefined, type: 'team' | 'alumni'): TeamMember[] {
+  if (!raw || !Array.isArray(raw)) return [];
   return raw.map((member) => ({
     id: member.id,
     name: member.name,

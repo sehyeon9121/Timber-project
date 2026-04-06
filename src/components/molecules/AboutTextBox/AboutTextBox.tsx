@@ -22,7 +22,7 @@ export function AboutTextBox({
         className
       )}
     >
-      <Heading level={3} style={{ fontWeight: 700, color: '#00380A' }}>
+      <Heading level={3} style={{ fontWeight: 700, color: '#00380A', paddingTop: '10px', paddingBottom: '10px' }}>
         {title}
       </Heading>
 

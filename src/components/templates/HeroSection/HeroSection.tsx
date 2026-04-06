@@ -135,7 +135,7 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        'hero-section relative flex items-center justify-start overflow-hidden',
+        'hero-section relative flex items-end justify-start overflow-hidden',
         !aspectRatio && minHeightClasses[minHeight],
         className
       )}
@@ -152,7 +152,7 @@ export function HeroSection({
         </>
       )}
 
-      <div className="relative z-10 w-full md:w-auto hero-content-container">
+      <div className="relative z-10 w-full md:w-auto hero-content-container" style={{ paddingBottom: '20px' }}>
         {children || (
           <HeroContent
             subtitle={subtitle || ''}

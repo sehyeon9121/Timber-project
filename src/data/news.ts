@@ -22,7 +22,8 @@ interface RawNewsItem {
 const BASE_URL = import.meta.env.BASE_URL || '/';
 
 // Raw 데이터를 NewsItemData 타입으로 변환
-function transformNews(raw: RawNewsItem[]): NewsItemData[] {
+function transformNews(raw: RawNewsItem[] | null | undefined): NewsItemData[] {
+  if (!raw || !Array.isArray(raw)) return [];
   return raw.map((item) => ({
     id: item.id,
     title: item.title,
