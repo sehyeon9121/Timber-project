@@ -54,6 +54,7 @@ export function AboutContent({
         className="relative w-full"
         style={{
           minHeight: '420px',
+          aspectRatio: '3006 / 1344',
           backgroundImage: `url(${getImageSrc(image)})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',

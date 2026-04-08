@@ -168,7 +168,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.about.description': '본 연구는 목조 구조를 기반으로 대공간 건축 기술을 고도화하고, 설계·시공·운영 전 과정을 통합하여 탄소중립 건축 실현을 목표로 합니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '미래를 위한 연구',
-    'home.showcase.title': '우리의 비전',
+    'home.showcase.title': '참여기관',
     'home.showcase.subtitle': '목재 혁신을 통한 지속 가능한 미래 건설',
     'home.showcase.boxTitle': 'AI 탄소중립 목조 건축 연구',
     'home.showcase.boxDesc': '인공지능과 목조 공학을 결합하여 탄소중립 대공간 건축물을 실현하는 혁신적 연구를 추구합니다.',
@@ -184,14 +184,14 @@ const translations: Record<Language, Record<string, string>> = {
     'showcase.block3Desc': '목조 건축물의 효율적인 시공 및 장기 유지관리를 위한 스마트 기술 통합.',
 
     // Research Themes
-    'research.terrestrialCarbon.title': '200m급 대공간 구조',
-    'research.terrestrialCarbon.description': '국내 최초 초대형 목조 구조 실현',
-    'research.naturalClimate.title': '4대 핵심 기술',
-    'research.naturalClimate.description': '구조 · 설계 · 시공 · 운영 통합 기술',
-    'research.smartConstruction.title': '기간 2026 ~ 2029',
-    'research.smartConstruction.description': '단계별 기술 개발 및 실증 수행',
-    'research.energyPerformance.title': '탄소중립 건축',
-    'research.energyPerformance.description': '건설 분야 탄소 배출 저감',
+    'research.terrestrialCarbon.title': '고성능 하이브리드 대단면 부재 기술',
+    'research.terrestrialCarbon.description': '목조 대공간 구조 실현을 위한 고강도 대단면 하이브리드 구조 부재 개발',
+    'research.naturalClimate.title': 'OSC 기반 모듈화 및 탄소중립 설계',
+    'research.naturalClimate.description': '모듈화 시공과 탄소중립 설계를 기반으로 대공간 건축 시스템 통합 기술 개발',
+    'research.smartConstruction.title': '친환경 및 에너지 성능 평가 기술',
+    'research.smartConstruction.description': '건축물 전 생애주기 기반의 환경 및 에너지 성능 평가 기술 개발',
+    'research.energyPerformance.title': '스마트 시공 및 유지관리 시스템',
+    'research.energyPerformance.description': '디지털 기반 시공 및 운영관리 기술을 통한 건축물 건주기 스마트 관리 시스템 구축',
 
     // Research Detail Pages (상세 페이지 전용)
     'researchDetail.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',

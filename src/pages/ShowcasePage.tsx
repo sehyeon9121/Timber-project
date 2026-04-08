@@ -2,44 +2,31 @@ import { DetailPageLayout } from '@/components/templates/DetailPageLayout';
 import { ContentSection } from '@/components/templates/ContentSection';
 import { Container } from '@/components/atoms/Container';
 import { Spacer } from '@/components/atoms/Spacer';
-import { ShowcaseBlock } from '@/components/molecules/ShowcaseBlock';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { PartnershipCard } from '@/components/organisms/PartnershipCard';
+import { partnerships } from '@/data/partnerships';
 
 export function ShowcasePage() {
-  const { t } = useLanguage();
-
-  const blocks = [
-    {
-      image: '/images/leeseunglab/hero-background.jpg',
-      imageAlt: t('showcase.block1Title'),
-      title: t('showcase.block1Title'),
-      description: t('showcase.block1Desc'),
-    },
-    {
-      image: '/images/leeseunglab/test-homepage.jpg',
-      imageAlt: t('showcase.block2Title'),
-      title: t('showcase.block2Title'),
-      description: t('showcase.block2Desc'),
-    },
-    {
-      image: '/images/leeseunglab/people-hero.jpg',
-      imageAlt: t('showcase.block3Title'),
-      title: t('showcase.block3Title'),
-      description: t('showcase.block3Desc'),
-    },
-  ];
-
   return (
     <DetailPageLayout
-      title={t('showcase.heroTitle')}
-      subtitle={t('showcase.heroSubtitle')}
+      title="협력 네트워크"
+      subtitle="학술·연구·산업 파트너십"
+      heroImage="/images/leeseunglab/Net.jpg"
     >
-      <ContentSection background="white" padding="lg">
-        <Container maxWidth="none" className="max-w-[900px]">
-          {blocks.map((block, index) => (
-            <div key={index}>
-              {index > 0 && <Spacer size="4xl" />}
-              <ShowcaseBlock {...block} />
+      <ContentSection
+        background="white"
+        padding="lg"
+        className="!pt-[20px] !pb-[20px] md:!pt-[20px] md:!pb-[20px]"
+      >
+        <Container maxWidth="none" className="max-w-[1100px]">
+          {partnerships.map((partnership, index) => (
+            <div key={partnership.id}>
+              {index > 0 && <Spacer size="xl" />}
+              <PartnershipCard
+                title={partnership.title}
+                description={partnership.description}
+                icon={partnership.icon}
+                institutions={partnership.institutions}
+              />
             </div>
           ))}
         </Container>

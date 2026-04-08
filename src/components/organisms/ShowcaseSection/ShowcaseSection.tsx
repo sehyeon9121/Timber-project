@@ -56,13 +56,19 @@ export function ShowcaseSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="w-1/2 mx-auto"
+        className="mx-auto"
+        style={{ width: '65%', maxWidth: '700px' }}
       >
-        <img
-          src={image}
-          alt={imageAlt}
-          className="w-full object-cover aspect-square"
-        />
+        <div
+          className="bg-white rounded-xl border border-gray-200 drop-shadow-lg"
+          style={{ padding: '20px' }}
+        >
+          <img
+            src={image}
+            alt={imageAlt}
+            className="w-full object-cover aspect-square"
+          />
+        </div>
       </motion.div>
 
       {/* Bottom Box - 20px gap from image */}

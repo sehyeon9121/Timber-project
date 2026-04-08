@@ -46,3 +46,7 @@ export type { ShowcaseSectionProps } from './ShowcaseSection';
 // Affiliations
 export { AffiliationLogo } from './AffiliationLogo';
 export type { AffiliationLogoProps } from './AffiliationLogo';
+
+// Partnerships
+export { PartnershipCard } from './PartnershipCard';
+export type { PartnershipCardProps } from './PartnershipCard';
