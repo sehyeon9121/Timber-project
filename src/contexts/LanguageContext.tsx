@@ -40,14 +40,22 @@ const translations: Record<Language, Record<string, string>> = {
     'home.showcase.boxDesc': 'We pursue innovative research that combines artificial intelligence with timber engineering to realize carbon-neutral large-span architecture.',
 
     // Showcase Page
-    'showcase.heroTitle': 'AI Carbon-Neutral Timber Research',
-    'showcase.heroSubtitle': 'Building a sustainable future through timber innovation',
+    'showcase.heroTitle': 'Collaboration Network',
+    'showcase.heroSubtitle': 'Academic · Research · Industry Partnership',
     'showcase.block1Title': 'AI-Driven Structural Design',
     'showcase.block1Desc': 'Leveraging artificial intelligence for next-generation timber structural design and optimization.',
     'showcase.block2Title': 'Carbon-Neutral Architecture',
     'showcase.block2Desc': 'Advancing carbon-neutral architecture from theory to practice through data-driven analysis.',
     'showcase.block3Title': 'Smart Construction Technologies',
     'showcase.block3Desc': 'Integrating smart technologies for efficient construction and long-term maintenance of timber buildings.',
+
+    // Showcase Page - Partnerships
+    'showcase.academic.title': 'Academic Joint Research Institutions',
+    'showcase.academic.description': 'This research strengthens the research foundation and expertise in ultra-large timber large-span construction technology through academic joint research with universities. By linking diverse specializations and research capabilities, we build an integrated research collaboration system spanning structure, design, environment, and construction.',
+    'showcase.research.title': 'Research, Testing & Demonstration Partners',
+    'showcase.research.description': 'This research strengthens the testing, evaluation, and demonstration foundation for ultra-large timber large-span construction technology through collaboration with national research institutions and specialized research institutes. Through this, we aim to secure the reliability and public applicability of core technologies and contribute to the national-level expansion of carbon-neutral construction technology.',
+    'showcase.industry.title': 'Industry Partners for Technology Diffusion',
+    'showcase.industry.description': 'This research examines the field applicability and feasibility of ultra-large timber large-span construction technology through collaboration with construction and engineering industry partners. Based on this, we build a collaboration system that connects from design, construction, to commercialization stages, promoting practical utilization and technology diffusion of research outcomes.',
 
     // Research Themes
     'research.terrestrialCarbon.title': 'High-Performance Hybrid Large-Section Member Technology',
@@ -188,14 +196,22 @@ const translations: Record<Language, Record<string, string>> = {
     'home.showcase.boxDesc': '인공지능과 목조 공학을 결합하여 탄소중립 대공간 건축물을 실현하는 혁신적 연구를 추구합니다.',
 
     // Showcase Page
-    'showcase.heroTitle': 'AI 탄소중립 목조 건축 연구',
-    'showcase.heroSubtitle': '목재 혁신을 통한 지속 가능한 미래 건설',
+    'showcase.heroTitle': '협력 네트워크',
+    'showcase.heroSubtitle': '학술·연구·산업 파트너십',
     'showcase.block1Title': 'AI 기반 구조 설계',
     'showcase.block1Desc': '인공지능을 활용한 차세대 목조 구조 설계 및 최적화.',
     'showcase.block2Title': '탄소중립 건축',
     'showcase.block2Desc': '데이터 기반 분석을 통해 탄소중립 건축을 이론에서 실천으로.',
     'showcase.block3Title': '스마트 건설 기술',
     'showcase.block3Desc': '목조 건축물의 효율적인 시공 및 장기 유지관리를 위한 스마트 기술 통합.',
+
+    // Showcase Page - Partnerships
+    'showcase.academic.title': '학술 공동 연구 기관',
+    'showcase.academic.description': '본 연구는 대학과의 학술 공동 연구를 통해 초대형 목조 대공간 건축 기술의 연구 기반과 전문성을 강화합니다. 다양한 전공과 연구 역량을 연계하여 구조, 설계, 환경, 시공 분야를 아우르는 통합적 연구 협력 체계를 구축합니다.',
+    'showcase.research.title': '연구·시험·실증 협력 기관',
+    'showcase.research.description': '본 연구는 국가 연구기관 및 전문 연구소와의 협력을 통해 초대형 목조 대공간 건축 기술에 대한 시험, 평가, 실증 기반을 강화합니다. 이를 통해 핵심 기술의 신뢰성과 공공적 활용 가능성을 확보하고, 국가 차원의 탄소중립 건설 기술 확산에 기여하고자 합니다.',
+    'showcase.industry.title': '산업 연계 및 기술 확산 파트너',
+    'showcase.industry.description': '본 연구는 건설 및 엔지니어링 산업체와의 협력을 통해 초대형 목조 대공간 건축 기술의 현장 적용 가능성과 실현성을 검토합니다. 이를 바탕으로 설계·시공·사업화 단계까지 연계되는 협력 체계를 구축하여 연구 성과의 실질적인 활용과 기술 확산을 추진합니다.',
 
     // Research Themes
     'research.terrestrialCarbon.title': '고성능 하이브리드 대단면 부재 기술',
