@@ -18,7 +18,6 @@ export function ResearchCard({
   id,
   title,
   description,
-  backgroundImage,
   index = 0,
   className,
 }: ResearchCardProps) {
