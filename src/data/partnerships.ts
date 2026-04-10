@@ -21,6 +21,7 @@ export const partnerships: Partnership[] = [
       { name: '한양대학교', logo: 'logo-university3.png', url: 'https://www.hanyang.ac.kr' },
       { name: '부산대학교', logo: 'logo-university4.png', url: 'https://www.pusan.ac.kr' },
       { name: '서울시립대학교', logo: 'logo-university5.png', url: 'https://www.uos.ac.kr' },
+      { name: '한국기술교육대학교', logo: 'icon-storm.jpg', url: 'https://www.koreatech.ac.kr/kor/index.jsp' },
       { name: '전북대학교', logo: 'logo-university6.png', url: 'https://www.jbnu.ac.kr' },
       { name: '전남대학교', logo: 'logo-university7.png', url: 'https://www.jnu.ac.kr' },
       { name: '숭실대학교', logo: 'logo-university8.jpg', url: 'https://ssu.ac.kr' },
