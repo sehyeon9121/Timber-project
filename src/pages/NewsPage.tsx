@@ -13,12 +13,13 @@ export function NewsPage() {
     <DetailPageLayout
       title={t('news.title')}
       subtitle={t('news.subtitle')}
-      heroImage="/images/leeseunglab/hero-background.jpg"
+      heroImage="/images/leeseunglab/publications-hero.jpg"
+      heroMaxHeight={540}
     >
       {/* Latest News Header */}
       <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 100 }}>
         <Container maxWidth="none" className="max-w-[840px]">
-          <DecoratedSectionHeader title={t('news.latestNews')} subtitle="TERRER LAB" />
+          <DecoratedSectionHeader title={t('news.latestNews')} subtitle="HI-WOOD" />
         </Container>
       </ContentSection>
 

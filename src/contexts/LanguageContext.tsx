@@ -97,8 +97,22 @@ const translations: Record<Language, Record<string, string>> = {
 
     // Team Page
     'team.title': 'Introducing ACT Lab',
+    'team.heroDescription': 'Our research team aims to realize 200m-class large-span timber architecture, with expert researchers from all fields of structure, design, construction, and operation participating as a convergent research organization.',
     'team.team': 'Team',
     'team.alumni': 'Undergraduate Student',
+    'team.division1': 'Division 1',
+    'team.division2': 'Division 2',
+    'team.division3': 'Division 3',
+    'team.division4': 'Division 4',
+    'team.showMore': 'Show More',
+    'team.showLess': 'Show Less',
+
+    // Email Modal
+    'email.title': 'Email',
+    'email.subtitle': 'Check the email address.',
+    'email.copy': 'Copy',
+    'email.copied': 'Email copied!',
+    'email.close': 'Close',
 
     // Join Us Page
     'joinUs.title': 'Join Us',
@@ -230,9 +244,23 @@ const translations: Record<Language, Record<string, string>> = {
     'people.researchAssistants': '연구 조교',
 
     // Team Page
-    'team.title': 'ACT LAB을 소개합니다',
+    'team.title': 'ACT 연구단 소개',
+    'team.heroDescription': '본 연구단은 200m급 목조 대공간 건축 실현을 목표로, 구조·설계·시공·운영 전 분야의 전문 연구진이 참여하는 융합형 연구 조직입니다.',
     'team.team': '팀',
     'team.alumni': '학부생',
+    'team.division1': '1세부',
+    'team.division2': '2세부',
+    'team.division3': '3세부',
+    'team.division4': '4세부',
+    'team.showMore': '더보기',
+    'team.showLess': '접기',
+
+    // Email Modal
+    'email.title': '이메일 확인',
+    'email.subtitle': '이메일을 확인하세요.',
+    'email.copy': '복사하기',
+    'email.copied': '이메일이 복사되었습니다!',
+    'email.close': '닫기',
 
     // Join Us Page
     'joinUs.title': 'ACT INSTITUTE',

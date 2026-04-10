@@ -135,7 +135,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
         <div className="flex items-center">
           <LogoImage
             src="/images/leeseunglab/terrer-lab-logo.png"
-            alt="Terrer Lab"
+            alt="Hi-Wood"
             href="/"
             height={51}
             className="object-contain"

@@ -6,9 +6,12 @@ export interface DetailPageLayoutProps {
   children: ReactNode;
   title: string;
   subtitle?: string;
+  heroDescription?: string;
   heroImage?: string;
   heroHeight?: number;
   noHeroImage?: boolean;
+  heroMaxHeight?: number;
+  titleAlign?: 'center' | 'bottom-left';
   backLink?: {
     href: string;
     label: string;
@@ -21,8 +24,11 @@ export function DetailPageLayout({
   title,
   subtitle,
   heroImage,
+  heroDescription,
   heroHeight,
   noHeroImage,
+  heroMaxHeight,
+  titleAlign,
   backLink,
   className,
 }: DetailPageLayoutProps) {
@@ -32,8 +38,11 @@ export function DetailPageLayout({
         variant="subpage"
         title={title}
         subtitle={subtitle}
+        heroDescription={heroDescription}
         backgroundImage={noHeroImage ? undefined : (heroImage || '/images/leeseunglab/hero-background.jpg')}
         height={heroHeight}
+        heroMaxHeight={heroMaxHeight}
+        titleAlign={titleAlign}
         backLink={backLink}
       />
 

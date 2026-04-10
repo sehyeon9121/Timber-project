@@ -9,6 +9,7 @@ import { Span } from '@/components/atoms/Span';
 import { Spacer } from '@/components/atoms/Spacer';
 import { Link } from '@/components/atoms/Link';
 import { Icon } from '@/components/atoms/Icon';
+import { HeroDescription } from '@/components/molecules/HeroDescription';
 import { cn } from '@/utils/cn';
 
 export interface HeroSectionProps {
@@ -16,12 +17,15 @@ export interface HeroSectionProps {
   title: string;
   subtitle?: string;
   description?: string;
+  heroDescription?: string;
   scrollTarget?: string;
   overlayOpacity?: number;
   minHeight?: 'screen' | 'three-quarter' | 'half' | 'auto';
   height?: number;
   aspectRatio?: string; // e.g., "16/9", "7/4"
   variant?: 'landing' | 'subpage';
+  titleAlign?: 'center' | 'bottom-left';
+  heroMaxHeight?: number;
   backLink?: {
     href: string;
     label: string;
@@ -35,12 +39,15 @@ export function HeroSection({
   title,
   subtitle,
   description,
+  heroDescription,
   scrollTarget,
   overlayOpacity = 0.65,
   minHeight = 'screen',
   height: _height,
   aspectRatio,
   variant = 'landing',
+  titleAlign = 'center',
+  heroMaxHeight,
   backLink,
   children,
   className,
@@ -72,13 +79,17 @@ export function HeroSection({
             <img
               src={imageSrc}
               alt=""
-              className="w-full h-auto block"
+              className={cn('w-full block', heroMaxHeight ? 'object-cover' : 'h-auto')}
+              style={heroMaxHeight ? { height: heroMaxHeight, maxHeight: heroMaxHeight } : undefined}
             />
             <Overlay opacity={overlayOpacity} />
           </>
         )}
 
-        <div className="absolute inset-0 z-10 flex flex-col justify-center hero-content-container">
+        <div className={cn(
+          'absolute inset-0 z-10 flex flex-col hero-content-container',
+          titleAlign === 'bottom-left' ? 'justify-end pb-10' : 'justify-center'
+        )}>
           {backLink && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -123,6 +134,16 @@ export function HeroSection({
                 >
                   {subtitle}
                 </Span>
+              </>
+            )}
+
+            {heroDescription && (
+              <>
+                <Spacer size="md" />
+                <HeroDescription
+                  text={heroDescription}
+                  color={hasBackgroundImage ? 'white' : 'dark'}
+                />
               </>
             )}
           </motion.div>

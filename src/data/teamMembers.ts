@@ -12,9 +12,9 @@ import alumniData from '@content/team/alumni.yaml';
 // YAML에서 로드된 데이터의 raw 타입
 interface RawTeamMember {
   id: string;
-  name: string;
-  position: string;
-  bio: string;
+  name: string | { en: string; ko: string };
+  position: string | { en: string; ko: string };
+  bio: string | { en: string; ko: string };
   image: string;
   scholar_url?: string;
   email: string;
@@ -22,6 +22,8 @@ interface RawTeamMember {
     en: string;
     ko: string;
   };
+  division?: number;
+  is_representative?: boolean;
 }
 
 // Base URL for static assets
@@ -41,6 +43,8 @@ function transformTeamMembers(raw: RawTeamMember[] | null | undefined, type: 'te
     email: member.email,
     type,
     affiliation: member.affiliation,
+    division: member.division,
+    isRepresentative: member.is_representative,
   }));
 }
 
@@ -58,3 +62,39 @@ export const alumni: TeamMember[] = transformTeamMembers(
 
 // 전체 멤버 (팀원 + 동문)
 export const allMembers: TeamMember[] = [...teamMembers, ...alumni];
+
+// 세부별 그룹 타입
+export interface DivisionGroup {
+  division: number;
+  representative: TeamMember | null;
+  members: TeamMember[];
+}
+
+// 세부별로 멤버 그룹핑
+export function getTeamByDivision(): DivisionGroup[] {
+  const divisionMap = new Map<number, { representative: TeamMember | null; members: TeamMember[] }>();
+
+  for (const member of teamMembers) {
+    const div = member.division ?? 0;
+    if (!divisionMap.has(div)) {
+      divisionMap.set(div, { representative: null, members: [] });
+    }
+    const group = divisionMap.get(div)!;
+    if (member.isRepresentative && !group.representative) {
+      // 첫 번째 대표만 메인 카드로, 이후 대표는 멤버 리스트로
+      group.representative = member;
+    } else {
+      group.members.push(member);
+    }
+  }
+
+  // 세부 번호 순으로 정렬 (1, 2, 3, 4)
+  return Array.from(divisionMap.entries())
+    .filter(([div]) => div > 0)
+    .sort(([a], [b]) => a - b)
+    .map(([division, group]) => ({
+      division,
+      representative: group.representative,
+      members: group.members,
+    }));
+}

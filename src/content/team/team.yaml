@@ -1,104 +1,348 @@
 # 현재 팀원 목록
-# Terrer Lab Team Members
+# ACT Institute Team Members
 
-# Principal Investigator
+# ===== 1세부 =====
 - id: "Lee Seung-jae"
-  name: "Lee Seung-jae"
-  position: "Professor, Korea University of Technology and Education"
-  bio: "Professor Seung-Jae Lee received his M.S. and Ph.D. in Architectural Engineering from the University of Tokyo, specializing in structural engineering. His research focuses on earthquake-resistant structures and AI-based structural design to enhance the safety and performance of buildings. He has actively contributed to academia and industry through award-winning research and practical applications in structural engineering."
+  name:
+    ko: "이승재"
+    en: "Lee Seung-jae"
+  position:
+    ko: "교수, 한국기술교육대학교"
+    en: "Professor, Korea University of Technology and Education"
+  bio:
+    ko: "이승재 교수는 도쿄대학교에서 건축공학 석사 및 박사 학위를 취득하였으며, 구조공학을 전공하였다. 내진 구조물과 AI 기반 구조 설계를 연구하며 건물의 안전성과 성능 향상에 기여하고 있다. 수상 경력이 있는 연구와 구조공학 분야의 실무 적용을 통해 학계와 산업계에 활발히 공헌하고 있다."
+    en: "Professor Seung-Jae Lee received his M.S. and Ph.D. in Architectural Engineering from the University of Tokyo, specializing in structural engineering. His research focuses on earthquake-resistant structures and AI-based structural design to enhance the safety and performance of buildings. He has actively contributed to academia and industry through award-winning research and practical applications in structural engineering."
   image: "images/cesar-terrer.jpg"
   scholar_url: "https://www.koreatech.ac.kr/faculty/view.es?mid=b30103010100&division=1&classification=DEPF006&seq=144"
   email: "leeseung@koreatech.ac.kr"
   affiliation:
     ko: "한국기술교육대학교 건축공학과"
     en: "Dept. of Architectural Engineering, KOREATECH"
-
-# Research Scientists
-- id: "Lee Don-woo"
-  name: "Lee Don-woo"
-  position: "Postdoctoral Researcher"
-  bio: "He conducts research in structural optimization, dynamic analysis, and seismic design, with particular emphasis on quantum-based algorithms, meta-heuristics, and machine learning for optimal structural systems. His work spans truss, dome, and large-scale timber structures, focusing on form-finding, topology optimization, vibration control (TMD), and advanced building hardware, supported by multiple national research projects funded by the NRF and KAIA."
-  image: "images/evan-fricke.jpg"
-  scholar_url: "https://sites.google.com/view/leedonwoo/people"
-  email: "lov1004ely@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
-
-- id: "Ha Hyeon-Ju"
-  name: "Ha Hyeon-Ju"
-  position: "Postdoctoral Researcher"
-  bio: "This research explores quantum circuit–based structural analysis and shape control using variational quantum circuits, integrating classical structural methods with quantum computing to improve the efficiency and scalability of structural systems."
-  image: "images/IMG_1627.jpg"
-  scholar_url: ""
-  email: "hayezii@koreatech.ac.kr"
-  affiliation:
-    ko: "Cardiff University"
-    en: "Cardiff University"
-
-# Postdoc Fellows
-- id: "Lee Gyeong-seok"
-  name: "Lee Gyeong-seok"
-  position: "Master's Program"
-  bio: "He conducts research on the prediction of nonlinear structural responses and parameter identification using an exponentially weighted moving average–based dynamic weighted PI-LSTM model, aiming to improve the accuracy and robustness of data-driven structural analysis under complex loading conditions.."
-  image: "images/diego-grados.jpg"
-  scholar_url: ""
-  email: "hun183@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+  division: 1
+  is_representative: true
 
 - id: "Noh Seung-hyun"
-  name: "Noh Seung-hyun"
-  position: "Master's Program"
-  bio: "He focuses on optimizing truss structural weight through a Q-learning–based PS-QDE algorithm that employs a strategic transition coefficient to enhance search efficiency and convergence."
+  name:
+    ko: "노승현"
+    en: "Noh Seung-hyun"
+  position:
+    ko: "석사과정"
+    en: "Master's Program"
+  bio:
+    ko: "Q-러닝 기반 PS-QDE 알고리즘을 활용한 트러스 구조 중량 최적화 연구를 수행하며, 전략적 전환 계수를 통해 탐색 효율성과 수렴성을 향상시키는 데 중점을 두고 있다."
+    en: "He focuses on optimizing truss structural weight through a Q-learning–based PS-QDE algorithm that employs a strategic transition coefficient to enhance search efficiency and convergence."
   image: "images/leila-mirzagholi.png"
-  scholar_url: ""
   email: "sh01150304@koreatech.ac.kr"
   affiliation:
     ko: "한국기술교육대학교 건축공학과"
     en: "Dept. of Architectural Engineering, KOREATECH"
+  division: 1
+  is_representative: false
 
-- id: "So Jae-min"
-  name: "So Jae-min"
-  position: "Master's Program"
-  bio: "He focuses on multi-objective optimization of reinforced concrete frame structures through the NSGA-II algorithm to improve structural performance and design efficiency."
-  image: "images/na-chen.jpg"
-  scholar_url: ""
-  email: "sojaemin06@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+# ===== 2세부 =====
+- id: "division2-representative"
+  name:
+    ko: "김재경"
+    en: "Jae K Kim"
+  position:
+    ko: "부교수, 한양대학교"
+    en: "Associate Professor, Hanyang University"
+  bio:
+    ko: "김재경 교수는 연구와 교육, 실무를 병행하며 '동아시아 목조건축의 창신(創新)'이란 주제로 독창적인 건축 영역을 구축하고 있다. 건축가로서 김재경은 김재경건축연구소(JK-AR)를 이끌고  '세 그루 집 (2019)', 빛의 루 (2022)', '치유의 집 (2025)'등의 작품을 설계하였다. 또한, 교육자 및 연구자로 디지털 장인정신을 추구하며 한양대학교 건축학부의 CoDe Lab에서 50여 명의 석, 박사를 배출하였다."
+    en: "Jae K Kim has established a unique niche by exploring the theme of \"Reimagining East Asian timber architecture,\" seamlessly integrating research, education, and practice. As a designer leading JK-AR, he has created notable works such as House of Three Trees (2019), Pavilion of Floating Lights (2022), and House for Rejuvenation (2025). As an educator and researcher, Jae K Kim has nurtured the spirit of digital craftsmanship through the CoDe Lab at Hanyang University, guiding over 40 master's and doctoral students."
+  image: "images/kim jae Kyung.png"
+  scholar_url: "www.jk-ar.com"
+  email: "jaekkim@hanyang.ac.kr"
+  division: 2
+  is_representative: true
 
-- id: "Seong Jong-hyeok"
-  name: "Seong Jong-hyeok"
-  position: "Master's Program"
-  bio: "He focuses on the optimal design of steel–timber hybrid truss structures by incorporating embodied carbon considerations through a mixed-integer linear programming–based optimization approach, aiming to enhance both structural efficiency and environmental sustainability."
-  image: "images/sara-cerasoli.png"
-  scholar_url: ""
-  email: "ababvv@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+- id: "new-member"
+  name:
+    ko: "조태용"
+    en: "Cho, Taeyong"
+  position:
+    ko: "dA Architects / Director of AXCenter"
+    en: "dA Architects / Director of AXCenter"
+  bio:
+    ko: "조태용은 디에이건축 AXCenter 본부장으로, BIM, 알고리즘 설계, 생성형 인공지능 등 디지털 기술을 건축설계 실무에 접목하는 업무를 총괄하고 있다. 현재 한양대학교에서 박사과정을 진행 중이며, 건국대학교 건축전문대학원 겸임교수로 활동하고 있다. 주요 관심 분야는 건축설계 단계의 BIM 활용, 설계 프로세스의 디지털 전환, 데이터 기반 설계지원 체계 구축이며, 이를 바탕으로 복합 건축 프로젝트의 기획 및 설계지원 전략 수립에 참여하고 있다."
+    en: "Taeyong Cho is the Head of AXCenter at dA Architecture. He is currently pursuing a Ph.D. at Hanyang University and serves as an Adjunct Professor at Konkuk University. His work focuses on BIM, generative AI, and digital transformation in architectural design practice."
+  image: "images/Cho TaeYoung.png"
+  email: "hong@example.com"
+  scholar_url: "https://www.dagroup.kr"
+  division: 2
+  is_representative: false
 
-- id: "Lee Gyu-min"
-  name: "Lee Gyu-min"
-  position: "Master's Program"
-  bio: "He focuses on optimizing damper placement in steel-framed structures through reinforcement learning–based algorithms to enhance structural performance under dynamic loading."
-  image: "images/shuai-ren.png"
-  scholar_url: ""
-  email: "sdlrbals@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+- id: "new-member"
+  name:
+    ko: "김진우"
+    en: "Kim, Jinwoo"
+  position:
+    ko: "Korea Conformity Laboratories(KCL), Principal Researcher/Ph.D"
+    en: "Korea Conformity Laboratories(KCL), Principal Researcher/Ph.D"
+  bio:
+    ko: "김진우 박사는 일본 오사카대학교 건축공학과 강구조연구실에서 제진장치를 적용한 강구조물의 지진응답 특성을 주제로 박사학위를 취득하였다. 이후 동 대학에서 조교수로 재직하며 강구조 및 제진구조 분야의 교육·연구를 수행하였으며, 현재는 한국건설생활환경시험연구원(KCL) 내진센터에서 강구조 및 내진공학 분야의 실험·해석 기반 연구와 기술개발을 수행하고 있다. 주요 연구 분야는 제진구조, 면진구조, 내진보강, 내진성능 평가 및 성능기반 설계이며, 구조실험과 수치해석을 연계한 연구를 통해 내진기술의 실용화와 설계기술 고도화에 기여하고 있다."
+    en: "Dr. Jinwoo Kim received his Ph.D. in Architectural Engineering from Osaka University, Japan, where he studied the seismic response of steel structures equipped with damping devices. After serving as an Assistant Professor at Osaka University, he is currently a Principal Researcher at the Korea Conformity Laboratories (KCL). His research focuses on seismic control and isolation systems, seismic retrofit, and performance-based design, integrating structural experiments with numerical analysis."
+  image: "images/Kim, Jinwoo.png"
+  email: "kimjinwoo@kcl.re.kr"
+  scholar_url: "https://www.kcl.re.kr"
+  division: 2
+  is_representative: false
 
-- id: "Hong In-Pyo"
-  name: "Hong In-Pyo"
-  position: "Master's Program"
-  bio: "He focuses on optimizing damper placement in steel-framed structures through reinforcement learning–based algorithms to enhance structural performance under dynamic loading."
-  image: "images/Hong In Pyo.png"
+- id: "new-member"
+  name:
+    ko: "오상훈"
+    en: "Oh, Sanghoon"
+  position:
+    ko: "Pusan National University, Professor"
+    en: "Pusan National University, Professor"
+  bio:
+    ko: "오상훈 교수는 한양대학교 건축공학과에서 학사, 석사 졸업 후 동경대학교에서 석사 및 박사학위를 취득하였다. 부산대학교 건축공학과 교수로 재직하며 강구조, 내진공학 및 진동제어 구조시스템 관련 연구를 수행하고 있다. 국내외 논문 130여편 이상, 국내특허 60여건 이상 등의 성과가 있다. 대통령직속 국가건축정책위원회 위원 등을 역임한 바 있으며 국내 면진제진구조의 발전을 위하여 한국면진제진협회 창립에 기여하고 2016년도부터 2025년까지 회장을 역임하였다. 2025년에는 우수 재난안전 연구개발 기여로 행정안전부 장관상을 수상하였다."
+    en: "Professor Sang-Hoon Oh is a professor of Architectural Engineering at Pusan National University. He received his bachelor’s degree from Hanyang University and his doctoral degree from the University of Tokyo. His research and academic career have centered on steel structures, earthquake engineering, and seismic damping system. His accomplishments include more than 130 publications, over 60 domestic patents, and the Minister of the Interior and Safety Award in 2025."
+  image: "images/Oh, Sanghoon.png"
+  email: "osh@pusan.ac.kr"
   scholar_url: ""
-  email: "sdlrbals@koreatech.ac.kr"
-  affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+  division: 2
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "박금성"
+    en: "Park, Keum sung"
+  position:
+    ko: "Korea Institute of Civil Engineering and Building Technology (KICT), Senior Research Fellow/Ph.D/P.E"
+    en: "Korea Institute of Civil Engineering and Building Technology (KICT), Senior Research Fellow/Ph.D/P.E"
+  bio:
+    ko: "박금성 선임연구위원은 한양대학교 건축공학과 강구조연구실에서 장스팬 트러스 접합부를 주제로 박사학위를 취득하였다. 1998년부터 한국건설기술연구원에 재직하며 강구조, 프리캐스트 콘크리트(PC), 합성구조 및 모듈러 건축 분야에서 부재, 접합부 및 구조시스템에 대한 핵심 기술 개발 연구를 수행해왔다. 최근에는 건설산업의 신수종 융복합 분야인 OSC(Off-Site Construction) 기반 목구조 접합부 및 구조시스템 개발, 그리고 목구조 설계법 고도화 연구에 집중하고 있다. 지속적인 연구개발을 통해 건축구조 분야의 엔지니어링 기술 고도화와 산업 경쟁력 강화에 기여하고 있다."
+    en: "Dr. Keum-Sung Park received his Ph.D. from Hanyang University, where his research focused on long-span truss connections in the Steel Structures Laboratory. Since joining the Korea Institute of Civil Engineering and Building Technology in 1998, he has conducted extensive research on structural members, connections, and system technologies in the fields of steel structures, precast concrete, composite structures, and modular construction. In recent years, his research has concentrated on emerging interdisciplinary areas, particularly the development of OSC-based timber connections and structural systems, as well as the advancement of timber design methodologies. Through continuous research and development efforts, he has contributed to the advancement of structural engineering technologies and the enhancement of competitiveness in the construction industry."
+  image: "images/Park, Keum sung.png"
+  email: "kspark1@kict.re.kr"
+  scholar_url: "https://www.kict.re.kr"
+  division: 2
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "김태진"
+    en: "Kim, Taejin"
+  position:
+    ko: "TI Structural Engineers (TISE)"
+    en: "TI Structural Engineers (TISE)"
+  bio:
+    ko: "김태진 대표는 30년 이상의 풍부한 실무 경험과 연구 역량을 겸비한 국내 건축구조 분야의 전문가입니다. 잠실 롯데월드타워를 비롯한 초고층 및 비정형 건축물 프로젝트를 성공적으로 수행하며 탁월한 기술력을 입증해 왔습니다. 미국 UC Berkeley에서 박사학위를 취득한 후 학문적 깊이와 실무 감각을 바탕으로 연구와 현장을 연결하는 기술 혁신을 지속적으로 이끌고 있습니다. 특히 내진설계와 강구조 분야에서 국내 최고 수준의 경쟁력을 보유하고 있으며, 다양한 목구조 연구를 통해 국내 목구조건축의 활성화에도 기여하고 있습니다."
+    en: "Dr. Taejin Kim is a structural engineer with over 30 years of professional experience in design, safety assessment, and research. He has successfully delivered a wide range of projects, including super-tall and irregular buildings such as the Lotte World Tower in Seoul. He holds a Ph.D. from the UC Berkeley, and has led innovation by integrating academic research with engineering practice. His expertise includes seismic design and steel structures, and he is also actively engaged in advancing timber construction in Korea."
+  image: "images/Park, Keum sung.png"
+  email: "taejin@tistructure.com"
+  scholar_url: "www.tistructure.com"
+  division: 2
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "조덕원"
+    en: "Cho. Duckwon"
+  position:
+    ko: "CSSE. CEO"
+    en: "CSSE. CEO"
+  bio:
+    ko: "건국대학교를 졸업하고 단국대에서 석사를 취득하였다. 현재 ㈜CS구조엔지니어링에서 대표이사 및 건국대학교 겸임교수로 재직하고 있다. 대공간 및 초고층구조의 구조설계 및 Erection Engineering 등을 주로 수행하고 있으며, 주요 수행프로젝트는 고척스카이돔, 필리핀아레나, 청라스타필드돔야구장, 부산용호만W, 범어W 등이 있다."
+    en: "Cho. Duckwon graduated from Konkuk University and received his master’s degree from Dankook University. He currently serves as the Chief Executive Officer of C.S Structural Engineering Co., Ltd. and as an Adjunct Professor at Konkuk University. His professional expertise lies in the structural design and erection engineering of spacial and super-tall structures. His representative projects include Gocheok Sky Dome, Philippine Arena, Cheongna Starfield Dome Baseball Stadium, Busan Yongho Man W, and Beomeo W."
+  image: "images/Cho. Duckwon.png"
+  email: "dwcho@csse.kr"
+  scholar_url: "http://csse.kr"
+  division: 2
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "유기표"
+    en: "You, Kipyo"
+  position:
+    ko: "Jenobuk National University, Professor"
+    en: "Jenobuk National University, Professor"
+  bio:
+    ko: "전북대학교를 졸업하여, 전북대학교에서 석사 및 박사학위를 취득하였다. 현재 전북대학교 건축공학과에서 정교수로 재직하고 있다. 건축물 내풍공학 분야를 연구하고 있으며, 1997년에 건축 전용 풍동실험실을 구축하였으며 2009년 이후 구축된 분산공유형 대형풍동실험시설을 통해 다수의 고층건물 및 대공간 구조물에 대한 풍하중 평가를 수행하였다."
+    en: "You, Kipyo graduated from Jeonbuk National University, where he also obtained his Master’s and Ph.D. degrees, and is currently a professor in the Department of Architectural Engineering. His research focuses on building wind engineering. He established an architectural wind tunnel laboratory in 1997 and, since 2009, has conducted wind load evaluations for high-rise and large-span structures using a large-scale wind tunnel facility."
+  image: "images/Park, Keum sung.png"
+  email: "taejin@tistructure.com"
+  scholar_url: "www.tistructure.com"
+  division: 2
+  is_representative: false
+
+# ===== 3세부 =====
+- id: "division3-representative"
+  name:
+    ko: "최경석"
+    en: "Choi, Gyeong-Seok"
+  position:
+    ko: "KICT (Korea Institute of Civil Engineering and Building Technology, Senior Research Fellow"
+    en: "KICT (Korea Institute of Civil Engineering and Building Technology, Senior Research Fellow"
+  bio:
+    ko: "최경석 선임연구위원은 건축물 에너지 성능평가 및 제로에너지건축물(ZEB) 분야에서 20년 이상의 연구 경력을 보유한 전문가로, ISO/TC163 전문위원 및 KOLAS 평가사로서 국제표준과 시험평가 분야에서 활발히 활동하고 있다. 국산재 활용 목구조 기술개발, 장수명 BIPV 개발, 스마트 외장재·설비 융복합 실증 등 다수의 국가 R&D 과제를 총괄 수행하며 목조·에너지·환경성 통합 연구 역량을 구축하였다. Energy and Buildings 등 국제학술지 논문 게재 및 ISO 19467 표준 제정에 참여하였으며, 국토부 국가건설기준위원회, 녹색건축물 조성위원회, 그린스마트 미래학교 검토위원 등 제도·인증 분야의 정책 활동을 통해 연구 성과의 실용화와 정책 반영에 기여하고 있다."
+    en: "Dr. Kyeong-Seok Choi is a Senior Research Fellow at the Building Energy Research Division of KICT, with over 20 years of expertise in building energy performance and zero-energy building (ZEB) evaluation. He has led numerous national R&D projects encompassing timber structure technology, long-life BIPV systems, and smart façade-MEP integrated demonstration. His international engagement includes serving as an expert member of ISO/TC163 and an accredited assessor for KOLAS, with contributions to ISO 19467 standard development. He has published in international journals including Energy and Buildings, and actively participates in national policy committees including the Ministry of Land's Green Building Committee and National Construction Standards Committee."
+  image: "images/Choi, Gyeong-Seok.png"
+  scholar_url: ""
+  email: "bear717@kict.re.kr"
+  division: 3
+  is_representative: true
+
+- id: "new-member"
+  name:
+    ko: "여명석"
+    en: "You, Kipyo"
+  position:
+    ko: "Seoul National University Department of Architecture & Architectural Engineering, Professor "
+    en: "Seoul National University Department of Architecture & Architectural Engineering, Professor "
+  bio:
+    ko: "여명석 교수는 서울대학교 건축학과에서 학사과정(1991년)을 졸업하였고, 건축환경 및 설비전공으로 공학석사(1993년)와 공학박사(1998년) 학위를 취득하였다. 주로 건물의 환경적 성능에 대한 연구를 진행하고 있다. 주요 연구 분야는 실내 환경 질과 성능(열환경, 빛환경, 공기환경), 에너지 분석과 절약(저비용-고효율 난방 시스템, 건물 에너지 분석), 건물 시스템 ( HVAC 시스템 디자인 분석, 배관 시스템 디자인 및 분석, 자동 제어)이다."
+    en: "Professor Yeo studied architectural engineering at Seoul National University and received a B.S., M.S., Ph.D. from Department of Architecture, Seoul National University. He is currently a associate professor of Seoul National University. Professor Yeo’s main research interests focus on environmental performance of buildings. His research interests include: Indoor Environmental Quality & Performance, Energy Analysis & Conservation Building System."
+  image: "images/Yeo, Myoungsouk.png"
+  email: "msyeo@snu.ac.kr"
+  scholar_url: "http://aeprl.snu.ac.kr"
+  division: 3
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "김태연"
+    en: "You, Kipyo"
+  position:
+    ko: "Jenobuk National University, Professor"
+    en: "Jenobuk National University, Professor"
+  bio:
+    ko: "김태연 교수는 연세대학교 건축공학과에서 학사와 석사 학위를, 동경대학교에서 건축환경 전공으로 박사 학위를 취득하였다. 이러한 학문적 배경을 바탕으로 건물의 실내환경, 공조시스템, 재실자 쾌적성을 주제로 연구를 진행하고 있다. 특히 전산유체역학(CFD) 기반으로 건물의 열·공기환경을 해석하고 쾌적성과 에너지 효율을 고려한 실내환경 조성 방안을 연구하고 있다. 최근에는 IoT 센서를 활용한 건물 성능 분석과 재실자 중심의 실내환경 모니터링 및 제어 기술 개발에 집중하고 있다."
+    en: "Professor Taeyeon Kim received his B.S. and M.S. degrees from Yonsei University and his Ph.D. from the University of Tokyo. His major research areas include indoor environmental quality, HVAC systems,  and occupant comfort. In particular, he conducts CFD-based analyses of thermal and air environments in buildings and studies indoor environmental strategies. Recently, he has focused on IoT-based building performance analysis and occupant-centeric control."
+  image: "images/Kim, Taeyeon.png"
+  email: "tkim@yonsei.ac.kr"
+  scholar_url: "https://ae.or.kr/"
+  division: 3
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "황금숙"
+    en: "Gold Hwang"
+  position:
+    ko: "HIMEC, ph.D., PE, Senior Director"
+    en: "HIMEC, ph.D., PE, Senior Director"
+  bio:
+    ko: "황금숙 사업부장은 소방기술사로서, 서울과학기술대학교에서 안전공학으로 석사 및 박사학위을 취득하였습니다. 지하주차장 제연설비 화재안전기준 개발 연구를 진행한 경험이 있으며 대규모 건축물에 대한 소방 설계· 방재컨설팅 및 심의 경력을 보유하고 있습니다. 이러한 연구와 설계· 방재컨설팅 경험을 바탕으로 신속한 화재감지와 적절한 소화설비 적용 그리고 재실자의 피난안전성에 관하여 학계 및 산업계에 기여하고 있습니다."
+    en: "Hwang Keumsook is a PE. holding Master's and Ph.D. degrees in Fire Safety Engineering. She has demonstrated expertise in fields ranging from research on smoke control in underground parking lots to fire protection design for large buildings and consulting. Based on this practical experience, she actively contributes to academia and industry, focusing on advanced fire detection, suppression systems, and the enhancement of human safety and evacuation protocols."
+  image: "images/Gold Hwang.png"
+  email: "goldhwang@himec.co.kr"
+  scholar_url: "https://www.himec.co.kr/ko/"
+  division: 3
+  is_representative: false
+
+
+
+# ===== 4세부 =====
+- id: "division4-representative"
+  name:
+    ko: "김의용"
+    en: "Kim Euiyong"
+  position:
+    ko: "ARISU Engineering, CEO"
+    en: "ARISU Engineering, CEO"
+  bio:
+    ko: "김의용 대표는 30년 이상의 시공 및 구조, 안전진단의 다양한 실무 경험을 보유한 건축공학 분야 전문가입니다. 국토교통부 중앙건축물사고조사위원, 서울시 건축안전자문위원으로 활동하며 국가적 안전 이슈 해결에 앞장서 왔습니다. 특히, 재난안전공학 박사학위를 기반으로, HMF, PBS, HI-댐퍼 등 고도화된 보강 기술 연구 성과를 통해 학문적 전문성을 입증해 왔습니다. 이러한 수십 년간의 건설 사업 노하우를 대공간 목구조 연구에도 투영하여, 디지털트윈 기반 스마트 유지관리 체계를 정립함으로써 국내 목조 건축의 구조적 안전성 기술 개발에 주력하고 있습니다. "
+    en: "Dr. Euiyong Kim is an architectural engineering expert with over 30 years of experience in construction, structural design, and safety diagnosis, who leads the resolution of national safety issues through key government advisory roles. Leveraging his Ph.D. and research on advanced reinforcement technologies like HMF and PBS, he is currently applying his decades of practical know-how to spearhead the development of a digital twin-based smart maintenance system for large-span timber structures."
+  image: "images/Kim Euiyong.png"
+  scholar_url: "https://www.arisueng.co.kr/"
+  email: "arisueng1@naver.com"
+  division: 4
+  is_representative: true
+
+- id: "new-member"
+  name:
+    ko: "하기주"
+    en: "Ha, Geejoo"
+  position:
+    ko: "Construction Technology & Policy Institute, Director"
+    en: "Construction Technology & Policy Institute, Director"
+  bio:
+    ko: "하기주 원장은 한국과학기술원(KAIST)에서 콘크리트 및 내진구조를 전공하여 공학박사 학위를 취득하였다. 건축물 안전, 정책 및 법·제도 개선 분야에서 다양한 활동을 수행하며 학계와 정책 분야에 기여해 왔다. 이러한 경험을 바탕으로 본 연구에서는 점검·진단·모니터링 통합 프로세스 구축, 전주기 유지관리 체계 수립, 그리고 관련 법·제도 개선을 주도할 예정이다."
+    en: "Dr. Gee Joo Ha received his Ph.D. in Architectural Engineering from KAIST, specializing in concrete and seismic structural engineering. He has led various initiatives in building performance improvement, safety, policy, and regulatory improvement, contributing to both academia and public policy. Based on his experience in advancing institutional frameworks, he will lead this project in establishing integrated inspection, diagnosis, and monitoring processes, as well as developing lifecycle-based maintenance systems and improving relevant laws and regulations."
+  image: "images/Ha, Geejoo.png"
+  email: "geejooha@hanmail.net"
+  scholar_url: ""
+  division: 4
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "백기열"
+    en: "Baek, Kiyoul"
+  position:
+    ko: "Posco E&C"
+    en: "Posco E&C"
+  bio:
+    ko: "백기열 박사는 포스코이앤씨 R&D센터에서 대공간 구조 및 첨단 건설 시스템 기술을 연구하고 있습니다. 과거 케이블 장력 모니터링과 대공간 요소기술 개발, 접합부 거동의 실험적 검증을 통해 구조물의 안전성을 높이는 데 기여해 왔습니다. 특히 지난 10년간 OSC(Off-Site Construction) 및 모듈러 건축 분야를 심도 있게 연구하여 다수의 프로젝트를 실제 현장에 성공적으로 적용한 풍부한 실적을 보유하고 있습니다. 이러한 대공간 구조 역량과 OSC 현장 적용 노하우를 융합하여, 정밀한 사전 제작과 시공성 확보가 필수적인 ‘목조대공간 구조 시스템’의 고도화 및 실용화에 핵심적인 역할을 수행하고자 합니다."
+    en: "Dr. Ki-Youl Baek is a researcher at the POSCO E&C R&D Center, specializing in large-span structures and advanced construction systems. His key achievements include developing core technologies for large-span facilities, monitoring cable tension, and experimentally verifying complex joint behaviors. Over the past decade, he has deeply researched Off-Site Construction (OSC) and modular building systems, establishing a strong track record of successfully applying multiple projects to actual construction sites. By integrating his expertise in large-span structures with extensive field experience in OSC, Dr. Baek aims to contribute significantly to the advancement and practical application of large-span timber structural systems, where precision prefabrication and buildability are essential."
+  image: "images/Baek, Kiyoul.png"
+  email: "kybaek@poscoenc, 871802@posco.com"
+  scholar_url: "http://www.poscoenc.com/ko/"
+  division: 4
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "김승훈"
+    en: "Kim,Seung-Hun"
+  position:
+    ko: "Ph.D., The University of Hanbat · Professor"
+    en: "Ph.D., The University of Hanbat · Professor"
+  bio:
+    ko: "김승훈 교수는 한양대학교에서 건축공학 학사·석사·박사 학위를 취득한 후, 한양대학교 초대형구조시스템연구센터와 LG건설 기술연구원을 거쳐 2005년부터 국립한밭대학교 건축공학과 교수로 재직하고 있다. 또한 대한건축학회 대전·세종·충남지회 학술부회장, 한국구조물진단유지관리공학회 부회장, 한국콘크리트학회 이사 등을 역임하며 건축·구조공학 분야의 교육, 연구 및 학술 발전에 크게 기여하고 있다."
+    en: "Professor Seung-Hun Kim received his M.S. and Ph.D. in Architectural Engineering from Hanyang University. After serving at Hanyang University’s Research Center for High-Rise Structural Systems and the Research Institute of LG Construction, he joined Hanbat National University in 2005 and is currently a Professor in the Department of Architectural Engineering. He has also held major academic leadership roles, including Academic Vice President of the Daejeon · Sejong · Chungnam Branch of the Architectural Institute of Korea, Vice President of the Korea Institute for Structural Maintenance and Inspection, and Director of the Korea Concrete Institute, contributing significantly to education, research, and academic advancement in architectural and structural engineering."
+  image: "images/Kim,Seung-Hun.png"
+  email: "Kimsh@hanbat.ac.kr"
+  scholar_url: ""
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "김창석"
+    en: "Kim, Chang-Seok"
+  position:
+    ko: "Pusan National University, Professor"
+    en: "Pusan National University, Professor"
+  bio:
+    ko: "김창석 교수는 한국과학기술원(KAIST)에서 학사 학위를 취득한 후 2004년 존스홉킨스대학교에서 박사 학위를 받았습니다. 현재 부산대학교 광메카트로닉스공학과 교수이자 3D 광학 이미징 분야 공학연구센터(ERC) 센터장을 맡고 있습니다. 그의 연구는 180편 이상의 SCI 저널 논문과 50건의 등록특허 성과가 있습니다."
+    en: "Prof. Chang-Seok Kim obtained his Ph.D. in 2004 from Johns Hopkins University after finishing his Bachelor degree from KAIST. He is professor of Department of Optics and Mechatronics Engineering, Pusan National University and also a director of Engineering Research Center (ERC) in the area of 3D optical imaging. His work has led to over 180 SCI journal publications and 50 registered patents. "
+  image: "images/Kim, Chang-Seok.png"
+  email: "ckim@pusan.ac.kr"
+  scholar_url: "http://pnu-ckim.pusan.ac.kr/"
+  division: 4
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "최경규"
+    en: "Choi, Kyoung-Kyu"
+  position:
+    ko: "Soongsil University, Professor"
+    en: "Soongsil University, Professor"
+  bio:
+    ko: "최경규 교수는 서울대학교에서 건축구조 전공으로 석사 및 박사 학위를 취득하였다. 그의 연구는 전단 및 뚫림전단 거동, FRP/TRM 기반 보강공법 등 건축구조공학 전반에 걸쳐 있으며 이를 바탕으로 국가기준과 실무지침의 재개정에 참여함으로써 학계의 지식 축적 및 산업 현장의 구조 안전성 향상에 기여하였다. 최근에는 AI와 디지털 기술을 구조공학 및 건설안전 분야에 접목하는 연구에 집중하고 있으며, 디지털 기반 건축시공 및 안전감리 기술개발과 같은 컴퓨터비전 기반 품질관리 기술 개발을 통해 스마트 건설과 데이터 기반 안전관리의 실용화를 추진하고 있다."
+    en: "Professor Kyoung-Kyu Choi received his M.S. and Ph.D. in structural engineering from Seoul National University. His research has focused on shear and punching shear behavior and FRP/TRM-based strengthening methods, and he has contributed to both academia and industry through the development and revision of national standards and practical guidelines. More recently, he has been working on the application of AI and digital technologies to structural engineering and construction safety, particularly in computer vision-based quality control for smart construction."
+  image: "images/Choi, Kyoung-Kyu.png"
+  email: "kkchoi@ssu.ac.kr"
+  scholar_url: ""
+  division: 4
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "심국보"
+    en: "Shim, KugBo"
+  position:
+    ko: "Chungbuk National University, Assistant Professor"
+    en: "Chungbuk National University, Assistant Professor"
+  bio:
+    ko: "서울대학교 임산공학과를 졸업하고 동 대학원에서 석·박사 학위를 취득하였다. 산림청 국립산림과학원에서 목조건축과 목재공학 연구를 수행하였다. 미국 USDA 임산물연구소와 캐나다 FPInnovations에서 목구조 접합부와 내진성능 연구를 수행하였다. 목재공학과 목조건축 분야 발전을 위해 2018 세계목조건축대회(WCTE 2018)의 유치·개최와 《목조건축 개론》 저술하였다. 국내 실정에 맞는 목조건축 기술 개발, 기후변화 완화를 위한 공공 목조건축 확대, 전통건축 유지보수 기술 연구를 수행하고 있다."
+    en: "Professor Shim earned his bachelor’s, master’s, and doctoral degrees in Wood Science and Engineering from Seoul National University and conducted research on timber structures and wood engineering at the National Institute of Forest Science. He led the 2018 World Conference on Timber Engineering (WCTE 2018), authored Introduction to Timber Architecture, and now focuses on developing wood construction technologies suited to Korea and promoting public timber buildings for climate change mitigation."
+  image: "images/Shim, KugBo.png"
+  email: "kbshim@chungbuk.ac.kr"
+  scholar_url: "https://wood-paper.chungbuk.ac.kr/"
+  division: 4
+  is_representative: false

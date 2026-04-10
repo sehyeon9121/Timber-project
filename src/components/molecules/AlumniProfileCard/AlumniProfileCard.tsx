@@ -1,9 +1,11 @@
 import { ProfileImage } from '@/components/molecules/ProfileImage';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/utils/cn';
+import type { LocalizedText } from '@/types';
 
 export interface AlumniProfileCardProps {
   image: string;
-  name: string;
+  name: string | LocalizedText;
   imageSize?: number;
   cardWidth?: number;
   padding?: number;
@@ -18,6 +20,11 @@ export function AlumniProfileCard({
   padding = 12,
   className,
 }: AlumniProfileCardProps) {
+  const { language } = useLanguage();
+  const nameText = typeof name === 'object'
+    ? (language === 'KO' ? name.ko : name.en)
+    : name;
+
   return (
     <div
       className={cn('bg-white text-center', className)}
@@ -34,7 +41,7 @@ export function AlumniProfileCard({
       <div style={{ marginBottom: 18 }}>
         <ProfileImage
           src={image}
-          alt={name}
+          alt={nameText}
           size="md"
           shape="square"
           className="object-cover"
@@ -43,7 +50,7 @@ export function AlumniProfileCard({
       </div>
 
       <p className="text-[18px] font-medium text-black">
-        {name}
+        {nameText}
       </p>
     </div>
   );

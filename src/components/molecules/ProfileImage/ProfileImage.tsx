@@ -38,16 +38,23 @@ export function ProfileImage({
         'overflow-hidden flex-shrink-0',
         sizeClasses[size],
         shapeClasses[shape],
+        !src && 'bg-gray-200',
         className
       )}
       style={style}
     >
-      <Image
-        src={src}
-        alt={alt}
-        objectFit="cover"
-        className="w-full h-full"
-      />
+      {src ? (
+        <Image
+          src={src}
+          alt={alt}
+          objectFit="cover"
+          className="w-full h-full"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+          {alt}
+        </div>
+      )}
     </div>
   );
 }

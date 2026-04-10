@@ -36,14 +36,16 @@ export interface LocalizedText {
 // Team Member
 export interface TeamMember {
   id: string;
-  name: string;
-  position: string;
-  bio: string;
+  name: string | LocalizedText;
+  position: string | LocalizedText;
+  bio: string | LocalizedText;
   image: string;
   scholarUrl?: string;
   email: string;
   type: 'team' | 'alumni';
   affiliation?: LocalizedText;
+  division?: number;
+  isRepresentative?: boolean;
 }
 
 // Participating Institution

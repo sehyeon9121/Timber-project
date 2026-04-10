@@ -21,7 +21,7 @@ export interface AffiliationsSectionProps {
 }
 
 export function AffiliationsSection({ className }: AffiliationsSectionProps) {
-  const imageSrc = getImageSrc('/images/leeseunglab/affiliations.jpg');
+  const imageSrc = getImageSrc('/images/leeseunglab/affiliations.pag');
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -62,7 +62,7 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
       <div className="relative z-10 h-full flex flex-col items-center justify-center">
         <DecoratedSectionHeader
           title="Associated Institutions"
-          subtitle="ACT LAB"
+          subtitle="Hi-Wood"
           variant="light"
           useOriginalMarker
         />

@@ -1,57 +1,35 @@
 import { DetailPageLayout } from '@/components/templates/DetailPageLayout';
 import { ContentSection } from '@/components/templates/ContentSection';
 import { Container } from '@/components/atoms/Container';
-import { TeamMemberCard } from '@/components/organisms/TeamMemberCard';
-// import { AlumniCard } from '@/components/organisms/AlumniCard';  // 학부생 섹션 비활성화
-import { SectionHeader } from '@/components/molecules/SectionHeader';
-import { teamMembers } from '@/data/teamMembers';
+import { DivisionTeamSection } from '@/components/organisms/DivisionTeamSection';
+import { getTeamByDivision } from '@/data/teamMembers';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export function TeamPage() {
   const { t } = useLanguage();
+  const divisions = getTeamByDivision();
 
   return (
     <DetailPageLayout
       title={t('team.title')}
-      heroImage="/images/leeseunglab/people-hero.jpg"
+      heroDescription={t('team.heroDescription')}
+      heroImage="/images/leeseunglab/people-hero.png"
+      titleAlign="bottom-left"
     >
-      {/* Team Section */}
-      <ContentSection background="white" padding="lg" style={{ paddingTop: 100 }}>
+      <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 40 }}>
         <Container maxWidth="none" className="max-w-[950px]">
-          <SectionHeader title={t('team.team')} />
-          <div>
-            {teamMembers.map((member, index) => (
-              <TeamMemberCard
-                key={member.id}
-                {...member}
-                index={index}
+          <div className="flex flex-col gap-16">
+            {divisions.map((group) => (
+              <DivisionTeamSection
+                key={group.division}
+                division={group.division}
+                representative={group.representative}
+                members={group.members}
               />
             ))}
           </div>
         </Container>
       </ContentSection>
-
-      {/* Alumni (학부생 섹션 비활성화) */}
-      {/* {alumni.length > 0 && (
-        <ContentSection
-          background="white"
-          padding="lg"
-          style={{ paddingTop: 120, paddingBottom: 240 }}
-        >
-          <Container maxWidth="none" className="max-w-[950px]">
-            <SectionHeader title={t('team.alumni')} style={{ marginBottom: 40 }} />
-            <div className="flex flex-wrap gap-6">
-              {alumni.map((member, index) => (
-                <AlumniCard
-                  key={member.id}
-                  {...member}
-                  index={index}
-                />
-              ))}
-            </div>
-          </Container>
-        </ContentSection>
-      )} */}
     </DetailPageLayout>
   );
 }

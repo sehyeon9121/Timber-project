@@ -1,17 +1,11 @@
 # 뉴스 목록
-# Terrer Lab News & Updates
+# Hi-Wood News & Updates
 # 최신순으로 정렬
 
-- id: "congrats-graduates-2024"
-  title: "Congrats graduates!"
-  date: "May 2024"
-  excerpt: "Congratulations to Sydney and Jenna on graduating from the MEng program! Sydney will start as a water resources engineer at Weston & Sampson in the Boston area. Jenna will travel to Padua, Italy, on a Fulbright Scholarship to study wetland carbon storage."
-  image: "images/congrats-graduates-2024.jpeg"
+- id: "200m-Class Large-Span Timber Structure Technology Development - 1st Workshop -"
+  title: "200m-Class Large-Span Timber Structure Technology Development - 1st Workshop -"
+  date: "2026/04/13"
+  excerpt: "The 1st workshop for the development of construction technologies for 200m-class large-span timber structures was held, where key research tasks and project directions were presented."
+  image: "images/1st workshop.png"
   href: "/news/congrats-graduates"
 
-- id: "mcsc-panel-2023"
-  title: "Evan participates in MCSC panel"
-  date: "November 2023"
-  excerpt: "Evan served as a panelist at MIT Climate and Sustainability Consortium's annual meeting, discussing \"Incorporating biodiversity into corporate goal setting through metrics, monitoring, and assessment\" with corporate sustainability officers and researchers."
-  image: "images/mcsc-panel-2023.png"
-  href: "/news/mcsc-panel"

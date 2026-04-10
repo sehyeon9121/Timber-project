@@ -26,15 +26,7 @@ export function FooterContent({ className }: FooterContentProps) {
           className="text-white/80"
           style={{ fontSize: 16 }}
         >
-          © Copyright {currentYear} | ACT Lab |{' '}
-          <Link
-            href="https://www.koreatech.ac.kr/kor/index.jsp"
-            variant="white"
-            className="hover:text-white"
-            style={{ textDecoration: 'underline' }}
-          >
-            Koreatech.ac.kr
-          </Link>
+          © Copyright {currentYear} | Hi-Wood
         </motion.div>
       </div>
     </footer>
