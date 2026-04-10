@@ -25,18 +25,18 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.climateSnacks': 'Climate Snacks',
 
     // Home Page - Hero
-    'home.hero.subtitle': 'ACT INSTITUTE LAB | Korea University of Technology and Department of Architectural Engineering, KOREATECH',
-    'home.hero.title': 'AI Carbon-Neutral Timber Research Institute',
-    'home.hero.description': 'Acting for the Planet, Innovating Technology for Timber.',
+    'home.hero.subtitle': 'Development of 200m-scale Wooden Large Space Structure Building Technology',
+    'home.hero.title': 'Research Group for Construction Technology Development of 200m-class Large-span Timber Structures',
+    'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
-    'home.about.imageTitle': 'About ACT Lab',
-    'home.about.title': ' Lab',
-    'home.about.description': 'ACT Lab is a research institute exploring new possibilities for large-span timber structures through the integration of artificial intelligence and architectural engineering. By extending the inherent potential of timber through intelligent design and data-driven technologies, we aim to achieve both structural reliability and environmental responsibility. Moving beyond conceptual design studies, our research focuses on analysis and validation grounded in real-world building conditions, advancing carbon-neutral architecture from theory to a practical and viable choice.',
+    'home.about.imageTitle': 'Project Overview',
+    'home.about.title': 'Hi - Wood',
+    'home.about.description': 'This research aims to advance large-span timber construction technology based on wooden structures, integrating the entire process of design, construction, and operation to achieve carbon-neutral architecture.',
     'home.research.title': 'Research Topics',
     'home.research.subtitle': 'Research for the Future',
-    'home.showcase.title': 'Our Vision',
+    'home.showcase.title': 'Associated Institutions',
     'home.showcase.subtitle': 'Building a sustainable future through timber innovation',
-    'home.showcase.boxTitle': 'AI Carbon-Neutral Timber Research',
+    'home.showcase.boxTitle': 'AI Carbon-Neutral Timber Architecture Research',
     'home.showcase.boxDesc': 'We pursue innovative research that combines artificial intelligence with timber engineering to realize carbon-neutral large-span architecture.',
 
     // Showcase Page
@@ -50,14 +50,14 @@ const translations: Record<Language, Record<string, string>> = {
     'showcase.block3Desc': 'Integrating smart technologies for efficient construction and long-term maintenance of timber buildings.',
 
     // Research Themes
-    'research.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',
-    'research.terrestrialCarbon.description': 'Through AI- and data-driven design approaches, we extend the structural limits of large-span timber systems. By integrally analyzing load transfer mechanisms, material efficiency, and geometric optimization, our research advances next-generation timber structural design methods that enhance both stability and performance.',
-    'research.naturalClimate.title': 'Technologies for Realizing Carbon-Neutral Architecture',
-    'research.naturalClimate.description': 'We quantitatively analyze the carbon reduction potential of timber construction and evaluate carbon-neutral performance across the entire building lifecycle, including design, construction, and operation. Through AI-based analysis and simulation, we present implementable technologies that enable carbon-neutral architecture in real-world applications.',
-    'research.smartConstruction.title': 'Smart Construction & Maintenance Technologies',
-    'research.smartConstruction.description': 'We develop smart construction and maintenance technologies for large-span timber buildings by integrating IoT sensing, digital twin modeling, and AI-based predictive maintenance to ensure long-term structural safety and operational efficiency.',
-    'research.energyPerformance.title': 'Environmental & Energy Performance Evaluation',
-    'research.energyPerformance.description': 'We evaluate the environmental and energy performance of large-span timber buildings through lifecycle assessment and simulation technologies, developing standards and methodologies for green building certification and energy optimization.',
+    'research.terrestrialCarbon.title': 'High-Performance Hybrid Large-Section Member Technology',
+    'research.terrestrialCarbon.description': 'Development of high-strength, large-section hybrid structural members for realizing large-span timber structures.',
+    'research.naturalClimate.title': 'OSC-Based Modularization & Carbon-Neutral Design',
+    'research.naturalClimate.description': 'Development of integrated large-span architectural system technologies based on modular construction and carbon-neutral design.',
+    'research.smartConstruction.title': 'Eco-Friendly & Energy Performance Evaluation Technology',
+    'research.smartConstruction.description': 'Development of environmental and energy performance evaluation technologies based on the entire building lifecycle.',
+    'research.energyPerformance.title': 'Smart Construction & Maintenance System',
+    'research.energyPerformance.description': 'Establishing a smart lifecycle management system for buildings through digital-based construction and operation management technologies.',
 
     // Research Detail Pages (상세 페이지 전용)
     'researchDetail.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',

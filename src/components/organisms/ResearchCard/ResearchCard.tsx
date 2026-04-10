@@ -51,7 +51,10 @@ export function ResearchCard({
       <div className="h-1.5 w-full bg-[var(--color-primary)]" />
 
       {/* Content */}
-      <div className="flex h-full flex-col justify-start pb-6 md:pb-8 px-5 md:px-12" style={{ paddingTop: '40px' }}>
+      <div
+        className="flex h-full flex-col justify-start"
+        style={{ padding: 'clamp(24px, 5vw, 48px)', paddingTop: '40px', paddingBottom: '32px' }}
+      >
         <h2 className="font-lato text-lg font-semibold text-gray-800 md:text-[28px] text-center" style={{ marginBottom: '18px' }}>
           {title}
         </h2>
