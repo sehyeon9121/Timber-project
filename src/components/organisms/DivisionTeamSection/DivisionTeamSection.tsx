@@ -24,7 +24,6 @@ export function DivisionTeamSection({
   const { t } = useLanguage();
 
   const divisionLabel = t(`team.division${division}`);
-  const hasMembers = members.length > 0;
 
   return (
     <div className={cn('w-full', className)}>

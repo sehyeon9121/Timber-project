@@ -2,17 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 
-// public 폴더 이미지에 base URL 자동 추가
-const getImageSrc = (src: string): string => {
-  if (src.startsWith('http') || src.startsWith('data:')) {
-    return src;
-  }
-  const baseUrl = import.meta.env.BASE_URL || '/';
-  if (src.startsWith('/') && !src.startsWith(baseUrl)) {
-    return `${baseUrl.replace(/\/$/, '')}${src}`;
-  }
-  return src;
-};
+
 
 export interface ResearchCardProps {
   id: string;

@@ -25,7 +25,6 @@ export interface AboutContentProps {
 
 export function AboutContent({
   image,
-  imageAlt,
   imageTitle,
   title,
   description,

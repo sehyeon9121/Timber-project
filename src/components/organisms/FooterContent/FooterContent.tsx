@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Link } from '@/components/atoms/Link';
 import { cn } from '@/utils/cn';
 
 export interface FooterContentProps {

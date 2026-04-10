@@ -26,13 +26,6 @@ export function NavigationBar({ className }: NavigationBarProps) {
     { label: t('nav.research'), href: '/#research' },
   ];
 
-  const publicationsDropdownItems = [
-    { label: 'SCIE', href: '/publications/scie' },
-    { label: 'KCI', href: '/publications/kci' },
-    { label: 'Int. Conference', href: '/publications/international-conference' },
-    { label: 'Dom. Conference', href: '/publications/domestic-conference' },
-    { label: 'SCOPUS', href: '/publications/scopus' },
-  ];
 
   const peopleDropdownItems = [
     { label: t('nav.ourTeam'), href: '/team' },
