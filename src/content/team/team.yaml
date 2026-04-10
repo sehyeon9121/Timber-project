@@ -114,7 +114,7 @@
   bio:
     ko: "김재경 교수는 연구와 교육, 실무를 병행하며 ‘동아시아 목조건축의 창신(創新)’이란 주제로 독창적인 건축 영역을 구축하고 있다. 건축가로서 김재경은 김재경건축연구소(JK-AR)를 이끌고  ‘세 그루 집 (2019)’, 빛의 루 (2022)’, ‘치유의 집 (2025)’등의 작품을 설계하였다. 또한, 교육자 및 연구자로 디지털 장인정신을 추구하며 한양대학교 건축학부의 CoDe Lab에서 50여 명의 석, 박사를 배출하였다."
     en: "Jae K Kim  has established a unique niche by exploring the theme of “Reimagining East Asian timber architecture,” seamlessly integrating research, education, and practice. As a designer leading JK-AR, he has created notable works such as House of Three Trees (2019), Pavilion of Floating Lights (2022), and House for Rejuvenation (2025). As an educator and researcher, Jae K Kim  has nurtured the spirit of digital craftsmanship through the CoDe Lab at Hanyang University, guiding over 40 master's and doctoral students."
-  image: "images/Kim, Jae Kyung.png"
+  image: "images/kim jae Kyung.png"
   email: "jaekkim@hanyang.ac.kr"
   scholar_url: "www.jk-ar.com"
   division: 2
@@ -130,7 +130,7 @@
   bio:
     ko: "김태진 대표는 30년 이상의 풍부한 실무 경험과 연구 역량을 겸비한 국내 건축구조 분야의 전문가입니다. 잠실 롯데월드타워를 비롯한 초고층 및 비정형 건축물 프로젝트를 성공적으로 수행하며 탁월한 기술력을 입증해 왔습니다. 미국 UC Berkeley에서 박사학위를 취득한 후 학문적 깊이와 실무 감각을 바탕으로 연구와 현장을 연결하는 기술 혁신을 지속적으로 이끌고 있습니다. 특히 내진설계와 강구조 분야에서 국내 최고 수준의 경쟁력을 보유하고 있으며, 다양한 목구조 연구를 통해 국내 목구조건축의 활성화에도 기여하고 있습니다."
     en: "Dr. Taejin Kim is a structural engineer with over 30 years of professional experience in design, safety assessment, and research. He has successfully delivered a wide range of projects, including super-tall and irregular buildings such as the Lotte World Tower in Seoul. He holds a Ph.D. from the UC Berkeley, and has led innovation by integrating academic research with engineering practice. His expertise includes seismic design and steel structures, and he is also actively engaged in advancing timber construction in Korea."
-  image: "images/Park, Keum sung.png"
+  image: "images/Kim, Taejin.png"
   email: "taejin@tistructure.com"
   scholar_url: "www.tistructure.com"
   division: 2
@@ -162,7 +162,7 @@
   bio:
     ko: "전북대학교를 졸업하여, 전북대학교에서 석사 및 박사학위를 취득하였다. 현재 전북대학교 건축공학과에서 정교수로 재직하고 있다. 건축물 내풍공학 분야를 연구하고 있으며, 1997년에 건축 전용 풍동실험실을 구축하였으며 2009년 이후 구축된 분산공유형 대형풍동실험시설을 통해 다수의 고층건물 및 대공간 구조물에 대한 풍하중 평가를 수행하였다."
     en: "You, Kipyo graduated from Jeonbuk National University, where he also obtained his Master’s and Ph.D. degrees, and is currently a professor in the Department of Architectural Engineering. His research focuses on building wind engineering. He established an architectural wind tunnel laboratory in 1997 and, since 2009, has conducted wind load evaluations for high-rise and large-span structures using a large-scale wind tunnel facility."
-  image: "images/Park, Keum sung.png"
+  image: "images/You, Kipyo.png"
   email: "taejin@tistructure.com"
   scholar_url: "www.tistructure.com"
   division: 2
@@ -188,7 +188,7 @@
 - id: "new-member"
   name:
     ko: "여명석"
-    en: "You, Kipyo"
+    en: "Yeo, Myoungsouk"
   position:
     ko: "Seoul National University Department of Architecture & Architectural Engineering, Professor "
     en: "Seoul National University Department of Architecture & Architectural Engineering, Professor "
@@ -297,6 +297,7 @@
   image: "images/Kim,Seung-Hun.png"
   email: "Kimsh@hanbat.ac.kr"
   scholar_url: ""
+  division: 4
   is_representative: false
 
 - id: "new-member"
