@@ -56,6 +56,11 @@ const translations: Record<Language, Record<string, string>> = {
     'showcase.research.description': 'This research strengthens the testing, evaluation, and demonstration foundation for ultra-large timber large-span construction technology through collaboration with national research institutions and specialized research institutes. Through this, we aim to secure the reliability and public applicability of core technologies and contribute to the national-level expansion of carbon-neutral construction technology.',
     'showcase.industry.title': 'Industry Partners for Technology Diffusion',
     'showcase.industry.description': 'This research examines the field applicability and feasibility of ultra-large timber large-span construction technology through collaboration with construction and engineering industry partners. Based on this, we build a collaboration system that connects from design, construction, to commercialization stages, promoting practical utilization and technology diffusion of research outcomes.',
+    'showcase.demonstration.title': 'Demonstration Institutions',
+    'showcase.demonstration.description': 'This study aims to validate the real-world applicability and performance of large-scale timber megastructure technologies through collaboration with a demonstration partner. Based on empirical data collected throughout the entire lifecycle—design, construction, and operation—the project seeks to enhance technological reliability and establish a foundation for commercialization and broader adoption of timber construction. In particular, in collaboration with Gangneung Development Corporation, a full-scale demonstration model will be constructed at Ojukheon Hanok Village in Gangneung to verify the developed technologies under real-world conditions.',
+    'showcase.demonstration.image1Caption': 'Gangneung Ojukheon Hanok Village',
+    'showcase.demonstration.image1Alt': 'Gangneung Ojukheon Hanok Village',
+    'showcase.demonstration.image2Alt': 'Gangneung Urban Development Corporation',
 
     // Research Themes
     'research.terrestrialCarbon.title': 'High-Performance Hybrid Large-Section Member Technology',
@@ -212,6 +217,11 @@ const translations: Record<Language, Record<string, string>> = {
     'showcase.research.description': '본 연구는 국가 연구기관 및 전문 연구소와의 협력을 통해 초대형 목조 대공간 건축 기술에 대한 시험, 평가, 실증 기반을 강화합니다. 이를 통해 핵심 기술의 신뢰성과 공공적 활용 가능성을 확보하고, 국가 차원의 탄소중립 건설 기술 확산에 기여하고자 합니다.',
     'showcase.industry.title': '산업 연계 및 기술 확산 파트너',
     'showcase.industry.description': '본 연구는 건설 및 엔지니어링 산업체와의 협력을 통해 초대형 목조 대공간 건축 기술의 현장 적용 가능성과 실현성을 검토합니다. 이를 바탕으로 설계·시공·사업화 단계까지 연계되는 협력 체계를 구축하여 연구 성과의 실질적인 활용과 기술 확산을 추진합니다.',
+    'showcase.demonstration.title': '실증기관',
+    'showcase.demonstration.description': '본 연구는 실증기관과의 협력을 통해 초대형 목조 대공간 건축 기술의 현장 적용성과 성능을 실제 환경에서 검증합니다. 설계·시공·운영 전 과정에서 축적된 실증 데이터를 기반으로 기술의 신뢰성과 상용화 가능성을 확보하고, 목조 건축의 확산을 위한 실질적 기반을 마련합니다. 특히 강릉개발공사와 협력하여 강릉 오죽헌 한옥마을에 실증 모델을 구축함으로써, 개발 기술의 현장 적용성과 실증 기반 검증을 수행할 예정입니다.',
+    'showcase.demonstration.image1Caption': '강릉 오죽헌 한옥마을',
+    'showcase.demonstration.image1Alt': '강릉 오죽헌 한옥마을',
+    'showcase.demonstration.image2Alt': '강릉개발공사',
 
     // Research Themes
     'research.terrestrialCarbon.title': '고성능 하이브리드 대단면 부재 기술',

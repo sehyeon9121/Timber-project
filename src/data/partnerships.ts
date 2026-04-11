@@ -1,4 +1,5 @@
 import type { ParticipatingInstitution } from '@/types';
+import type { DemonstrationImage } from '@/components/organisms/DemonstrationImageSection';
 
 export interface Partnership {
   id: string;
@@ -6,6 +7,7 @@ export interface Partnership {
   description: string;
   icon: string;
   institutions: ParticipatingInstitution[];
+  images?: DemonstrationImage[];
 }
 
 export const partnerships: Partnership[] = [
@@ -56,12 +58,34 @@ export const partnerships: Partnership[] = [
       '본 연구는 건설 및 엔지니어링 산업체와의 협력을 통해 초대형 목조 대공간 건축 기술의 현장 적용 가능성과 실현성을 검토합니다. 이를 바탕으로 설계·시공·사업화 단계까지 연계되는 협력 체계를 구축하여 연구 성과의 실질적인 활용과 기술 확산을 추진합니다.',
     icon: 'Factory',
     institutions: [
+      // 주의: 아래 기관들은 url이 없습니다. @/types에서 url이 선택적 속성(url?: string)이어야 에러가 안 납니다!
       { name: '포스코 이앤씨', logo: 'logo-institute1.png' },
       { name: '아리수 엔지니어링', logo: 'logo-institute2.jpg' },
       { name: '(주)하이멕', logo: 'logo-institute3.png' },
       { name: 'dA architecture group', logo: 'logo-institute4.jpg' },
       { name: '티아이구조기술사사무소', logo: 'logo-institute5.jpg' },
       { name: 'CS구조엔지니어링', logo: 'logo-institute6.png' },
+    ],
+  },
+  {
+    id: 'demonstration',
+    title: '실증기관',
+    description:
+      '본 연구는 실증기관과의 협력을 통해 초대형 목조 대공간 건축 기술의 현장 적용성과 성능을 실제 환경에서 검증합니다. 설계·시공·운영 전 과정에서 축적된 실증 데이터를 기반으로 기술의 신뢰성과 상용화 가능성을 확보하고, 목조 건축의 확산을 위한 실질적 기반을 마련합니다. 특히 강릉개발공사와 협력하여 강릉 오죽헌 한옥마을에 실증 모델을 구축함으로써, 개발 기술의 현장 적용성과 실증 기반 검증을 수행할 예정입니다.',
+    icon: 'Building2',
+    institutions: [],
+    images: [
+      {
+        src: '/images/leeseunglab/vivivi.jpg',
+        alt: 'showcase.demonstration.image1Alt',
+        caption: 'showcase.demonstration.image1Caption',
+      },
+      {
+        src: '/images/leeseunglab/gangneung.png',
+        alt: 'showcase.demonstration.image2Alt',
+        fit: 'contain',
+        url: 'https://gtdc.or.kr/',
+      },
     ],
   },
 ];

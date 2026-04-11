@@ -15,7 +15,7 @@ export function JoinUsPage() {
     <DetailPageLayout
       title={t('joinUs.title')}
       subtitle={t('joinUs.subtitle')}
-      heroImage="/images/leeseunglab/joinus-hero.jpg"
+      heroImage="/images/leeseunglab/joinus-hero.png"
     >
       <div style={{ height: 60 }} />
 

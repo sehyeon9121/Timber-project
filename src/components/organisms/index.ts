@@ -50,3 +50,8 @@ export type { AffiliationLogoProps } from './AffiliationLogo';
 // Partnerships
 export { PartnershipCard } from './PartnershipCard';
 export type { PartnershipCardProps } from './PartnershipCard';
+export { DemonstrationImageSection } from './DemonstrationImageSection';
+export type {
+  DemonstrationImage,
+  DemonstrationImageSectionProps,
+} from './DemonstrationImageSection';

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ProfileImage } from '@/components/molecules/ProfileImage';
-import { SocialIcon } from '@/components/molecules/SocialIcon';
 import { EmailModal } from '@/components/molecules/EmailModal';
 import { Icon } from '@/components/atoms/Icon';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -44,13 +43,20 @@ export function MemberProfileImage({
       {(scholarUrl || email) && (
         <div className="flex items-center justify-center gap-2" style={{ marginTop: 16 }}>
           {scholarUrl && (
-            <SocialIcon
-              platform="google"
+            <a
               href={scholarUrl}
-              size={30}
-              strokeWidth={1.5}
-              className="text-gray-500 hover:text-[#00380A] transition-colors"
-            />
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Website"
+              className={cn(
+                'inline-flex items-center justify-center p-2 rounded-full',
+                'transition-all duration-[var(--transition-fast)]',
+                'hover:bg-gray-100 hover:text-[#00380A]',
+                'text-gray-500 no-underline'
+              )}
+            >
+              <Icon name="Globe" size={30} strokeWidth={1.5} />
+            </a>
           )}
           {email && (
             <button

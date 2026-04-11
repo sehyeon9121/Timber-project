@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heading } from '@/components/atoms/Heading';
 import { Paragraph } from '@/components/atoms/Paragraph';
 import { Icon } from '@/components/atoms/Icon';
+import {
+  DemonstrationImageSection,
+  type DemonstrationImage,
+} from '@/components/organisms/DemonstrationImageSection';
 import { cn } from '@/utils/cn';
 import type { ParticipatingInstitution } from '@/types';
 
@@ -23,6 +27,7 @@ export interface PartnershipCardProps {
   description: string;
   icon: string;
   institutions: ParticipatingInstitution[];
+  images?: DemonstrationImage[];
   className?: string;
 }
 
@@ -31,6 +36,7 @@ export function PartnershipCard({
   description,
   icon,
   institutions,
+  images,
   className,
 }: PartnershipCardProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -109,58 +115,64 @@ export function PartnershipCard({
                 {description}
               </Paragraph>
 
-              <div
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-                style={{ gap: 16, marginTop: 28 }}
-              >
-                {institutions.map((institution, idx) => {
-                  const cardContent = (
-                    <motion.div
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25, delay: idx * 0.04 }}
-                      className={cn(
-                        'bg-white rounded-lg border border-gray-200',
-                        'flex flex-col items-center justify-center',
-                        'aspect-square',
-                        'transition-shadow hover:shadow-md',
-                        institution.url && 'cursor-pointer'
-                      )}
-                      style={{ padding: 12 }}
-                    >
-                      <img
-                        src={getImageSrc(institution.logo)}
-                        alt={institution.name}
-                        className="object-contain"
-                        style={{ maxWidth: '90%', maxHeight: '60%', marginBottom: 8 }}
-                      />
-                      <span className="text-xs text-gray-700 text-center line-clamp-2">
-                        {institution.name}
-                      </span>
-                      {institution.url && (
-                        <span className="text-[10px] text-[#1B3A4B] mt-1 flex items-center gap-1">
-                          <Icon name="ExternalLink" size={10} />
-                          Website
-                        </span>
-                      )}
-                    </motion.div>
-                  );
+              {images && images.length > 0 && (
+                <DemonstrationImageSection images={images} columns={2} />
+              )}
 
-                  return institution.url ? (
-                    <a
-                      key={idx}
-                      href={institution.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="no-underline"
-                    >
-                      {cardContent}
-                    </a>
-                  ) : (
-                    <div key={idx}>{cardContent}</div>
-                  );
-                })}
-              </div>
+              {institutions.length > 0 && (
+                <div
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+                  style={{ gap: 16, marginTop: 28 }}
+                >
+                  {institutions.map((institution, idx) => {
+                    const cardContent = (
+                      <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25, delay: idx * 0.04 }}
+                        className={cn(
+                          'bg-white rounded-lg border border-gray-200',
+                          'flex flex-col items-center justify-center',
+                          'aspect-square',
+                          'transition-shadow hover:shadow-md',
+                          institution.url && 'cursor-pointer'
+                        )}
+                        style={{ padding: 12 }}
+                      >
+                        <img
+                          src={getImageSrc(institution.logo)}
+                          alt={institution.name}
+                          className="object-contain"
+                          style={{ maxWidth: '90%', maxHeight: '60%', marginBottom: 8 }}
+                        />
+                        <span className="text-xs text-gray-700 text-center line-clamp-2">
+                          {institution.name}
+                        </span>
+                        {institution.url && (
+                          <span className="text-[10px] text-[#1B3A4B] mt-1 flex items-center gap-1">
+                            <Icon name="ExternalLink" size={10} />
+                            Website
+                          </span>
+                        )}
+                      </motion.div>
+                    );
+
+                    return institution.url ? (
+                      <a
+                        key={idx}
+                        href={institution.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="no-underline"
+                      >
+                        {cardContent}
+                      </a>
+                    ) : (
+                      <div key={idx}>{cardContent}</div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </motion.div>
         )}
