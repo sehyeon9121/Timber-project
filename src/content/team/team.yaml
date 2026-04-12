@@ -2,42 +2,101 @@
 # ACT Institute Team Members
 
 # ===== 1세부 =====
-- id: "Lee Seung-jae"
+- id: "division1-representative"
   name:
     ko: "오정권"
-    en: "Lee Seung-jae"
+    en: "Oh, Jung-Kwon"
   position:
-    ko: "교수, 한국기술교육대학교"
-    en: "Professor, Korea University of Technology and Education"
+    ko: "Seoul National University, Professor"
+    en: "Seoul National University, Professor"
   bio:
-    ko: "이승재 교수는 도쿄대학교에서 건축공학 석사 및 박사 학위를 취득하였으며, 구조공학을 전공하였다. 내진 구조물과 AI 기반 구조 설계를 연구하며 건물의 안전성과 성능 향상에 기여하고 있다. 수상 경력이 있는 연구와 구조공학 분야의 실무 적용을 통해 학계와 산업계에 활발히 공헌하고 있다."
-    en: "Professor Seung-Jae Lee received his M.S. and Ph.D. in Architectural Engineering from the University of Tokyo, specializing in structural engineering. His research focuses on earthquake-resistant structures and AI-based structural design to enhance the safety and performance of buildings. He has actively contributed to academia and industry through award-winning research and practical applications in structural engineering."
-  image: "images/cesar-terrer.jpg"
-  scholar_url: "https://www.koreatech.ac.kr/faculty/view.es?mid=b30103010100&division=1&classification=DEPF006&seq=144"
-  email: "leeseung@koreatech.ac.kr"
+    ko: "오정권 교수는 서울대학교 임산공학과에서 학사 석사 박사를 마치고 서울대 산림과학부 환경재료과학전공에 교수로 재직중이다. 그는 공학목재, 목구조를 전공으로하고 있고, GLT, CLT 등 공학목재 뿐만아니라 NLT-콘크리트 복합재, 목재-강재 복합재에 대한 연구를 활발히 하고 있으며 탈현장건설을 위한 건축요소 개발에도 활발한 연구를 진행중이다. 본 연구과제에서는 초대형 GLT 및 cambered GLT, Curved GLT의 연구를 담당하고 있다."
+    en: "ung-Kwon Oh received his B.S., M.S., and Ph.D. in Seoul National University. He currently serves as a professor in the Dept. of Forest Sciences, SNU, specializing in engineered wood products and timber engineering. His research focuses on mass timber such as GLT and CLT, as well as innovative composite systems including timber-concrete and timber-steel composites. He is also actively involved in developing building components for Off-Site Construction. In this research project, he is leading the investigation into extra-large GLT, and curved GLT."
+  image: "images/Oh, Jung-Kwon.png"
+  scholar_url: "https://snutel.snu.ac.kr/"
+  email: "jungoh@snu.ac.kr"
   affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+    ko: ""
+    en: ""
   division: 1
   is_representative: true
 
-- id: "Noh Seung-hyun"
+- id: "new-member"
   name:
-    ko: "노승현"
-    en: "Noh Seung-hyun"
+    ko: "황경주"
+    en: "Hwang, Kyung-Ju"
   position:
-    ko: "석사과정"
-    en: "Master's Program"
+    ko: "University of Seoul, Professor"
+    en: "University of Seoul, Professor"
   bio:
-    ko: "Q-러닝 기반 PS-QDE 알고리즘을 활용한 트러스 구조 중량 최적화 연구를 수행하며, 전략적 전환 계수를 통해 탐색 효율성과 수렴성을 향상시키는 데 중점을 두고 있다."
-    en: "He focuses on optimizing truss structural weight through a Q-learning–based PS-QDE algorithm that employs a strategic transition coefficient to enhance search efficiency and convergence."
-  image: "images/leila-mirzagholi.png"
-  email: "sh01150304@koreatech.ac.kr"
+    ko: "황경주 교수는 독일 슈투트가르트대학(University of Stuttgart)에서 접합부 강성을 고려한 대공간 구조물의 구조디자인전공으로 공학박사를 취득하였으며 2012년부터 현재까지 독일 바덴 뷔르텐베르크(Baden Wurttenberg)주의 구조기술사로 등록되어 있다. 목재를 비롯한 다양한 재료를 활용한 고부가가치 건축구조물의 실현에 경험이 풍부하다. 경주 금관총 유물전시관의 국내 최장 경간의 목조 아치 지붕의 구조설계를 성공적으로 완성하여 2023년 한국공간구조학회 작품상을 수상하였다. "
+    en: "Professor Hwang received Dr.-Ing. in engineering with a specialization in structural design of large-span structures considering joint stiffness at the University of Stuttgart. He has been registered as a professional engineer in the state of Baden-Württemberg. He has extensive experience in realizing high value architectural structures using a variety of materials, including wood. He successfully completed the structural design of the wooden arch roof with longest span in Korea, Gyeongju Geumgwanchong Relic Exhibition Hall. He received the 2023 Works Award from the Korean Society of Space Structures."
+  image: "images/Hwang, Kyung-Ju.png"
+  scholar_url: "https://uosarch.ac.kr/"
+  email: "kj.hwang@uos.ac.kr"
   affiliation:
-    ko: "한국기술교육대학교 건축공학과"
-    en: "Dept. of Architectural Engineering, KOREATECH"
+    ko: ""
+    en: ""
   division: 1
   is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "방성준"
+    en: "Pang, Sung-Jun"
+  position:
+    ko: "Chonnam National University, Associate Professor"
+    en: "Chonnam National University, Associate Professor"
+  bio:
+    ko: "본 연구과제는 한국형 신뢰성 기반 지압강도 DB 및 보정계수 개발을 주제로 하며, 국산 수종 및 파스너 조건을 반영한 목재 DB 구축과 보정계수 개발을 통해 목구조 대공간 설계를 지원하는 것을 목표로 합니다. 이를 통해 목조건축 및 국산 목재 활용 기술 고도화에 기여할 것으로 보이며, 연구 책임자는 목재역학 및 구조 분야의 풍부한 연구 경험을 바탕으로 해당 과제를 성공적으로 수행할 수 있을 것으로 기대됩니다."
+    en: "This project, titledDevelopment of a Reliability-Based Bearing Strength DB and Modification Factors, aims to support the design of large-span timber structures by establishing a wood database and developing modification factors that reflect domestic species and fastener conditions. The successful implementation of this project is expected to contribute to the advancement of timber construction technology and the increased use of domestic wood. Furthermore, the principal investigator is highly qualified to lead this initiative, with the expertise to successfully execute the project based on extensive research experience in timber mechanics and structural engineering."
+  image: "images/Pang, Sung-Jun.png"
+  scholar_url: "https://sites.google.com/view/tctelab/%ED%99%88?authuser=1"
+  email: "sjp@jnu.ac.kr"
+  affiliation:
+    ko: ""
+    en: ""
+  division: 1
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "이상준"
+    en: "Lee, Sang-Joon"
+  position:
+    ko: "National Institute of Forest Science, Senior Research Scientist"
+    en: "National Institute of Forest Science, Senior Research Scientist"
+  bio:
+    ko: "국립산림과학원 이상준 박사는 서울대학교에서 학사, 박사 학위를 취득하였으며 목구조 연구를 중심으로 임산공학을 전공하였다. 현재는 국립산림과학원 임업연구관으로서 국가 탄소중립 실현을 위한 건물부문 핵심 대안을 목조건축으로 보고, 국내 활성화를 위한 제도 개선, 산업 진흥, 국민인식 제고 등 정책 마련과 재료, 구조, 내화·차음·에너지 등 성능 확보를 위한 종합적 연구개발을 총괄하고 있다. "
+    en: "Dr. Sang-Joon Lee earned his B.S. and Ph.D. from Seoul National University, specializing in Forest Products with a focus on timber engineering. Currently serving as a Senior Research Scientist at the National Institute of Forest Science, he views timber construction as a pivotal solution for achieving national carbon neutrality in the building sector. He leads comprehensive R&D and policy initiatives to improve regulations, vitalize the industry and enhance public awareness."
+  image: "images/Lee, Sang-Joon.png"
+  scholar_url: "http://nifos.forest.go.kr"
+  email: "lsjoon@korea.kr"
+  affiliation:
+    ko: ""
+    en: ""
+  division: 1
+  is_representative: false
+
+- id: "new-member"
+  name:
+    ko: "안재홍"
+    en: "An, Jae-Hong"
+  position:
+    ko: "KICT(Korea Institute of Civil engineering and building Technology), Ph.D, Senior Researcher"
+    en: "KICT(Korea Institute of Civil engineering and building Technology), Ph.D, Senior Researcher"
+  bio:
+    ko: "안재홍은 건국대학교에서 건축물 내화구조로 박사학위를 받았으며, 한국건설기술연구원(KICT)에서 근무하면서 목조 건축물 내화구조 분야 기술 개발과 연구를 수행하고 있습니다. 목구조의 내화성능, 표준화, 고온 특성 해석 등 목조 건축물의 내화구조 및 화재 안전과 관련한 다양한 연구를 수행하였습니다. 연구 결과를 바탕으로 목구조 내화구조 기술의 실용성 확보와 표준화 적용 및 정책 지원에도 기여하고 있습니다."
+    en: "Dr. Jae-hong An received his Ph.D. in fire-resistant construction of buildings from Konkuk University. He is currently working at KICT, where he conducts research in the field of fire-resistant construction for timber buildings. Based on his research outcomes, he contributes to enhancing the practicality of fire-resistant technologies for timber structures, as well as their standardization, implementation, and policy support."
+  image: "images/An, Jae-Hong.png"
+  scholar_url: "www.kict.re.kr"
+  email: "rehong@kict.re.kr"
+  affiliation:
+    ko: ""
+    en: ""
+  division: 1
+  is_representative: false
+
 
 # ===== 2세부 =====
 - id: "division2-representative"
