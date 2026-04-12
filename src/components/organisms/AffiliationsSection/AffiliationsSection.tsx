@@ -2,8 +2,6 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { DecoratedSectionHeader } from '@/components/organisms/DecoratedSectionHeader';
-import { AffiliationLogo } from '@/components/molecules/AffiliationLogo';
-import { affiliations } from '@/data/affiliations';
 
 const getImageSrc = (src: string): string => {
   if (src.startsWith('http') || src.startsWith('data:')) {
@@ -66,21 +64,6 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
           variant="light"
           useOriginalMarker
         />
-
-        {/* Logos */}
-        <div
-          className="flex items-center justify-center"
-          style={{ marginTop: 45, gap: 20, width: 'calc(100% - 40px)', maxWidth: 620 }}
-        >
-          {affiliations.map((affiliation) => (
-            <AffiliationLogo
-              key={affiliation.id}
-              name={affiliation.name}
-              logo={affiliation.logo}
-              url={affiliation.url}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );
