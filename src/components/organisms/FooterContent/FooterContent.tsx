@@ -25,7 +25,7 @@ export function FooterContent({ className }: FooterContentProps) {
           className="text-white/80"
           style={{ fontSize: 16 }}
         >
-          © Copyright {currentYear} | Hi-Wood
+          © Copyright {currentYear} | 200m급 목구조대공간 건축물 건설 기술개발
         </motion.div>
       </div>
     </footer>

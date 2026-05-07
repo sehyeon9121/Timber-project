@@ -30,7 +30,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
     'home.about.imageTitle': 'Project Overview',
-    'home.about.title': 'Hi - Wood',
+    'home.about.title': 'Research Team Goal',
     'home.about.description': 'This research aims to advance large-span timber construction technology based on wooden structures, integrating the entire process of design, construction, and operation to achieve carbon-neutral architecture.',
     'home.research.title': 'Research Topics',
     'home.research.subtitle': 'Research for the Future',
@@ -191,7 +191,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
     'home.about.imageTitle': 'Project Overview',
-    'home.about.title': 'Hi - Wood',
+    'home.about.title': '연구단의 목표',
     'home.about.description': '본 연구는 목조 구조를 기반으로 대공간 건축 기술을 고도화하고, 설계·시공·운영 전 과정을 통합하여 탄소중립 건축 실현을 목표로 합니다.',
     'home.research.title': '연구 주제',
     'home.research.subtitle': '미래를 위한 연구',
@@ -350,7 +350,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
         return saved;
       }
     }
-    return 'EN';
+    return 'KO';
   });
 
   const setLanguage = useCallback((lang: Language) => {

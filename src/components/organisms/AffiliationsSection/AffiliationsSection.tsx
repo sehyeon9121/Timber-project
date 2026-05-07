@@ -59,7 +59,7 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center">
         <DecoratedSectionHeader
-          title="Hi-Wood"
+          title="200m급 목구조대공간 건축물 건설 기술개발"
           subtitle=""
           variant="light"
           useOriginalMarker

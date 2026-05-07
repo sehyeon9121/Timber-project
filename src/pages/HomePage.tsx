@@ -37,7 +37,7 @@ export function HomePage() {
       <section id="about" className="bg-white py-24 md:py-32">
         <AboutContent
           image="/images/leeseunglab/test-homepage.jpg"
-          imageAlt="Hi-Wood"
+          imageAlt="200m급 목구조대공간 건축물 건설 기술개발"
           imageTitle={t('home.about.imageTitle')}
           title={t('home.about.title')}
           description={t('home.about.description')}

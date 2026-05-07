@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogoImage } from '@/components/molecules/LogoImage';
 import { NavLink } from '@/components/molecules/NavLink';
 import { DropdownMenu } from '@/components/molecules/DropdownMenu';
 import { MenuButton } from '@/components/molecules/MenuButton';
@@ -126,13 +125,16 @@ export function NavigationBar({ className }: NavigationBarProps) {
       >
         {/* Logo */}
         <div className="flex items-center">
-          <LogoImage
-            src="/images/leeseunglab/terrer-lab-logo.png"
-            alt="Hi-Wood"
-            href="/"
-            height={51}
-            className="object-contain"
-          />
+          <Link href="/" className="inline-block transition-opacity duration-[var(--transition-fast)] hover:opacity-80">
+            <Text
+              size="lg"
+              weight={700}
+              color="text"
+              className="whitespace-nowrap"
+            >
+              200m급 목구조대공간 건축물 건설 기술개발
+            </Text>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
