@@ -61,9 +61,47 @@ npm run build
 
 ### 운영 배포
 
-현재 GitHub Pages 설정은 정적 사이트만 배포합니다. 승인제 회원 기능을 운영하려면 Node 서버와 지속 저장 공간이 필요합니다. 이번 변경은 로컬 실행용이며 서버를 외부에 배포하지 않습니다.
+현재 GitHub Pages 설정은 정적 사이트만 배포합니다. 승인제 회원 기능을 운영하려면 로그인 API와 계정·게시글을 저장할 영구 DB가 함께 필요합니다.
+
+Vercel에서는 `api/index.mjs`가 기존 로그인·관리자 승인·게시판 API를 실행합니다. `vercel.json`은 `/api` 요청을 이 함수로 연결하고, `/login`, `/admin`, `/board` 같은 화면 주소의 직접 접속과 새로고침을 지원합니다. Vercel의 DB 설정이 없으면 로컬 파일이나 임시 DB로 대체하지 않고 서비스 연결 오류(503)를 반환합니다.
+
+로컬에서 생성한 관리자·회원 계정은 `server/data/auth.sqlite`에만 저장되며 GitHub와 Vercel로 전송되지 않습니다. 기존 계정을 유지하려면 운영 DB로 안전하게 이전해야 합니다. DB 파일을 Git에 추가하거나 공개 파일 경로에 넣지 마세요.
 
 운영 시 Node 서버가 `dist` 사이트와 `/api`를 같은 도메인에서 제공하도록 구성하고 HTTPS 역방향 프록시를 연결합니다. `NODE_ENV=production`, `SITE_ORIGIN=https://실제사이트주소`를 지정하고 빌드 후 `npm start`로 실행합니다. 운영 쿠키에는 Secure가 추가됩니다. SQLite는 단일 서버와 지속 디스크를 전제로 합니다. HTTPS 접속과 DB 백업을 구성한 뒤 운영하세요.
+
+### Vercel + Turso 무료 DB 연결
+
+[Turso](https://turso.tech/pricing)의 Free 요금제에서 libSQL DB를 생성합니다. Vercel과 DB의 무료 한도 안에서 운영할 수 있으며 유료 요금제나 자동 추가 사용량 결제는 활성화하지 않습니다. Vercel Hobby는 개인·비상업용 대상이므로 실제 사이트 용도에 맞는지 [사용 조건](https://vercel.com/docs/plans/hobby)을 확인하세요.
+
+1. Turso에서 빈 libSQL DB를 생성하고 Database URL과 읽기·쓰기 권한의 Auth Token을 발급합니다.
+2. Vercel 프로젝트의 **Settings → Environment Variables**에 아래 세 값을 등록합니다. Production 환경에 적용하세요.
+
+| 이름 | 값 |
+| --- | --- |
+| `TURSO_DATABASE_URL` | Turso의 `libsql://…turso.io` 주소 |
+| `TURSO_AUTH_TOKEN` | DB 연결 토큰 |
+| `SITE_ORIGIN` | `https://timber-project-ten.vercel.app`처럼 실제 접속하는 사이트의 HTTPS 주소 |
+
+토큰은 서버에서만 사용합니다. `VITE_`로 시작하는 변수, 프런트엔드 코드, Git 파일, 채팅에 토큰을 넣지 마세요. 커스텀 도메인을 사용하면 `SITE_ORIGIN`도 해당 주소로 바꿉니다. 별도의 Preview 주소는 승인된 운영 주소와 다르므로 로그인·회원가입 요청이 거절됩니다.
+
+3. 기존 계정을 유지하려면 이 컴퓨터에서 `.env.example`을 `.env`로 복사하고 동일한 Turso URL·토큰을 입력한 뒤 실행합니다. `.env`는 Git에서 제외됩니다.
+
+```powershell
+npm run db:migrate
+```
+
+이 도구는 원본 SQLite DB를 읽기 전용으로 열고 계정·비밀번호 해시·승인 상태·게시글을 하나의 트랜잭션으로 이전한 뒤 내용 일치를 검증합니다. 기존 ID와 작성자 연결도 유지됩니다. 로컬 세션은 이전하지 않으므로 운영 사이트에서 다시 로그인하세요. 같은 내용을 재실행하면 중복 없이 완료 상태를 표시하며, 대상 DB에 다른 내용이 있으면 덮어쓰지 않고 중단합니다. 계정·게시글을 운영에서 사용하기 시작한 뒤에는 다시 이전하지 마세요.
+
+기존 DB 대신 새로 시작한다면 위 이전 명령을 실행하지 않고 다음 명령으로 운영 DB에 관리자 계정을 만듭니다. 기존 가입 이메일을 관리자 계정으로 덮어쓰지는 않습니다.
+
+```powershell
+node --env-file=.env server/create-master.mjs master@example.com "관리자 이름"
+```
+
+4. 수정한 코드를 Vercel에 배포하고 환경 변수를 적용한 상태로 **Redeploy**합니다. Node.js 버전은 24.x, 빌드 명령은 `npm run build`, 출력 폴더는 `dist`를 사용합니다.
+5. `/api/health`가 `{"ok":true}`를 반환하는지 확인합니다. `/login`에서 기존 관리자·승인된 회원 계정으로 로그인합니다. 가입 신청자는 기존과 같이 관리자 승인을 받아야 합니다.
+
+Turso 환경 변수가 없는 로컬 실행에서는 기존 SQLite DB를 계속 사용합니다. 운영 DB를 로컬 DB로 바꾸면 운영에서 작성한 새 데이터는 로컬에 자동으로 복사되지 않으므로, 되돌리기 전에 운영 DB를 별도로 백업해야 합니다.
 
 ## Original Vite template notes
 

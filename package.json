@@ -13,10 +13,12 @@
     "master:create": "node server/create-master.mjs",
     "test:auth": "node --test server/auth.test.mjs",
     "test:board": "node --test server/board.test.mjs",
-    "test": "node --test server/auth.test.mjs server/board.test.mjs",
+    "test": "node --test server/auth.test.mjs server/board.test.mjs server/remote-store.test.mjs",
+    "db:migrate": "node --env-file=.env server/migrate-to-turso.mjs",
     "start": "node server/index.mjs"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "clsx": "^2.1.1",
     "express": "^5.2.1",
     "framer-motion": "^12.26.2",

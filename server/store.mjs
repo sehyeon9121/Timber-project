@@ -39,14 +39,9 @@ export function publicUser(user) {
     role: user.role, status: user.status, createdAt: user.created_at, reviewedAt: user.reviewed_at };
 }
 
-const tokenHash = token => createHash('sha256').update(token).digest('hex');
+export const tokenHash = token => createHash('sha256').update(token).digest('hex');
 
-export function createStore(path = databasePath) {
-  if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
-  const db = new DatabaseSync(path, { timeout: 5000 });
-  db.exec(`
-    PRAGMA journal_mode = WAL;
-    PRAGMA foreign_keys = ON;
+export const storeSchema = `
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
@@ -73,6 +68,15 @@ export function createStore(path = databasePath) {
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
     );
+`;
+
+export function createStore(path = databasePath) {
+  if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
+  const db = new DatabaseSync(path, { timeout: 5000 });
+  db.exec(`
+    PRAGMA journal_mode = WAL;
+    PRAGMA foreign_keys = ON;
+${storeSchema}
   `);
   return {
     db,

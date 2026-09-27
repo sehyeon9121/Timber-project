@@ -1,6 +1,7 @@
 import { createInterface } from 'node:readline/promises';
 import { Writable } from 'node:stream';
-import { createStore, hashPassword, validateRegistration } from './store.mjs';
+import { hashPassword, validateRegistration } from './store.mjs';
+import { openStore } from './open-store.mjs';
 
 // Master accounts are created only from the server terminal, never from signup.
 const email = process.argv[2];
@@ -25,9 +26,9 @@ try {
   if (password !== confirmation) throw new Error('비밀번호가 일치하지 않습니다.');
   const input = validateRegistration({ name, email, affiliation: '사이트 관리', password });
   if (input.error) throw new Error(input.error);
-  store = createStore();
-  if (store.findByEmail(input.email)) throw new Error('이미 등록된 이메일입니다. 다른 이메일을 사용하세요.');
-  store.addUser(input, await hashPassword(password), 'master');
+  store = await openStore();
+  if (await store.findByEmail(input.email)) throw new Error('이미 등록된 이메일입니다. 다른 이메일을 사용하세요.');
+  await store.addUser(input, await hashPassword(password), 'master');
   console.log(`마스터 계정이 등록되었습니다: ${input.email}`);
 } catch (error) {
   console.error(error.message);

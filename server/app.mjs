@@ -47,8 +47,8 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     next();
   });
 
-  function requireUser(request, response, next) {
-    const user = store.sessionUser(readSessionCookie(request));
+  async function requireUser(request, response, next) {
+    const user = await store.sessionUser(readSessionCookie(request));
     if (!user) return fail(response, 401, 'UNAUTHENTICATED', '로그인이 필요합니다.');
     request.user = user;
     next();
@@ -59,18 +59,25 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   }
 
   app.get('/api/health', (_request, response) => response.json({ ok: true }));
-  app.get('/api/auth/me', (request, response) => {
-    const user = store.sessionUser(readSessionCookie(request));
+  app.get('/api/auth/me', async (request, response) => {
+    const user = await store.sessionUser(readSessionCookie(request));
     response.json({ user: user ? publicUser(user) : null });
   });
   app.post('/api/auth/signup', async (request, response) => {
     const input = validateRegistration(request.body);
     if (input.error) return fail(response, 400, 'VALIDATION', input.error);
-    if (store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
+    if (await store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
     const passwordHash = await hashPassword(input.password);
     // The hash step is asynchronous; recheck duplicates before the insert.
-    if (store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
-    store.addUser(input, passwordHash);
+    if (await store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
+    try {
+      await store.addUser(input, passwordHash);
+    } catch (error) {
+      if (error.message?.includes('UNIQUE constraint failed: users.email')) {
+        return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
+      }
+      throw error;
+    }
     response.status(201).json({ status: 'pending', message: '가입 요청이 접수되었습니다. 관리자 승인 후 로그인할 수 있습니다.' });
   });
   app.post('/api/auth/login', async (request, response) => {
@@ -79,33 +86,33 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     if (typeof password !== 'string' || password.length > 128 || email.length > 254) {
       return fail(response, 400, 'INVALID_CREDENTIALS', '이메일과 비밀번호를 확인해 주세요.');
     }
-    const user = store.findByEmail(email);
+    const user = await store.findByEmail(email);
     const valid = await verifyPassword(password, user?.password_hash || dummyHash);
     if (!user || !valid) return fail(response, 401, 'INVALID_CREDENTIALS', '이메일과 비밀번호를 확인해 주세요.');
     if (user.status === 'pending') return fail(response, 403, 'PENDING', '관리자 승인 대기 중입니다. 승인 후 로그인할 수 있습니다.');
     if (user.status === 'rejected') return fail(response, 403, 'REJECTED', '가입 요청이 거절되었습니다. 관리자에게 문의해 주세요.');
-    store.deleteSession(readSessionCookie(request));
-    const token = store.createSession(user.id);
+    await store.deleteSession(readSessionCookie(request));
+    const token = await store.createSession(user.id);
     response.cookie(cookieName, token, { ...cookieOptions, maxAge: sessionDuration }).json({ user: publicUser(user) });
   });
-  app.post('/api/auth/logout', (request, response) => {
-    store.deleteSession(readSessionCookie(request));
+  app.post('/api/auth/logout', async (request, response) => {
+    await store.deleteSession(readSessionCookie(request));
     response.clearCookie(cookieName, cookieOptions).json({ ok: true });
   });
-  app.get('/api/members/home', requireUser, (request, response) => {
+  app.get('/api/members/home', requireUser, async (request, response) => {
     response.json({ user: publicUser(request.user), message: '승인된 회원 전용 공간입니다.' });
   });
-  app.get('/api/admin/users', requireUser, requireMaster, (_request, response) => {
-    response.json({ users: store.listMembers() });
+  app.get('/api/admin/users', requireUser, requireMaster, async (_request, response) => {
+    response.json({ users: await store.listMembers() });
   });
-  app.patch('/api/admin/users/:id', requireUser, requireMaster, (request, response) => {
+  app.patch('/api/admin/users/:id', requireUser, requireMaster, async (request, response) => {
     const id = Number(request.params.id);
     const status = request.body?.status;
     if (!Number.isSafeInteger(id) || id < 1 || !['approved', 'rejected'].includes(status)) {
       return fail(response, 400, 'VALIDATION', '승인 또는 거절을 선택해 주세요.');
     }
-    if (!store.review(id, status, request.user.id)) return fail(response, 409, 'ALREADY_REVIEWED', '이미 처리되었거나 존재하지 않는 가입 요청입니다.');
-    response.json({ user: publicUser(store.findById(id)) });
+    if (!await store.review(id, status, request.user.id)) return fail(response, 409, 'ALREADY_REVIEWED', '이미 처리되었거나 존재하지 않는 가입 요청입니다.');
+    response.json({ user: publicUser(await store.findById(id)) });
   });
   registerBoardRoutes(app, store, requireUser);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));

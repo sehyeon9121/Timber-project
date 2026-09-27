@@ -10,47 +10,47 @@ export function validatePost(input) {
 
 export function registerBoardRoutes(app, store, requireUser) {
   const fail = (response, status, code, message) => response.status(status).json({ code, message });
-  function findPost(request, response) {
+  async function findPost(request, response) {
     const id = Number(request.params.id);
-    const post = Number.isSafeInteger(id) && id > 0 ? store.findPost(id) : undefined;
+    const post = Number.isSafeInteger(id) && id > 0 ? await store.findPost(id) : undefined;
     if (!post) fail(response, 404, 'POST_NOT_FOUND', '게시글을 찾을 수 없습니다. 삭제되었을 수 있습니다.');
     return post;
   }
-  app.get('/api/board/posts', requireUser, (request, response) => {
+  app.get('/api/board/posts', requireUser, async (request, response) => {
     const page = Number(request.query.page ?? 1);
     if (!Number.isSafeInteger(page) || page < 1 || page > 1000000) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 페이지 번호를 입력해 주세요.');
     }
-    const total = store.countPosts();
-    response.json({ posts: store.listPosts(boardPageSize, (page - 1) * boardPageSize), page,
+    const total = await store.countPosts();
+    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize), page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
-  app.get('/api/board/posts/:id', requireUser, (request, response) => {
-    const post = findPost(request, response);
+  app.get('/api/board/posts/:id', requireUser, async (request, response) => {
+    const post = await findPost(request, response);
     if (post) response.json({ post });
   });
-  app.post('/api/board/posts', requireUser, (request, response) => {
+  app.post('/api/board/posts', requireUser, async (request, response) => {
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
-    const post = store.createPost(input, request.user.id);
+    const post = await store.createPost(input, request.user.id);
     response.status(201).location(`/api/board/posts/${post.id}`).json({ post });
   });
-  app.patch('/api/board/posts/:id', requireUser, (request, response) => {
-    const post = findPost(request, response);
+  app.patch('/api/board/posts/:id', requireUser, async (request, response) => {
+    const post = await findPost(request, response);
     if (!post) return;
     if (post.authorId !== request.user.id) return fail(response, 403, 'POST_FORBIDDEN', '작성한 회원만 글을 수정할 수 있습니다.');
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
-    store.updatePost(post.id, input);
-    response.json({ post: store.findPost(post.id) });
+    await store.updatePost(post.id, input);
+    response.json({ post: await store.findPost(post.id) });
   });
-  app.delete('/api/board/posts/:id', requireUser, (request, response) => {
-    const post = findPost(request, response);
+  app.delete('/api/board/posts/:id', requireUser, async (request, response) => {
+    const post = await findPost(request, response);
     if (!post) return;
     if (post.authorId !== request.user.id && request.user.role !== 'master') {
       return fail(response, 403, 'POST_FORBIDDEN', '작성자 또는 관리자만 글을 삭제할 수 있습니다.');
     }
-    store.deletePost(post.id);
+    await store.deletePost(post.id);
     response.json({ ok: true });
   });
 }
