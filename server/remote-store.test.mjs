@@ -8,26 +8,42 @@ import { pathToFileURL } from 'node:url';
 import { createApp } from './app.mjs';
 import { createStore, hashPassword, verifyPassword } from './store.mjs';
 import { createRemoteStore } from './remote-store.mjs';
-import { openStore } from './open-store.mjs';
+import { openStore, remoteStoreOptions } from './open-store.mjs';
 import { migrateLocalStore } from './migrate-to-turso.mjs';
-import handler from '../api/index.mjs';
+import handler, { siteOrigin } from '../api/index.mjs';
 import express from 'express';
 
-test('Vercel refuses missing DB configuration and returns a service error', async () => {
+test('Vercel refuses missing DB configuration and returns a service error', async t => {
   await assert.rejects(openStore({ VERCEL: '1' }), /TURSO_DATABASE_URL/);
   await assert.rejects(openStore({ TURSO_DATABASE_URL: 'file:unsafe.sqlite', TURSO_AUTH_TOKEN: 'test' }), /TURSO_DATABASE_URL/);
   const saved = process.env.SITE_ORIGIN;
   delete process.env.SITE_ORIGIN;
   try {
+    const logs = t.mock.method(console, 'error', () => {});
     let body;
     const response = { setHeader() {}, end(value) { body = JSON.parse(value); } };
     await handler({}, response);
     assert.equal(response.statusCode, 503);
     assert.equal(body.code, 'SERVICE_UNAVAILABLE');
+    assert.deepEqual(logs.mock.calls[0].arguments, ['Login API initialization failed:', 'MISSING_SITE_ORIGIN']);
   } finally {
     if (saved === undefined) delete process.env.SITE_ORIGIN;
     else process.env.SITE_ORIGIN = saved;
   }
+});
+
+test('deployment configuration reports the failing field and accepts pasted whitespace', () => {
+  const url = 'libsql://timber-auth-sehyeon9121.aws-ap-northeast-1.turso.io';
+  const token = 'test-private-token';
+  assert.throws(() => remoteStoreOptions({ TURSO_AUTH_TOKEN: token }), { code: 'MISSING_TURSO_DATABASE_URL' });
+  assert.throws(() => remoteStoreOptions({ TURSO_DATABASE_URL: url }), { code: 'MISSING_TURSO_AUTH_TOKEN' });
+  assert.throws(() => remoteStoreOptions({ TURSO_DATABASE_URL: 'bad-address', TURSO_AUTH_TOKEN: token }), { code: 'INVALID_TURSO_DATABASE_URL' });
+  assert.deepEqual(remoteStoreOptions({ TURSO_DATABASE_URL: ` ${url}\n`, TURSO_AUTH_TOKEN: ` ${token}\n` }), { url, authToken: token });
+  assert.throws(() => siteOrigin({}), { code: 'MISSING_SITE_ORIGIN' });
+  for (const value of ['bad-address', 'http://example.com', 'https://user:password@example.com']) {
+    assert.throws(() => siteOrigin({ SITE_ORIGIN: value }), { code: 'INVALID_SITE_ORIGIN' });
+  }
+  assert.equal(siteOrigin({ SITE_ORIGIN: ' https://timber-project-ten.vercel.app/\n' }), 'https://timber-project-ten.vercel.app');
 });
 
 test('libSQL migration preserves accounts, passwords, permissions, posts, and sessions across instances', async t => {
