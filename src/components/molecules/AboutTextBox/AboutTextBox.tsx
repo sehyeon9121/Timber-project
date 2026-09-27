@@ -22,8 +22,7 @@ export function AboutTextBox({
   return (
     <div
       className={cn(
-        'p-8',
-        isOverlay ? 'bg-transparent' : 'bg-white',
+        isOverlay ? 'bg-transparent p-0' : 'bg-white p-8',
         className
       )}
     >

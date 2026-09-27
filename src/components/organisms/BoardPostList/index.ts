@@ -1,0 +1,1 @@
+export { BoardPostList } from './BoardPostList';

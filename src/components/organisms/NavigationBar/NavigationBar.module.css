@@ -1,9 +1,18 @@
-.container { max-width: 1200px; width: 100%; margin: 10px auto; gap: 24px; }
-.desktop { display: none; align-items: center; gap: 24px; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
-.publicLinks { display: flex; align-items: center; gap: 16px; }
+.container { position: relative; z-index: 50; background: #fff; max-width: 1200px; width: 100%; min-height: var(--nav-height); margin: 0 auto; gap: 12px; }
+.brand { flex: 1; min-width: 0; }
+.brandText { display: block; font-size: 14px; line-height: 1.4; word-break: keep-all; overflow-wrap: anywhere; }
+.desktop { display: none; align-items: center; gap: 20px; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+.publicLinks { display: flex; align-items: center; gap: 12px; }
 .accountLinks { border-left: 1px solid var(--color-border); padding-left: 20px; }
-.mobileToggle { display: inline-flex; flex-shrink: 0; }
-@media (min-width: 1100px) {
+.mobileToggle { display: inline-flex; flex-shrink: 0; min-width: 44px; min-height: 44px; padding: 8px; }
+.mobilePanel { max-height: calc(100dvh - var(--nav-height)); overflow-y: auto; }
+@media (min-width: 640px) {
+  .brandText { font-size: 18px; }
+}
+@media (min-width: 1200px) {
+  .container { gap: 24px; }
+  .brand { flex: 0 1 auto; }
+  .brandText { white-space: nowrap; }
   .desktop { display: flex; }
   .mobileToggle, .mobileOnly { display: none; }
 }

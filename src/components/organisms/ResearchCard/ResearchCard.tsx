@@ -39,7 +39,7 @@ export function ResearchCard({
         }
       }}
       className={cn(
-        'relative block overflow-hidden',
+        'relative flex flex-col overflow-hidden',
         'min-h-[200px] w-full',
         'bg-gray-100 border border-gray-200 rounded-xl',
         'shadow-md hover:border-gray-300',
@@ -52,7 +52,7 @@ export function ResearchCard({
 
       {/* Content */}
       <div
-        className="flex h-full flex-col justify-start"
+        className="flex flex-1 flex-col justify-start"
         style={{ padding: 'clamp(24px, 5vw, 48px)', paddingTop: '40px', paddingBottom: '32px' }}
       >
         <h2 className="font-lato text-lg font-semibold text-gray-800 md:text-[28px] text-center" style={{ marginBottom: '18px' }}>

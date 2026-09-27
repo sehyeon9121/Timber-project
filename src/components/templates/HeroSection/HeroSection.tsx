@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { BackgroundImage } from '@/components/atoms/BackgroundImage';
 import { Overlay } from '@/components/atoms/Overlay';
@@ -11,6 +11,7 @@ import { Link } from '@/components/atoms/Link';
 import { Icon } from '@/components/atoms/Icon';
 import { HeroDescription } from '@/components/molecules/HeroDescription';
 import { cn } from '@/utils/cn';
+import styles from './HeroSection.module.css';
 
 export interface HeroSectionProps {
   backgroundImage?: string;
@@ -43,7 +44,6 @@ export function HeroSection({
   scrollTarget,
   overlayOpacity = 0.65,
   minHeight = 'screen',
-  height: _height,
   aspectRatio,
   variant = 'landing',
   titleAlign = 'center',
@@ -71,24 +71,28 @@ export function HeroSection({
     return (
       <section
         className={cn('hero-section relative overflow-hidden', className)}
-        style={!hasBackgroundImage ? { backgroundColor: '#f8f8f8', paddingTop: 120, paddingBottom: 60 } : undefined}
+        style={{
+          '--hero-max-height': `${heroMaxHeight ?? 400}px`,
+          ...(!hasBackgroundImage ? { backgroundColor: '#f8f8f8' } : {}),
+        } as CSSProperties}
       >
         {hasBackgroundImage && (
           <>
-            {/* 이미지가 자연스럽게 종횡비를 유지하도록 img 태그 사용 */}
+            {/* 배너 높이는 콘텐츠 영역에서 결정하고 이미지는 영역에 맞춰 채웁니다. */}
             <img
               src={imageSrc}
               alt=""
-              className={cn('w-full block', heroMaxHeight ? 'object-cover' : 'h-auto')}
-              style={heroMaxHeight ? { height: heroMaxHeight, maxHeight: heroMaxHeight } : undefined}
+              className={cn('w-full block', styles.subpageImage)}
             />
             <Overlay opacity={overlayOpacity} />
           </>
         )}
 
         <div className={cn(
-          'absolute inset-0 z-10 flex flex-col hero-content-container',
-          titleAlign === 'bottom-left' ? 'justify-end pb-10' : 'justify-center'
+          'relative z-10 flex flex-col hero-content-container',
+          styles.subpageContent,
+          !hasBackgroundImage && styles.plainContent,
+          titleAlign === 'bottom-left' ? 'justify-end' : 'justify-center'
         )}>
           {backLink && (
             <motion.div
@@ -157,6 +161,7 @@ export function HeroSection({
     <section
       className={cn(
         'hero-section relative flex items-end justify-start overflow-hidden',
+        styles.landing,
         !aspectRatio && minHeightClasses[minHeight],
         className
       )}
@@ -173,7 +178,7 @@ export function HeroSection({
         </>
       )}
 
-      <div className="relative z-10 w-full md:w-auto hero-content-container" style={{ paddingBottom: '20px' }}>
+      <div className={cn('relative z-10 w-full md:w-auto hero-content-container', styles.landingContent)}>
         {children || (
           <HeroContent
             subtitle={subtitle || ''}

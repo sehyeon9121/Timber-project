@@ -25,7 +25,7 @@ export function AccountMenu({ onNavigate }: { onNavigate?: () => void }) {
     <div className={styles.menu}>
       {user ? <>
         <Link href="/members" onClick={onNavigate}>{ko ? '회원 공간' : 'Members'}</Link>
-        {user.role === 'master' && <Link href="/admin" onClick={onNavigate}>{ko ? '가입 승인 관리' : 'Manage signups'}</Link>}
+        {user.role === 'master' && <Link href="/admin" className={styles.adminLink} onClick={onNavigate}>{ko ? '관리자 설정' : 'Admin settings'}</Link>}
         <button type="button" disabled={busy} onClick={() => void signOut()}>{ko ? '로그아웃' : 'Sign out'}</button>
       </> : <>
         <Link href="/login" onClick={onNavigate}>{ko ? '로그인' : 'Sign in'}</Link>

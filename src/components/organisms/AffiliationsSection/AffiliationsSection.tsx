@@ -19,7 +19,7 @@ export interface AffiliationsSectionProps {
 }
 
 export function AffiliationsSection({ className }: AffiliationsSectionProps) {
-  const imageSrc = getImageSrc('/images/leeseunglab/affiliations.png');
+  const imageSrc = getImageSrc('/images/leeseunglab/affiliations.jpg?v=timber-hall-20260927');
   const sectionRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -33,11 +33,7 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className={cn('w-full relative overflow-hidden', className)}
-      style={{
-        height: 560,
-        marginTop: 120,
-      }}
+      className={cn('w-full relative overflow-hidden h-[280px] md:h-[400px] mt-12 md:mt-16', className)}
     >
       {/* Parallax Background Image */}
       <motion.div
@@ -57,7 +53,7 @@ export function AffiliationsSection({ className }: AffiliationsSectionProps) {
       <div className="absolute inset-0 bg-black/50" />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center">
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-5">
         <DecoratedSectionHeader
           title="200m급 목구조대공간 건축물 건설 기술개발"
           subtitle=""

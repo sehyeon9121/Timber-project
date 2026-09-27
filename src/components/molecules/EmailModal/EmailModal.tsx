@@ -97,7 +97,7 @@ function EmailModalContent({ email, isOpen, onClose }: EmailModalProps) {
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
             width: '100%',
             maxWidth: 400,
-            padding: 32,
+            padding: 'clamp(20px, 5vw, 32px)',
             pointerEvents: 'auto',
           }}
           onClick={(e) => e.stopPropagation()}
@@ -116,11 +116,11 @@ function EmailModalContent({ email, isOpen, onClose }: EmailModalProps) {
             gap: 8,
             backgroundColor: '#f3f4f6',
             borderRadius: 8,
-            padding: 16,
+            padding: 12,
             marginBottom: copied ? 8 : 24,
           }}>
             <Icon name="Mail" size={18} className="text-gray-400" />
-            <span style={{ flex: 1, fontSize: 15, color: '#000', textAlign: 'center', fontWeight: 500 }}>
+            <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere', fontSize: 'clamp(14px, 4vw, 15px)', color: '#000', textAlign: 'center', fontWeight: 500 }}>
               {email}
             </span>
             <button

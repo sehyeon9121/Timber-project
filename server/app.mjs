@@ -1,5 +1,6 @@
 import express from 'express';
 import { getDevelopmentOrigins } from './origins.mjs';
+import { registerBoardRoutes } from './board.mjs';
 import { publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
 
 const cookieName = 'timber_session';
@@ -26,6 +27,7 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     }
     next();
   });
+  app.use('/api/board', requireUser, express.json({ limit: '64kb' }));
   app.use('/api', express.json({ limit: '8kb' }));
   app.use('/api/auth', (request, response, next) => {
     if (!['/login', '/signup'].includes(request.path) || request.method !== 'POST') return next();
@@ -105,6 +107,7 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     if (!store.review(id, status, request.user.id)) return fail(response, 409, 'ALREADY_REVIEWED', '이미 처리되었거나 존재하지 않는 가입 요청입니다.');
     response.json({ user: publicUser(store.findById(id)) });
   });
+  registerBoardRoutes(app, store, requireUser);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));
   app.use((error, _request, response, _next) => {
     if (error.type === 'entity.parse.failed') return fail(response, 400, 'VALIDATION', '요청 형식이 올바르지 않습니다.');

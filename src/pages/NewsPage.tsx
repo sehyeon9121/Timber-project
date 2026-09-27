@@ -17,15 +17,15 @@ export function NewsPage() {
       heroMaxHeight={540}
     >
       {/* Latest News Header */}
-      <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 100 }}>
-        <Container maxWidth="none" className="max-w-[840px]">
+      <ContentSection background="white" padding="lg" style={{ paddingBottom: 40 }}>
+        <Container maxWidth="none" padding="none" className="max-w-[840px]">
           <DecoratedSectionHeader title={t('news.latestNews')} subtitle="HI-WOOD" />
         </Container>
       </ContentSection>
 
       {/* News List */}
-      <ContentSection background="white" padding="lg" style={{ paddingBottom: 120 }}>
-        <Container maxWidth="none" className="max-w-[1100px]">
+      <ContentSection background="white" padding="lg" style={{ paddingTop: 0 }}>
+        <Container maxWidth="none" padding="none" className="max-w-[1100px]">
           <div className="flex flex-col" style={{ gap: 52 }}>
             {newsItems.map((news, index) => (
               <NewsCard

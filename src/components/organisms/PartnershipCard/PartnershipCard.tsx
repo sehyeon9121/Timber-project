@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heading } from '@/components/atoms/Heading';
 import { Paragraph } from '@/components/atoms/Paragraph';
@@ -9,6 +9,7 @@ import {
 } from '@/components/organisms/DemonstrationImageSection';
 import { cn } from '@/utils/cn';
 import type { ParticipatingInstitution } from '@/types';
+import styles from './PartnershipCard.module.css';
 
 const getImageSrc = (src: string): string => {
   if (src.startsWith('http') || src.startsWith('data:')) {
@@ -40,6 +41,7 @@ export function PartnershipCard({
   className,
 }: PartnershipCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const contentId = useId();
   const articleRef = useRef<HTMLElement>(null);
 
   // 카드가 펼쳐지는 애니메이션이 끝나면 카드 전체가 보이도록 스크롤
@@ -65,7 +67,7 @@ export function PartnershipCard({
     <article
       ref={articleRef}
       className={cn(
-        'bg-white rounded-xl border border-gray-200 drop-shadow-lg overflow-hidden',
+        'bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden',
         className
       )}
     >
@@ -73,25 +75,26 @@ export function PartnershipCard({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full flex items-center justify-between text-left transition-colors hover:bg-gray-50"
-        style={{ padding: '24px 28px' }}
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? contentId : undefined}
+        className={cn(styles.header, 'transition-colors hover:bg-gray-50')}
       >
-        <div className="flex items-center gap-4">
+        <div className={styles.label}>
           <div
-            className="flex items-center justify-center rounded-full bg-[#1B3A4B]/10"
-            style={{ width: 56, height: 56 }}
+            className={cn(styles.icon, 'rounded-full bg-[#1B3A4B]/10')}
           >
-            <Icon name={icon} size={28} className="text-[#1B3A4B]" />
+            <Icon name={icon} size={20} className="text-[#1B3A4B]" />
           </div>
-          <Heading level={3} style={{ fontWeight: 700, color: '#1B3A4B', margin: 0 }}>
+          <Heading level={3} className={styles.title} style={{ fontWeight: 700, color: '#1B3A4B', margin: 0 }}>
             {title}
           </Heading>
         </div>
         <motion.div
+          className={styles.chevron}
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.25 }}
         >
-          <Icon name="ChevronDown" size={24} className="text-[#1B3A4B]" />
+          <Icon name="ChevronDown" size={18} className="text-[#1B3A4B]" />
         </motion.div>
       </button>
 
@@ -100,6 +103,7 @@ export function PartnershipCard({
         {isOpen && (
           <motion.div
             key="content"
+            id={contentId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -108,10 +112,9 @@ export function PartnershipCard({
             style={{ overflow: 'hidden' }}
           >
             <div
-              className="border-t border-gray-200"
-              style={{ padding: '24px 28px 32px' }}
+              className={cn(styles.content, 'border-t border-gray-200')}
             >
-              <Paragraph color="light" size="md" className="leading-relaxed">
+              <Paragraph color="light" size="sm" className="leading-relaxed">
                 {description}
               </Paragraph>
 
@@ -122,7 +125,7 @@ export function PartnershipCard({
               {institutions.length > 0 && (
                 <div
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-                  style={{ gap: 16, marginTop: 28 }}
+                  style={{ gap: 12, marginTop: 20 }}
                 >
                   {institutions.map((institution, idx) => {
                     const cardContent = (
@@ -133,17 +136,15 @@ export function PartnershipCard({
                         className={cn(
                           'bg-white rounded-lg border border-gray-200',
                           'flex flex-col items-center justify-center',
-                          'aspect-square',
+                          styles.institution,
                           'transition-shadow hover:shadow-md',
                           institution.url && 'cursor-pointer'
                         )}
-                        style={{ padding: 12 }}
                       >
                         <img
                           src={getImageSrc(institution.logo)}
                           alt={institution.name}
-                          className="object-contain"
-                          style={{ maxWidth: '90%', maxHeight: '60%', marginBottom: 8 }}
+                          className={cn('w-full object-contain', styles.logo)}
                         />
                         <span className="text-xs text-gray-700 text-center line-clamp-2">
                           {institution.name}

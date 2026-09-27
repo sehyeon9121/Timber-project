@@ -51,6 +51,9 @@ const englishErrors: Record<string, string> = {
   VALIDATION: 'Please check the information you entered.',
   INVALID_ORIGIN: 'This site is not allowed to send this request.',
   SERVER_ERROR: 'A server error occurred. Please try again shortly.',
+  POST_NOT_FOUND: 'This post could not be found. It may have been deleted.',
+  POST_FORBIDDEN: 'You do not have permission to change this post.',
+  POST_VALIDATION: 'Use 1–120 characters for the title and 1–10,000 for the body.',
 };
 export function authErrorMessage(error: unknown, language: 'KO' | 'EN') {
   if (error instanceof ApiError) return language === 'EN' ? englishErrors[error.code] || englishErrors.SERVER_ERROR : error.message;

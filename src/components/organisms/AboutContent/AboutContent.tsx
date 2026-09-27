@@ -52,8 +52,6 @@ export function AboutContent({
         transition={{ duration: 0.25 }}
         className="relative w-full"
         style={{
-          minHeight: '420px',
-          aspectRatio: '3006 / 1344',
           backgroundImage: `url(${getImageSrc(image)})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -69,7 +67,7 @@ export function AboutContent({
           viewport={{ once: true }}
           transition={{ duration: 0.25, delay: 0.1 }}
           className="relative flex items-center justify-end"
-          style={{ padding: '40px', minHeight: '420px' }}
+          style={{ padding: 'clamp(24px, 4vw, 40px)', minHeight: 'clamp(320px, 30vw, 420px)' }}
         >
           <div className="max-w-lg">
             <AboutTextBox title={title} description={description} variant="overlay" />

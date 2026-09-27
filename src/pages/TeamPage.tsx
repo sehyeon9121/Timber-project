@@ -13,11 +13,11 @@ export function TeamPage() {
     <DetailPageLayout
       title={t('team.title')}
       heroDescription={t('team.heroDescription')}
-      heroImage="/images/leeseunglab/people-hero.png"
+      heroImage="/images/leeseunglab/people-hero.jpg?v=timber-research-team-20260927"
       titleAlign="bottom-left"
     >
-      <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 40 }}>
-        <Container maxWidth="none" className="max-w-[950px]">
+      <ContentSection background="white" padding="lg">
+        <Container maxWidth="none" padding="none" className="max-w-[950px]">
           <div className="flex flex-col gap-16">
             {divisions.map((group) => (
               <DivisionTeamSection

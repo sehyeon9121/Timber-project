@@ -30,7 +30,7 @@ export function MembersPage() {
         <dt>{ko ? '소속' : 'Affiliation'}</dt><dd>{user.affiliation}</dd>
         <dt>{ko ? '계정 권한' : 'Role'}</dt><dd>{user.role === 'master' ? (ko ? '마스터 관리자' : 'Master administrator') : (ko ? '일반 회원' : 'Member')}</dd>
       </dl>
-      {user.role === 'master' && <Link href="/admin">{ko ? '가입 승인 관리로 이동 →' : 'Manage registration requests →'}</Link>}
+      {user.role === 'master' && <Link href="/admin">{ko ? '관리자 설정으로 이동 →' : 'Open admin settings →'}</Link>}
     </> : <p role="status">{ko ? '회원 정보를 불러오는 중…' : 'Loading your profile…'}</p>}
   </AuthLayout>;
 }

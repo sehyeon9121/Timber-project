@@ -93,9 +93,8 @@ export function PublicationsPage() {
       subtitle={t('publications.subtitle')}
       heroImage="/images/leeseunglab/publications-hero.jpg"
     >
-      <div style={{ height: 60 }} />
       <ContentSection background="white" padding="lg">
-        <Container maxWidth="none" className="max-w-[920px]">
+        <Container maxWidth="none" padding="none" className="max-w-[920px]">
           {publicationsByYear.length > 0 ? (
             publicationsByYear.map(({ year, publications: pubs }, groupIndex) => (
               <PublicationYearSection
@@ -111,7 +110,6 @@ export function PublicationsPage() {
               {t('publications.noResults') || 'No publications found.'}
             </div>
           )}
-          <div style={{ height: 60 }} />
         </Container>
       </ContentSection>
     </DetailPageLayout>

@@ -34,7 +34,7 @@ export function ResearchDetailPage() {
   return (
     <PageLayout>
       {/* Back Link */}
-      <ContentSection background="white" padding="sm" className="pt-24">
+      <ContentSection background="white" padding="sm">
         <div className="max-w-4xl" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
           <Link
             href="/"
@@ -48,7 +48,7 @@ export function ResearchDetailPage() {
       </ContentSection>
 
       {/* Main Content */}
-      <ContentSection background="white" padding="lg">
+      <ContentSection background="white" padding="lg" style={{ paddingTop: 0 }}>
         <ResearchDetailContent
           id={theme.id}
           title={translatedTitle}

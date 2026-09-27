@@ -14,7 +14,7 @@ export interface DemonstrationImage {
   url?: string;
   /**
    * 이미지를 박스에 맞추는 방식
-   * - 'cover' (기본): 4:3 박스에 꽉 채우고 필요한 부분은 잘라냄
+   * - 'cover' (기본): 16:10 박스에 꽉 채우고 필요한 부분은 잘라냄
    * - 'contain': 이미지 원본 비율을 유지하며 박스 안에 중앙 정렬 (잘리지 않음)
    */
   fit?: 'cover' | 'contain';
@@ -43,7 +43,7 @@ export function DemonstrationImageSection({
   return (
     <div
       className={cn('grid items-stretch', columnClassMap[columns], className)}
-      style={{ gap: 16, marginTop: 28 }}
+      style={{ gap: 12, marginTop: 20 }}
     >
       {images.map((image, idx) => {
         const fit = image.fit ?? 'cover';
@@ -65,12 +65,11 @@ export function DemonstrationImageSection({
           >
             <div
               className={cn(
-                'relative w-full overflow-hidden',
+                'relative w-full aspect-[16/10] max-h-[240px] shrink-0 overflow-hidden',
                 isContain
-                  ? 'flex-1 bg-white flex items-center justify-center p-4'
+                  ? 'bg-white'
                   : 'bg-gray-50'
               )}
-              style={isContain ? undefined : { aspectRatio: '4 / 3' }}
             >
               {image.src ? (
                 isContain ? (
@@ -78,7 +77,7 @@ export function DemonstrationImageSection({
                     src={image.src}
                     alt={image.alt || ''}
                     objectFit="contain"
-                    className="max-w-full max-h-[320px] w-auto h-auto"
+                    className="absolute inset-0 w-full h-full p-4"
                   />
                 ) : (
                   <Image
@@ -92,7 +91,7 @@ export function DemonstrationImageSection({
                 <div
                   className={cn(
                     'flex flex-col items-center justify-center text-gray-400',
-                    isContain ? 'py-16' : 'absolute inset-0'
+                    'absolute inset-0'
                   )}
                 >
                   <Icon name="ImagePlus" size={32} />

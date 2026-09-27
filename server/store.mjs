@@ -65,6 +65,14 @@ export function createStore(path = databasePath) {
       expires_at INTEGER NOT NULL
     );
     CREATE INDEX IF NOT EXISTS sessions_expiry ON sessions(expires_at);
+    CREATE TABLE IF NOT EXISTS posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      author_id INTEGER NOT NULL REFERENCES users(id),
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+    );
   `);
   return {
     db,
@@ -92,6 +100,21 @@ export function createStore(path = databasePath) {
         .get(tokenHash(token), Date.now());
     },
     deleteSession(token) { if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token)); },
+    countPosts: () => db.prepare('SELECT COUNT(*) AS total FROM posts').get().total,
+    listPosts: (limit, offset) => db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId,
+      users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
+      FROM posts JOIN users ON users.id = posts.author_id ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(limit, offset),
+    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId,
+      users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
+      FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`).get(id),
+    createPost(input, authorId) {
+      const result = db.prepare('INSERT INTO posts (author_id, title, body) VALUES (?, ?, ?)').run(authorId, input.title, input.body);
+      return this.findPost(Number(result.lastInsertRowid));
+    },
+    updatePost(id, input) {
+      db.prepare("UPDATE posts SET title = ?, body = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, id);
+    },
+    deletePost: id => db.prepare('DELETE FROM posts WHERE id = ?').run(id),
     close: () => db.close(),
   };
 }

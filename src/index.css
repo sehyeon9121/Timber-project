@@ -1,7 +1,6 @@
-@import "tailwindcss";
-
 /* Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600;800&display=swap');
+@import "tailwindcss";
 
 /* Tailwind Theme Extension */
 @theme {
@@ -21,6 +20,7 @@
   --color-bg: #FFFFFF;
   --color-bg-dark: #1A1A1A;
   --color-bg-section: #F8F8F8;
+  --color-background: var(--color-bg-section);
   --color-border: #E5E5E5;
 
   --font-sans: 'Inter', sans-serif;
@@ -38,6 +38,7 @@
 }
 
 /* Base Styles */
+@layer base {
 * {
   margin: 0;
   padding: 0;
@@ -63,6 +64,13 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sans);
   font-weight: 500;
   line-height: 1.2;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+p {
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -83,6 +91,7 @@ button {
   border: none;
   background: none;
 }
+}
 
 /* Utility Classes */
 .container {
@@ -90,14 +99,6 @@ button {
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 20px;
-}
-
-/* Global minimum padding for all sections - always maintain 20px minimum */
-/* Hero section은 전체 너비로 표시되어야 하므로 제외 */
-main > section:not(.hero-section),
-main > div {
-  padding-left: 20px;
-  padding-right: 20px;
 }
 
 /* Navigation Bar */
@@ -122,7 +123,7 @@ main > div {
 @media (min-width: 768px) {
   .hero-content-container {
     padding-left: 0;
-    padding-right: 0;
+    padding-right: 40px;
     margin-left: 40px;
   }
 }

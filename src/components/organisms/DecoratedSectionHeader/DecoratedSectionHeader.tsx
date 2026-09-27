@@ -64,14 +64,14 @@ export function DecoratedSectionHeader({
       </motion.div>
 
       {/* 서브타이틀 + 메인 타이틀 */}
-      <div className="flex flex-col items-center gap-0">
+      <div className="flex flex-col items-center gap-2">
         {subtitle && (
           <motion.span variants={itemVariants} className="font-medium tracking-[0.2em] leading-none uppercase text-xs" style={{ color: subtitleColor }}>
             {subtitle}
           </motion.span>
         )}
 
-        <motion.h3 variants={itemVariants} className="m-0 leading-none text-2xl md:text-3xl" style={{ fontWeight: 700, color: titleColor }}>
+        <motion.h3 variants={itemVariants} className="m-0 leading-snug text-2xl md:text-3xl" style={{ fontWeight: 700, color: titleColor }}>
           {title}
         </motion.h3>
       </div>

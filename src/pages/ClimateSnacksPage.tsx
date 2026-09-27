@@ -17,7 +17,7 @@ export function ClimateSnacksPage() {
     >
       {/* Section Header */}
       <ContentSection background="white" padding="lg" style={{ paddingTop: 100, paddingBottom: 0 }}>
-        <Container maxWidth="none" className="max-w-[1000px]">
+        <Container maxWidth="none" padding="none" className="max-w-[1000px]">
           <SectionHeader title={t('climateSnacks.title')} style={{ marginBottom: 36 }} />
           <TextBlock>
             {t('climateSnacks.description')}
@@ -27,7 +27,7 @@ export function ClimateSnacksPage() {
 
       {/* Sessions Card List */}
       <ContentSection background="white" padding="lg" style={{ paddingTop: 60, paddingBottom: 120 }}>
-        <Container maxWidth="none" className="max-w-[1100px]">
+        <Container maxWidth="none" padding="none" className="max-w-[1100px]">
           <div className="flex flex-col items-center" style={{ gap: 52 }}>
             {climateSnacksSessions.map((session, index) => (
               <ClimateSnacksCard

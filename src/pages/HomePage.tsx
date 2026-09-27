@@ -5,7 +5,6 @@ import { AboutContent } from '@/components/organisms/AboutContent';
 import { ResearchCard } from '@/components/organisms/ResearchCard';
 import { ShowcaseSection } from '@/components/organisms/ShowcaseSection';
 import { AffiliationsSection } from '@/components/organisms/AffiliationsSection';
-import { Spacer } from '@/components/atoms/Spacer';
 import { researchThemes } from '@/data/researchThemes';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -31,10 +30,8 @@ export function HomePage() {
       {/* Hero Section */}
       <LandingHero />
 
-      <Spacer size="4xl" />
-
       {/* About Section - Lab Introduction */}
-      <section id="about" className="bg-white py-24 md:py-32">
+      <section id="about" className="bg-white py-12 md:py-20">
         <AboutContent
           image="/images/leeseunglab/test-homepage.jpg"
           imageAlt="200m급 목구조대공간 건축물 건설 기술개발"
@@ -44,8 +41,6 @@ export function HomePage() {
         />
       </section>
 
-      <Spacer size="4xl" />
-
       {/* Research Themes Section */}
       <GridSection
         id="research"
@@ -54,7 +49,7 @@ export function HomePage() {
         columns={2}
         customGap={40}
         background="white"
-        padding="xl"
+        padding="md"
         containerMaxWidth={1153}
       >
         {translatedResearchThemes.map((theme, index) => (
@@ -70,8 +65,6 @@ export function HomePage() {
         ))}
       </GridSection>
 
-
-      <Spacer size="4xl" />
 
       {/* Showcase Section */}
       <ShowcaseSection

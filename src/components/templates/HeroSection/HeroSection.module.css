@@ -1,0 +1,14 @@
+.landing { max-height: 560px; }
+.landingContent { padding-bottom: 24px; }
+.subpageContent {
+  min-height: min(clamp(280px, 28vw, 400px), var(--hero-max-height));
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+.subpageContent h1 { overflow-wrap: anywhere; line-height: 1.3; }
+.subpageImage { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.plainContent { position: relative; min-height: 280px; }
+@media (max-width: 767px) {
+  .landing { min-height: 340px; }
+  .landingContent { padding-bottom: 80px; }
+}

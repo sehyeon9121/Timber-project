@@ -58,7 +58,7 @@ export function ContactPage() {
                 className={cn(
                   'inline-flex items-center justify-center',
                   'w-12 h-12 rounded-full mb-4',
-                  'bg-[var(--color-primary)] bg-opacity-10'
+                  'bg-[var(--color-primary)]/10'
                 )}
               >
                 <Icon
@@ -148,7 +148,7 @@ export function ContactPage() {
           <Link
             href="mailto:cterrer@mit.edu?subject=Interest%20in%20Joining%20Terrer%20Lab"
             variant="white"
-            className="inline-flex items-center gap-2 bg-white text-[var(--color-primary)] px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-all"
+            className="inline-flex items-center gap-2 bg-white text-[var(--color-primary)] px-6 py-3 rounded-lg font-medium hover:bg-white/90 transition-all"
           >
             {t('contact.contactOpportunities')}
             <Icon name="ArrowRight" size={16} />

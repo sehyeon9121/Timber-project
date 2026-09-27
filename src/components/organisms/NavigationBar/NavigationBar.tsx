@@ -121,13 +121,13 @@ export function NavigationBar({ className }: NavigationBarProps) {
         className={cn('flex items-center justify-between nav-container', styles.container)}
       >
         {/* Logo */}
-        <div className="flex items-center">
+        <div className={styles.brand}>
           <Link href="/" className="inline-block transition-opacity duration-[var(--transition-fast)] hover:opacity-80">
             <Text
               size="lg"
               weight={700}
               color="text"
-              className="whitespace-nowrap"
+              className={styles.brandText}
             >
               200m급 목구조대공간 건축물 건설 기술개발
             </Text>
@@ -161,6 +161,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
             items={newsDropdownItems}
           />
 
+          <NavLink href="/board" label={language === 'KO' ? '게시판' : 'Board'} />
           <LanguageSwitcher />
         </div>
         <div className={styles.accountLinks}><AccountMenu /></div>
@@ -197,7 +198,7 @@ export function NavigationBar({ className }: NavigationBarProps) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className={cn('absolute top-full left-0 right-0 bg-white shadow-lg z-50 overflow-hidden', styles.mobileOnly)}
+            className={cn('absolute top-full left-0 right-0 bg-white shadow-lg z-50', styles.mobileOnly, styles.mobilePanel)}
             variants={menuVariants}
             initial="hidden"
             animate="visible"
@@ -353,6 +354,11 @@ export function NavigationBar({ className }: NavigationBarProps) {
                   )}
                 </AnimatePresence>
               </div>
+
+              <Link href="/board" className="flex items-center h-12 hover:bg-gray-50 transition-colors"
+                style={{ paddingLeft: '20px', paddingRight: '20px' }} onClick={handleNavClick}>
+                <Text size="sm" weight={500} color="text">{language === 'KO' ? '게시판' : 'Board'}</Text>
+              </Link>
 
               {/* Language Toggle */}
               <div className="border-t border-gray-200" style={{ padding: '16px 20px' }}>

@@ -8,6 +8,9 @@ import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { MembersPage } from '@/pages/MembersPage';
 import { AdminPage } from '@/pages/AdminPage';
+import { BoardPage } from '@/pages/BoardPage';
+import { BoardPostPage } from '@/pages/BoardPostPage';
+import { BoardEditorPage } from '@/pages/BoardEditorPage';
 import {
   HomePage,
   ResearchPage,
@@ -65,6 +68,10 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute masterOnly><AdminPage /></ProtectedRoute>} />
+        <Route path="/board" element={<ProtectedRoute><BoardPage /></ProtectedRoute>} />
+        <Route path="/board/new" element={<ProtectedRoute><BoardEditorPage /></ProtectedRoute>} />
+        <Route path="/board/:id" element={<ProtectedRoute><BoardPostPage /></ProtectedRoute>} />
+        <Route path="/board/:id/edit" element={<ProtectedRoute><BoardEditorPage /></ProtectedRoute>} />
         </Routes>
       </AnimatePresence>
       </AuthProvider>

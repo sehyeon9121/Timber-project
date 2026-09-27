@@ -33,11 +33,11 @@ export function NewsCard({
       <div className="flex flex-col md:flex-row" style={{ gap: 20 }}>
         {/* Image - Top on mobile, Left on desktop */}
         {image && (
-          <div className="w-full md:w-1/2 flex-shrink-0">
+          <div className="relative w-full md:w-1/2 flex-shrink-0 self-start aspect-[16/10] max-h-[320px] overflow-hidden rounded-lg border border-black">
             <img
               src={image}
               alt={title}
-              className="w-full h-[200px] md:h-full object-cover rounded-lg border border-black"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
         )}
