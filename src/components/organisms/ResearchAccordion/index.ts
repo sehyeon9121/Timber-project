@@ -1,0 +1,1 @@
+export { ResearchAccordion } from './ResearchAccordion';

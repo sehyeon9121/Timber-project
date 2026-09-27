@@ -1,0 +1,10 @@
+export { HomePage } from './HomePage';
+export { ResearchPage } from './ResearchPage';
+export { TeamPage } from './TeamPage';
+export { PublicationsPage } from './PublicationsPage';
+export { NewsPage } from './NewsPage';
+export { ContactPage } from './ContactPage';
+export { JoinUsPage } from './JoinUsPage';
+export { ClimateSnacksPage } from './ClimateSnacksPage';
+export { ResearchDetailPage } from './ResearchDetailPage';
+export { ShowcasePage } from './ShowcasePage';

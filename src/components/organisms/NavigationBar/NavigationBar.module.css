@@ -1,0 +1,9 @@
+.container { max-width: 1200px; width: 100%; margin: 10px auto; gap: 24px; }
+.desktop { display: none; align-items: center; gap: 24px; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+.publicLinks { display: flex; align-items: center; gap: 16px; }
+.accountLinks { border-left: 1px solid var(--color-border); padding-left: 20px; }
+.mobileToggle { display: inline-flex; flex-shrink: 0; }
+@media (min-width: 1100px) {
+  .desktop { display: flex; }
+  .mobileToggle, .mobileOnly { display: none; }
+}

@@ -1,0 +1,71 @@
+import { motion } from 'framer-motion';
+import { Heading } from '@/components/atoms/Heading';
+import { Paragraph } from '@/components/atoms/Paragraph';
+import { Span } from '@/components/atoms/Span';
+import { Spacer } from '@/components/atoms/Spacer';
+import { cn } from '@/utils/cn';
+import { heroTitle, heroSubtitle, heroDescription } from '@/utils/animations';
+
+export interface HeroContentProps {
+  subtitle: string;
+  title: string;
+  description: string;
+  className?: string;
+}
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+export function HeroContent({
+  subtitle,
+  title,
+  description,
+  className,
+}: HeroContentProps) {
+  return (
+    <motion.div
+      className={cn('flex flex-col items-start text-left', className)}
+      style={{ maxWidth: '900px' }}
+      variants={containerVariants}
+      initial={false}
+      animate="visible"
+    >
+      <motion.div variants={heroSubtitle}>
+        <Span
+          size="lg"
+          color="white"
+          uppercase
+          letterSpacing="wider"
+          className="font-semibold text-[0.85rem] sm:text-[1.1rem] md:text-[1.46rem]"
+        >
+          {subtitle}
+        </Span>
+      </motion.div>
+
+      <Spacer size="lg" />
+
+      <motion.div variants={heroTitle}>
+        <Heading level={1} color="white" className="text-[1rem] sm:text-[1.5rem] md:text-[2.1rem] text-white">
+          {title}
+        </Heading>
+      </motion.div>
+
+      <div style={{ height: '4px' }} />
+
+      <motion.div variants={heroDescription}>
+        <Paragraph color="white" size="xl" className="opacity-90 text-[0.85rem] sm:text-[1rem] md:text-[1.25rem]">
+          {description}
+        </Paragraph>
+      </motion.div>
+
+    </motion.div>
+  );
+}
