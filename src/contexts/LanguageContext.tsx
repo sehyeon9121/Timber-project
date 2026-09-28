@@ -97,7 +97,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bigQuestions.backTo': 'Back to Big Questions',
 
     // Publications Page
-    'publications.title': 'Publications',
+    'publications.title': 'Results & Publications',
     'publications.subtitle': 'Explore our published research and scientific contributions',
 
     // People Page
@@ -150,7 +150,7 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.contactOpportunities': 'Contact Us About Opportunities',
 
     // News Page
-    'news.title': 'News',
+    'news.title': 'Project News',
     'news.subtitle': 'Take a look at the latest updates from the Terrer Lab',
     'news.latestNews': 'Latest News',
 
@@ -180,7 +180,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.publications': '출판물',
     'nav.people': '구성원',
     'nav.news': '뉴스',
-    'nav.ourTeam': '연구팀',
+    'nav.ourTeam': '세부별 책임연구원',
     'nav.joinUs': 'ACT INSTITUTE',
     'nav.newsUpdates': '뉴스 및 업데이트',
     'nav.climateSnacks': '기후 스낵',
@@ -258,7 +258,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bigQuestions.backTo': 'ACT LAB으로 돌아가기',
 
     // Publications Page
-    'publications.title': '출판물',
+    'publications.title': '연구성과·논문',
     'publications.subtitle': '출판된 연구 성과와 학술적 기여를 확인하세요',
 
     // People Page
@@ -270,7 +270,7 @@ const translations: Record<Language, Record<string, string>> = {
     'people.researchAssistants': '연구 조교',
 
     // Team Page
-    'team.title': 'ACT 연구단 소개',
+    'team.title': '각세부별 연구책임자 소개',
     'team.heroDescription': '본 연구단은 200m급 목조 대공간 건축 실현을 목표로, 구조·설계·시공·운영 전 분야의 전문 연구진이 참여하는 융합형 연구 조직입니다.',
     'team.team': '팀',
     'team.alumni': '학부생',
@@ -312,7 +312,7 @@ const translations: Record<Language, Record<string, string>> = {
     'contact.contactOpportunities': '기회에 대해 문의하기',
 
     // News Page
-    'news.title': '뉴스',
+    'news.title': '연구단 소식',
     'news.subtitle': 'Terrer Lab의 최신 소식을 확인하세요',
     'news.latestNews': '최신 뉴스',
 

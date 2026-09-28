@@ -7,6 +7,7 @@ export interface MemberInfoProps {
   position: string | LocalizedText;
   bio?: string | LocalizedText;
   affiliation?: LocalizedText;
+  representativeDivision?: number;
   className?: string;
 }
 
@@ -15,6 +16,7 @@ export function MemberInfo({
   position,
   bio,
   affiliation,
+  representativeDivision,
   className,
 }: MemberInfoProps) {
   const { language } = useLanguage();
@@ -34,7 +36,14 @@ export function MemberInfo({
   return (
     <div className={cn('flex-1', className)}>
       {/* Name */}
-      <h3 className="text-[22px] font-bold text-black" style={{ marginBottom: 5 }}>{nameText}</h3>
+      <h3 className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[22px] font-bold text-black" style={{ marginBottom: 5 }}>
+        <span>{nameText}</span>
+        {representativeDivision && (
+          <span className="text-[13px] font-medium text-[#00380A]">
+            {language === 'KO' ? `${representativeDivision}세부 책임자` : `Division ${representativeDivision} Lead`}
+          </span>
+        )}
+      </h3>
 
       {/* Position */}
       <p className="text-[14px] text-[#00380A] uppercase tracking-wide font-semibold" style={{ marginBottom: affiliationText ? 5 : 18 }}>

@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useId } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/atoms/Button';
 import { Icon } from '@/components/atoms/Icon';
@@ -21,6 +22,9 @@ export function DropdownMenu({
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+  const { pathname } = useLocation();
+  const active = items.some(item => pathname === item.href || pathname.startsWith(`${item.href}/`));
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -39,11 +43,24 @@ export function DropdownMenu({
       className={cn('relative', className)}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
+      onBlur={event => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+      }}
+      onKeyDown={event => {
+        if (event.key === 'Escape') {
+          setIsOpen(false);
+          dropdownRef.current?.querySelector('button')?.focus();
+        }
+      }}
     >
       <Button
         variant="ghost"
-        className="flex items-center gap-1"
-        style={{ padding: '20px 4px' }}
+        className={cn('flex items-center gap-1', active && 'text-[#00380A] bg-[#f4f7f4]')}
+        style={{ padding: '16px 8px' }}
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={menuId}
+        onClick={() => setIsOpen(true)}
         disableAnimation
       >
         <Text size="sm" weight={500}>
@@ -60,19 +77,20 @@ export function DropdownMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={menuId}
             variants={dropdownMenu}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="absolute top-full left-0 min-w-[200px] bg-white border border-gray-200 shadow-sm z-50"
+            className="absolute top-full left-0 w-full min-w-[200px] bg-white border border-gray-200 shadow-sm z-50"
             style={{ marginTop: 0 }}
           >
             {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center h-[48px] hover:bg-[#f5f5f5] transition-colors border-b border-gray-100 last:border-b-0"
-                style={{ paddingLeft: '20px' }}
+                className="flex items-center min-h-[48px] hover:bg-[#f5f5f5] focus-visible:bg-[#f5f5f5] transition-colors border-b border-gray-100 last:border-b-0"
+                style={{ padding: '12px 20px' }}
                 onClick={() => setIsOpen(false)}
               >
                 <Text size="sm" color="text" weight={500}>

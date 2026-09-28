@@ -1,408 +1,151 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NavLink } from '@/components/molecules/NavLink';
 import { DropdownMenu } from '@/components/molecules/DropdownMenu';
 import { MenuButton } from '@/components/molecules/MenuButton';
-import { LanguageSwitcher } from '@/components/molecules/LanguageSwitcher';
 import { AccountMenu } from '@/components/molecules/AccountMenu';
 import { Link } from '@/components/atoms/Link';
 import { Text } from '@/components/atoms/Text';
 import { Icon } from '@/components/atoms/Icon';
 import { cn } from '@/utils/cn';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { siteNavigation } from '@/data/siteNavigation';
 import styles from './NavigationBar.module.css';
 
-export interface NavigationBarProps {
-  className?: string;
-}
+export interface NavigationBarProps { className?: string; }
 
 export function NavigationBar({ className }: NavigationBarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
-  const { t, language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLDivElement>(null);
+  const ko = language === 'KO';
+  const groups = siteNavigation.map(group => ({
+      ...group,
+      title: ko ? group.label.ko : group.label.en,
+      links: group.items.map(item => ({ href: item.href, label: ko ? item.label.ko : item.label.en })),
+    }));
 
-  const mainNavItems = [
-    { label: t('nav.home'), href: '/' },
-    { label: t('nav.research'), href: '/#research' },
-  ];
-
-
-  const peopleDropdownItems = [
-    { label: t('nav.ourTeam'), href: '/team' },
-    // { label: t('nav.joinUs'), href: '/join-us' },  // ACT INSTITUTE 비활성화
-  ];
-
-  const newsDropdownItems = [
-    { label: t('nav.newsUpdates'), href: '/news' },
-    // { label: t('nav.climateSnacks'), href: '/climate-snacks' },  // 비활성화
-  ];
-
-  // Close menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node)
-      ) {
+    if (!isMobileMenuOpen) return;
+    function handleOutside(event: MouseEvent | TouchEvent) {
+      if (!mobileMenuRef.current?.contains(event.target as Node)) {
         setIsMobileMenuOpen(false);
         setExpandedMenu(null);
       }
     }
-
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside as EventListener);
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        setExpandedMenu(null);
+        menuButtonRef.current?.querySelector('button')?.focus();
+      }
     }
-
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside);
+    document.addEventListener('keydown', handleEscape);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside as EventListener);
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isMobileMenuOpen]);
 
-  const toggleSubmenu = (menu: string) => {
-    setExpandedMenu(expandedMenu === menu ? null : menu);
-  };
-
-  const handleNavClick = () => {
-    setIsMobileMenuOpen(false);
-    setExpandedMenu(null);
-  };
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'EN' ? 'KO' : 'EN');
-  };
-
-  const menuVariants = {
-    hidden: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.3,
-        ease: 'easeInOut' as const,
-      },
-    },
-    visible: {
-      opacity: 1,
-      height: 'auto',
-      transition: {
-        duration: 0.3,
-        ease: 'easeInOut' as const,
-      },
-    },
-  };
-
-  const submenuVariants = {
-    hidden: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.2,
-        ease: 'easeInOut' as const,
-      },
-    },
-    visible: {
-      opacity: 1,
-      height: 'auto',
-      transition: {
-        duration: 0.2,
-        ease: 'easeInOut' as const,
-      },
-    },
-  };
+  const closeMenu = () => { setIsMobileMenuOpen(false); setExpandedMenu(null); };
+  const languageControl = (
+    <button type="button" className={styles.languageButton}
+      onClick={() => setLanguage(ko ? 'EN' : 'KO')}
+      aria-label={ko ? 'Switch to English' : '한국어로 전환'}>
+      {ko ? 'EN' : 'KO'}
+    </button>
+  );
 
   return (
-    <header
-      ref={mobileMenuRef}
-      className={cn('bg-white relative', className)}
-    >
-      <div
-        className={cn('flex items-center justify-between nav-container', styles.container)}
-      >
+    <header ref={mobileMenuRef} className={cn('bg-white relative', className)}>
+      <div className={cn('flex items-center justify-between nav-container', styles.container)}>
         {/* Logo */}
         <div className={styles.brand}>
-          <Link href="/" className="inline-block transition-opacity duration-[var(--transition-fast)] hover:opacity-80">
+          <Link href="/" aria-label="국토교통부 · KAIA 국토교통과학기술진흥원" className={cn(styles.brandLink, 'transition-opacity duration-[var(--transition-fast)] hover:opacity-80')}>
+            <span className={styles.ministryLogoFrame}>
+              <img
+                src="/images/leeseunglab/ministry-land-transport-logo.jpg"
+                alt=""
+                width="842"
+                height="595"
+                className={styles.ministryLogo}
+              />
+            </span>
+            <span className={styles.brandDivider} aria-hidden="true" />
+            <img
+              src="/images/leeseunglab/kaia-logo-ko.jpg"
+              alt=""
+              width="857"
+              height="552"
+              className={styles.brandLogo}
+            />
             <Text
               size="lg"
               weight={700}
               color="text"
               className={styles.brandText}
             >
-              200m급 목구조대공간 건축물 건설 기술개발
+              KAIA 국토교통<wbr />과학기술<wbr />진흥원
             </Text>
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className={styles.desktop}>
-        <div className={styles.publicLinks}>
-          {mainNavItems.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              label={item.label}
-              className="text-[var(--color-text)] hover:text-[var(--color-primary)]"
-            />
-          ))}
-
-          {/* <DropdownMenu
-            label={t('nav.publications')}
-            items={publicationsDropdownItems}
-          /> */}
-
-          <DropdownMenu
-            label={t('nav.people')}
-            items={peopleDropdownItems}
-          />
-
-          <DropdownMenu
-            label={t('nav.news')}
-            items={newsDropdownItems}
-          />
-
-          <NavLink href="/board" label={language === 'KO' ? '게시판' : 'Board'} />
-          <LanguageSwitcher />
+        <div className={styles.desktopUtilities}>
+          {languageControl}
+          <div className={styles.accountLinks}><AccountMenu /></div>
         </div>
-        <div className={styles.accountLinks}><AccountMenu /></div>
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <MenuButton
-          className={styles.mobileToggle}
-          isOpen={isMobileMenuOpen}
-          onClick={() => {
-            setIsMobileMenuOpen(!isMobileMenuOpen);
-            if (isMobileMenuOpen) {
-              setExpandedMenu(null);
-            }
-          }}
-        />
+        <div ref={menuButtonRef} className={styles.mobileToggle}>
+          <MenuButton
+            isOpen={isMobileMenuOpen}
+            onClick={() => { setIsMobileMenuOpen(!isMobileMenuOpen); setExpandedMenu(null); }}
+          />
+        </div>
       </div>
 
-      {/* Mobile Navigation Overlay */}
+      <nav className={styles.desktop} aria-label={ko ? '주 메뉴' : 'Main navigation'}>
+        <div className={styles.publicLinks}>
+          {groups.map(group => (
+            <DropdownMenu key={group.id} label={group.title} items={group.links} className={styles.menuGroup} />
+          ))}
+        </div>
+      </nav>
+
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            className={cn('fixed inset-0 bg-black/50 z-40', styles.mobileOnly)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={handleNavClick}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            className={cn('absolute top-full left-0 right-0 bg-white shadow-lg z-50', styles.mobileOnly, styles.mobilePanel)}
-            variants={menuVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-          >
-            <div className="py-2">
-              {/* Main Nav Items */}
-              {mainNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center h-12 hover:bg-gray-50 transition-colors"
-                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
-                  onClick={handleNavClick}
-                >
-                  <Text size="sm" weight={500} color="text">
-                    {item.label}
-                  </Text>
-                </Link>
-              ))}
-
-              {/* Publications Accordion - 비활성화 */}
-              {/* <div>
-                <button
-                  type="button"
-                  onClick={() => toggleSubmenu('publications')}
-                  className="flex items-center justify-between w-full h-12 hover:bg-gray-50 transition-colors"
-                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
-                >
-                  <Text size="sm" weight={500} color="text">
-                    {t('nav.publications')}
-                  </Text>
-                  <motion.div
-                    animate={{ rotate: expandedMenu === 'publications' ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Icon name="ChevronDown" size="sm" color="text" />
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {expandedMenu === 'publications' && (
-                    <motion.div
-                      variants={submenuVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      className="overflow-hidden bg-gray-50"
-                    >
-                      {publicationsDropdownItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center h-11 hover:bg-gray-100 transition-colors"
-                          style={{ paddingLeft: '40px', paddingRight: '20px' }}
-                          onClick={handleNavClick}
-                        >
-                          <Text size="sm" weight={500} color="text">
-                            {item.label}
-                          </Text>
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div> */}
-
-              {/* People Accordion */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => toggleSubmenu('people')}
-                  className="flex items-center justify-between w-full h-12 hover:bg-gray-50 transition-colors"
-                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
-                >
-                  <Text size="sm" weight={500} color="text">
-                    {t('nav.people')}
-                  </Text>
-                  <motion.div
-                    animate={{ rotate: expandedMenu === 'people' ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Icon name="ChevronDown" size="sm" color="text" />
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {expandedMenu === 'people' && (
-                    <motion.div
-                      variants={submenuVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      className="overflow-hidden bg-gray-50"
-                    >
-                      {peopleDropdownItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center h-11 hover:bg-gray-100 transition-colors"
-                          style={{ paddingLeft: '40px', paddingRight: '20px' }}
-                          onClick={handleNavClick}
-                        >
-                          <Text size="sm" weight={500} color="text">
-                            {item.label}
-                          </Text>
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* News Accordion */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => toggleSubmenu('news')}
-                  className="flex items-center justify-between w-full h-12 hover:bg-gray-50 transition-colors"
-                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
-                >
-                  <Text size="sm" weight={500} color="text">
-                    {t('nav.news')}
-                  </Text>
-                  <motion.div
-                    animate={{ rotate: expandedMenu === 'news' ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Icon name="ChevronDown" size="sm" color="text" />
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {expandedMenu === 'news' && (
-                    <motion.div
-                      variants={submenuVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="hidden"
-                      className="overflow-hidden bg-gray-50"
-                    >
-                      {newsDropdownItems.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center h-11 hover:bg-gray-100 transition-colors"
-                          style={{ paddingLeft: '40px', paddingRight: '20px' }}
-                          onClick={handleNavClick}
-                        >
-                          <Text size="sm" weight={500} color="text">
-                            {item.label}
-                          </Text>
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Link href="/board" className="flex items-center h-12 hover:bg-gray-50 transition-colors"
-                style={{ paddingLeft: '20px', paddingRight: '20px' }} onClick={handleNavClick}>
-                <Text size="sm" weight={500} color="text">{language === 'KO' ? '게시판' : 'Board'}</Text>
-              </Link>
-
-              {/* Language Toggle */}
-              <div className="border-t border-gray-200" style={{ padding: '16px 20px' }}>
-                <AccountMenu onNavigate={handleNavClick} />
-              </div>
-              <div className="border-t border-gray-200 mt-2 pt-2">
-                <button
-                  type="button"
-                  onClick={toggleLanguage}
-                  className="flex items-center justify-between w-full h-12 hover:bg-gray-50 transition-colors"
-                  style={{ paddingLeft: '20px', paddingRight: '20px' }}
-                >
-                  <Text size="sm" weight={500} color="text">
-                    {language === 'EN' ? 'English' : '한국어'}
-                  </Text>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={cn(
-                        'text-sm font-medium transition-colors',
-                        language === 'EN' ? 'text-[var(--color-primary)]' : 'text-gray-400'
-                      )}
-                    >
-                      EN
-                    </span>
-                    <div className="relative w-10 h-5 bg-gray-200 rounded-full">
-                      <motion.div
-                        className="absolute top-0.5 w-4 h-4 bg-[var(--color-primary)] rounded-full"
-                        animate={{ left: language === 'EN' ? 2 : 22 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    </div>
-                    <span
-                      className={cn(
-                        'text-sm font-medium transition-colors',
-                        language === 'KO' ? 'text-[var(--color-primary)]' : 'text-gray-400'
-                      )}
-                    >
-                      KO
-                    </span>
+          <>
+            <motion.div className={cn('fixed inset-0 bg-black/50 z-40', styles.mobileOnly)}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeMenu} />
+            <motion.nav
+              aria-label={ko ? '모바일 메뉴' : 'Mobile navigation'}
+              className={cn('absolute top-full left-0 right-0 bg-white shadow-lg z-50', styles.mobileOnly, styles.mobilePanel)}
+              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+              {groups.map(group => (
+                <div key={group.id}>
+                  <button type="button" className={styles.mobileGroupButton}
+                    aria-expanded={expandedMenu === group.id} aria-controls={`mobile-${group.id}`}
+                    onClick={() => setExpandedMenu(expandedMenu === group.id ? null : group.id)}>
+                    {group.title}
+                    <Icon name={expandedMenu === group.id ? 'ChevronUp' : 'ChevronDown'} size={18} />
+                  </button>
+                  <div id={`mobile-${group.id}`} hidden={expandedMenu !== group.id} className={styles.mobileSubmenu}>
+                    {group.links.map(item => (
+                      <Link key={item.href} href={item.href} className={styles.mobileLink} onClick={closeMenu}>
+                        {item.label}
+                      </Link>
+                    ))}
                   </div>
-                </button>
+                </div>
+              ))}
+              <div className={styles.mobileUtilities}>
+                <AccountMenu onNavigate={closeMenu} />
+                {languageControl}
               </div>
-            </div>
-          </motion.div>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </header>

@@ -38,6 +38,14 @@ export function HeroContent({
       initial={false}
       animate="visible"
     >
+      <motion.div variants={heroTitle}>
+        <Heading level={1} color="white" className="text-[1rem] sm:text-[1.5rem] md:text-[2.1rem] text-white">
+          {title}
+        </Heading>
+      </motion.div>
+
+      <Spacer size="lg" />
+
       <motion.div variants={heroSubtitle}>
         <Span
           size="lg"
@@ -48,14 +56,6 @@ export function HeroContent({
         >
           {subtitle}
         </Span>
-      </motion.div>
-
-      <Spacer size="lg" />
-
-      <motion.div variants={heroTitle}>
-        <Heading level={1} color="white" className="text-[1rem] sm:text-[1.5rem] md:text-[2.1rem] text-white">
-          {title}
-        </Heading>
       </motion.div>
 
       <div style={{ height: '4px' }} />

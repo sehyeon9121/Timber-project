@@ -18,6 +18,8 @@ export function TeamMemberCard({
   scholarUrl,
   email,
   affiliation,
+  division,
+  isRepresentative,
   className,
   index = 0,
 }: TeamMemberCardProps) {
@@ -42,7 +44,13 @@ export function TeamMemberCard({
         />
 
         {/* Right: Content */}
-        <MemberInfo name={name} position={position} bio={bio} affiliation={affiliation} />
+        <MemberInfo
+          name={name}
+          position={position}
+          bio={bio}
+          affiliation={affiliation}
+          representativeDivision={isRepresentative ? division : undefined}
+        />
       </div>
 
       {/* Bottom Line */}

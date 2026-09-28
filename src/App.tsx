@@ -11,6 +11,9 @@ import { AdminPage } from '@/pages/AdminPage';
 import { BoardPage } from '@/pages/BoardPage';
 import { BoardPostPage } from '@/pages/BoardPostPage';
 import { BoardEditorPage } from '@/pages/BoardEditorPage';
+import { EmptyContentPage } from '@/pages/EmptyContentPage';
+import { OverviewPage } from '@/pages/OverviewPage';
+import { siteNavigation } from '@/data/siteNavigation';
 import {
   HomePage,
   ResearchPage,
@@ -55,9 +58,21 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about/overview" element={<OverviewPage />} />
+        <Route path="/about/organization" element={<ShowcasePage />} />
+        {siteNavigation.flatMap(group => group.items.filter(item => item.empty).map(item => (
+          <Route
+            key={item.href}
+            path={item.href}
+            element={group.membersOnly
+              ? <ProtectedRoute><EmptyContentPage title={item.label} /></ProtectedRoute>
+              : <EmptyContentPage title={item.label} />}
+          />
+        )))}
         <Route path="/research" element={<ResearchPage />} />
         <Route path="/research/:id" element={<ResearchDetailPage />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/team/researchers" element={<TeamPage participantsOnly />} />
         <Route path="/publications/:category?" element={<PublicationsPage />} />
         <Route path="/news" element={<NewsPage />} />
 <Route path="/contact" element={<ContactPage />} />
