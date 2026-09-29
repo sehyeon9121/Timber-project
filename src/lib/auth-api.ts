@@ -59,6 +59,10 @@ const englishErrors: Record<string, string> = {
   POST_VALIDATION: 'Use 1–120 characters for the title and 1–10,000 for the body.',
 };
 export function authErrorMessage(error: unknown, language: 'KO' | 'EN') {
-  if (error instanceof ApiError) return language === 'EN' ? englishErrors[error.code] || englishErrors.SERVER_ERROR : error.message;
+  if (error instanceof ApiError) {
+    if (language === 'EN') return englishErrors[error.code] || englishErrors.SERVER_ERROR;
+    if (error.code === 'INVALID_CREDENTIALS') return '아이디와 비밀번호를 확인해 주세요.';
+    return error.message;
+  }
   return language === 'EN' ? englishErrors.SERVER_ERROR : '요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.';
 }
