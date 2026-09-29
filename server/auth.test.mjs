@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 import { createApp } from './app.mjs';
-import { createStore, hashPassword, verifyPassword } from './store.mjs';
+import { createStore, hashPassword, verifyPassword, storeSchema } from './store.mjs';
 import { getDevelopmentOrigins } from './origins.mjs';
 
 test('approval-based membership and master authorization', async t => {
@@ -13,7 +14,7 @@ test('approval-based membership and master authorization', async t => {
   const store = createStore(path);
   const password = 'Test-only-password-2026';
   const passwordHash = await hashPassword(password);
-  const master = store.addUser({ name: 'Master', email: 'master@example.com', affiliation: 'Administration' }, passwordHash, 'master');
+  const master = store.addUser({ name: 'Master', username: 'ERS', email: 'master@example.com', affiliation: 'Administration' }, passwordHash, 'master');
   const app = await createApp(store);
   const server = app.listen(0, '127.0.0.1');
   await new Promise(resolveReady => server.once('listening', resolveReady));
@@ -45,30 +46,33 @@ test('approval-based membership and master authorization', async t => {
     assert.equal((await request('/admin/users', 'GET', undefined, 'timber_session=' + '0'.repeat(64))).status, 401);
   });
   await t.test('signup validates data, hashes passwords, and ignores role/status supplied by clients', async () => {
-    const invalid = await request('/auth/signup', 'POST', { name: 'A', email: 'bad', affiliation: 'Lab', password: 'short' });
+    const invalid = await request('/auth/signup', 'POST', { name: 'A', username: 'ab', email: 'bad', affiliation: 'Lab', password: 'short' });
     assert.equal(invalid.status, 400);
-    const registered = await request('/auth/signup', 'POST', { name: 'Member', email: ' MEMBER@example.com ', affiliation: 'Research lab', password, role: 'master', status: 'approved' });
+    const registered = await request('/auth/signup', 'POST', { name: 'Member', username: 'member', email: ' MEMBER@example.com ', affiliation: 'Research lab', password, role: 'master', status: 'approved' });
     assert.equal(registered.status, 201);
     assert.equal(registered.data.status, 'pending');
     assert.equal(registered.cookie, null);
     const user = store.findByEmail('member@example.com');
     memberId = user.id;
     assert.equal(user.role, 'member');
+    assert.equal(user.username, 'member');
     assert.equal(user.status, 'pending');
     assert.notEqual(user.password_hash, password);
     assert.notEqual(user.password_hash, passwordHash);
     assert.ok(await verifyPassword(password, user.password_hash));
-    assert.equal((await request('/auth/signup', 'POST', { name: 'Member', email: user.email, affiliation: user.affiliation, password })).status, 409);
+    assert.equal((await request('/auth/signup', 'POST', { name: 'Member', username: 'MEMBER', email: 'different@example.com', affiliation: user.affiliation, password })).data.code, 'USERNAME_EXISTS');
+    assert.equal((await request('/auth/signup', 'POST', { name: 'Member', username: 'different', email: user.email, affiliation: user.affiliation, password })).data.code, 'EMAIL_EXISTS');
   });
   await t.test('pending accounts cannot login; status is only revealed with a correct password', async () => {
-    assert.equal((await request('/auth/login', 'POST', { email: 'member@example.com', password: 'incorrect' })).status, 401);
-    const pending = await request('/auth/login', 'POST', { email: 'member@example.com', password });
+    assert.equal((await request('/auth/login', 'POST', { username: 'member', password: 'incorrect' })).status, 401);
+    assert.equal((await request('/auth/login', 'POST', { email: 'member@example.com', password })).status, 400);
+    const pending = await request('/auth/login', 'POST', { username: 'member', password });
     assert.equal(pending.status, 403);
     assert.equal(pending.data.code, 'PENDING');
     assert.equal(pending.cookie, null);
   });
   await t.test('only master can approve a pending member; returned profiles have no password hashes', async () => {
-    const login = await request('/auth/login', 'POST', { email: master.email, password });
+    const login = await request('/auth/login', 'POST', { username: master.username, password });
     assert.equal(login.status, 200);
     assert.match(login.cookie, /HttpOnly/i);
     assert.match(login.cookie, /SameSite=Strict/i);
@@ -83,7 +87,7 @@ test('approval-based membership and master authorization', async t => {
     assert.equal((await request(`/admin/users/${memberId}`, 'PATCH', { status: 'rejected' }, masterCookie)).status, 409);
   });
   await t.test('approved members can access member APIs but cannot list or approve registrations', async () => {
-    const login = await request('/auth/login', 'POST', { email: 'member@example.com', password });
+    const login = await request('/auth/login', 'POST', { username: 'member', password });
     assert.equal(login.status, 200);
     memberCookie = login.cookie.split(';')[0];
     assert.equal((await request('/members/home', 'GET', undefined, memberCookie)).status, 200);
@@ -113,9 +117,9 @@ test('approval-based membership and master authorization', async t => {
     }
   });
   await t.test('rejected accounts cannot login', async () => {
-    const user = store.addUser({ name: 'Rejected', email: 'rejected@example.com', affiliation: 'Research lab' }, passwordHash);
+    const user = store.addUser({ name: 'Rejected', username: 'rejected', email: 'rejected@example.com', affiliation: 'Research lab' }, passwordHash);
     assert.equal((await request(`/admin/users/${user.id}`, 'PATCH', { status: 'rejected' }, masterCookie)).status, 200);
-    const login = await request('/auth/login', 'POST', { email: user.email, password });
+    const login = await request('/auth/login', 'POST', { username: user.username, password });
     assert.equal(login.status, 403);
     assert.equal(login.data.code, 'REJECTED');
     assert.equal(login.cookie, null);
@@ -123,7 +127,7 @@ test('approval-based membership and master authorization', async t => {
   await t.test('logout and session expiry invalidate access on the server', async () => {
     assert.equal((await request('/auth/logout', 'POST', {}, memberCookie)).status, 200);
     assert.equal((await request('/members/home', 'GET', undefined, memberCookie)).status, 401);
-    const login = await request('/auth/login', 'POST', { email: 'member@example.com', password });
+    const login = await request('/auth/login', 'POST', { username: 'member', password });
     const cookie = login.cookie.split(';')[0];
     store.db.prepare('UPDATE sessions SET expires_at = 0 WHERE user_id = ?').run(memberId);
     assert.equal((await request('/members/home', 'GET', undefined, cookie)).status, 401);
@@ -140,6 +144,38 @@ test('approval-based membership and master authorization', async t => {
     assert.equal(result.status, 429);
     assert.ok(Number(result.headers.get('retry-after')) > 0);
   });
+});
+
+test('legacy accounts gain usernames without losing data; master password change revokes sessions', async t => {
+  const directory = mkdtempSync(join(tmpdir(), 'timber-legacy-auth-test-'));
+  const path = join(directory, 'auth.sqlite');
+  t.after(() => {
+    assert.ok(resolve(directory).startsWith(resolve(tmpdir()) + '\\') || resolve(directory).startsWith(resolve(tmpdir()) + '/'));
+    rmSync(directory, { recursive: true });
+  });
+  const old = new DatabaseSync(path);
+  old.exec(storeSchema.replace('      username TEXT UNIQUE COLLATE NOCASE,\n', ''));
+  const oldHash = await hashPassword('old-admin-password');
+  old.prepare("INSERT INTO users (name, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, 'master', 'approved')")
+    .run('Master', 'master@example.test', 'Administration', oldHash);
+  old.prepare("INSERT INTO users (name, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, 'member', 'approved')")
+    .run('Member', 'member@example.test', 'Lab', oldHash);
+  old.close();
+
+  const store = createStore(path);
+  assert.equal(store.findByUsername('ers').email, 'master@example.test');
+  assert.equal(store.findByUsername('user2').email, 'member@example.test');
+  const token = store.createSession(1);
+  const newHash = await hashPassword('new-admin-password');
+  store.updateMasterCredentials('ERS', newHash);
+  assert.equal(store.sessionUser(token), undefined);
+  assert.ok(await verifyPassword('new-admin-password', store.findByUsername('ERS').password_hash));
+  assert.equal(store.findByUsername('user2').password_hash, oldHash);
+  store.close();
+  const reopened = createStore(path);
+  assert.equal(reopened.findByUsername('ERS').email, 'master@example.test');
+  assert.equal(reopened.findByUsername('user2').email, 'member@example.test');
+  reopened.close();
 });
 
 test('an explicitly configured site origin does not inherit development origins', async t => {

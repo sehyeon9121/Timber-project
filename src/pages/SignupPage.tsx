@@ -29,7 +29,7 @@ export function SignupPage() {
     setBusy(true);
     try {
       await authApi('/auth/signup', { method: 'POST', body: JSON.stringify({
-        name: form.get('name'), email: form.get('email'), affiliation: form.get('affiliation'), password,
+        name: form.get('name'), username: form.get('username'), email: form.get('email'), affiliation: form.get('affiliation'), password,
       }) });
       setSent(true);
     } catch (cause) { setError(cause); }
@@ -45,7 +45,8 @@ export function SignupPage() {
       {mismatch && <div role="alert" className={styles.error}>{ko ? '비밀번호가 일치하지 않습니다.' : 'Passwords do not match.'}</div>}
       <form className={styles.form} onSubmit={submit}>
         <AuthField id="signup-name" name="name" label={ko ? '이름' : 'Name'} autoComplete="name" required minLength={2} maxLength={80} disabled={busy} />
-        <AuthField id="signup-email" name="email" label={ko ? '이메일' : 'Email'} type="email" autoComplete="username" required maxLength={254} disabled={busy} />
+        <AuthField id="signup-username" name="username" label={ko ? '아이디' : 'Username'} hint={ko ? '영문으로 시작하는 영문·숫자·밑줄 3~32자' : '3–32 letters, numbers, or underscores; start with a letter.'} autoComplete="username" required minLength={3} maxLength={32} pattern="[A-Za-z][A-Za-z0-9_]{2,31}" disabled={busy} />
+        <AuthField id="signup-email" name="email" label={ko ? '이메일 (연락용)' : 'Email (contact)'} type="email" autoComplete="email" required maxLength={254} disabled={busy} />
         <AuthField id="signup-affiliation" name="affiliation" label={ko ? '소속 기관 / 연구실' : 'Institution / lab'} autoComplete="organization" required minLength={2} maxLength={120} disabled={busy} />
         <AuthField id="signup-password" name="password" label={ko ? '비밀번호' : 'Password'} hint={ko ? '12~128자로 입력해 주세요.' : 'Use 12–128 characters.'} type="password" autoComplete="new-password" required minLength={12} maxLength={128} disabled={busy} />
         <AuthField id="signup-confirmation" name="confirmation" label={ko ? '비밀번호 확인' : 'Confirm password'} type="password" autoComplete="new-password" required minLength={12} maxLength={128} disabled={busy} />

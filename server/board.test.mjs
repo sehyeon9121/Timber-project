@@ -10,7 +10,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
   const directory = mkdtempSync(join(tmpdir(), 'timber-board-test-'));
   const path = join(directory, 'auth.sqlite');
   const store = createStore(path);
-  const createUser = (name, role = 'member') => store.addUser({ name, email: `${name}@example.test`, affiliation: 'Test lab' }, 'unused-test-hash', role);
+  const createUser = (name, role = 'member') => store.addUser({ name, username: name, email: `${name}@example.test`, affiliation: 'Test lab' }, 'unused-test-hash', role);
   const master = createUser('Master', 'master');
   const author = createUser('Author');
   const other = createUser('Other');

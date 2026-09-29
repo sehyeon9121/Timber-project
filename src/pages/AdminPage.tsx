@@ -52,7 +52,7 @@ export function AdminPage() {
   const search = query.trim().toLocaleLowerCase();
   const visible = users.filter(user =>
     (membersView ? filter === 'all' || user.status === filter : user.status === 'pending') &&
-    (!membersView || `${user.name} ${user.email} ${user.affiliation}`.toLocaleLowerCase().includes(search))
+    (!membersView || `${user.name} ${user.username} ${user.email} ${user.affiliation}`.toLocaleLowerCase().includes(search))
   );
   const date = (value: string) => new Date(value).toLocaleString(ko ? 'ko-KR' : 'en-US');
   const pendingCount = users.filter(user => user.status === 'pending').length;
@@ -78,11 +78,11 @@ export function AdminPage() {
         </nav>
         <div className={adminStyles.panel}>
           <Heading level={2}>{membersView ? (ko ? '회원 명단' : 'Member directory') : (ko ? '가입 승인' : 'Registration approval')}</Heading>
-          <p className={adminStyles.intro}>{membersView ? (ko ? '이름, 이메일, 소속과 가입 상태를 확인할 수 있습니다.' : 'View names, emails, affiliations, and registration status.') : (ko ? '승인 대기 중인 가입 요청을 검토하세요.' : 'Review pending registration requests.')}</p>
+          <p className={adminStyles.intro}>{membersView ? (ko ? '이름, 아이디, 이메일, 소속과 가입 상태를 확인할 수 있습니다.' : 'View names, usernames, emails, affiliations, and registration status.') : (ko ? '승인 대기 중인 가입 요청을 검토하세요.' : 'Review pending registration requests.')}</p>
     <div className={styles.filters}>
       {membersView && <>
       <label className={adminStyles.search} htmlFor="member-search">{ko ? '회원 검색' : 'Search members'}
-        <input id="member-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={ko ? '이름, 이메일, 소속 검색' : 'Name, email, or affiliation'} />
+        <input id="member-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={ko ? '이름, 아이디, 이메일, 소속 검색' : 'Name, username, email, or affiliation'} />
       </label>
       <label htmlFor="status-filter">{ko ? '가입 상태 ' : 'Status '}</label>
       <select id="status-filter" value={filter} onChange={event => setFilter(event.target.value)}>
@@ -101,10 +101,10 @@ export function AdminPage() {
       {!error && visible.length === 0 && <div className={styles.notice}>{membersView ? (ko ? '조건에 맞는 회원이 없습니다.' : 'No matching members.') : (ko ? '승인 대기 중인 가입 요청이 없습니다.' : 'No pending registration requests.')}</div>}
       {membersView ? visible.length > 0 && <div className={adminStyles.tableWrap} tabIndex={0} role="region" aria-label={ko ? '회원 명단 표' : 'Member directory table'}>
         <table className={adminStyles.table}>
-          <caption className="sr-only">{ko ? '등록된 회원의 이름, 이메일, 소속, 가입 상태와 신청일' : 'Registered member names, emails, affiliations, status, and registration dates'}</caption>
-          <thead><tr>{(ko ? ['이름', '이메일', '소속', '가입 상태', '신청일'] : ['Name', 'Email', 'Affiliation', 'Status', 'Registered']).map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
+          <caption className="sr-only">{ko ? '등록된 회원의 이름, 아이디, 이메일, 소속, 가입 상태와 신청일' : 'Registered member names, usernames, emails, affiliations, status, and registration dates'}</caption>
+          <thead><tr>{(ko ? ['이름', '아이디', '이메일', '소속', '가입 상태', '신청일'] : ['Name', 'Username', 'Email', 'Affiliation', 'Status', 'Registered']).map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
           <tbody>{visible.map(user => <tr key={user.id}>
-            <td>{user.name}</td><td>{user.email}</td><td>{user.affiliation}</td>
+            <td>{user.name}</td><td>{user.username}</td><td>{user.email}</td><td>{user.affiliation}</td>
             <td><span className={`${styles.badge} ${styles[user.status]}`}>{labels[user.status]}</span></td>
             <td>{new Date(user.createdAt).toLocaleDateString(ko ? 'ko-KR' : 'en-US')}</td>
           </tr>)}</tbody>
@@ -113,7 +113,7 @@ export function AdminPage() {
         {visible.map(user => <li key={user.id} className={styles.request}>
           <div className={styles.requestInfo}>
             <Heading level={2}>{user.name}</Heading>
-            <p>{user.email}</p><p>{user.affiliation}</p>
+            <p>{ko ? '아이디: ' : 'Username: '}{user.username}</p><p>{user.email}</p><p>{user.affiliation}</p>
             <p>{ko ? '신청일: ' : 'Requested: '}{date(user.createdAt)}</p>
             {user.reviewedAt && <p>{ko ? '처리일: ' : 'Reviewed: '}{date(user.reviewedAt)}</p>}
           </div>

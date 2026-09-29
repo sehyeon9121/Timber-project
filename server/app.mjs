@@ -66,9 +66,12 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   app.post('/api/auth/signup', async (request, response) => {
     const input = validateRegistration(request.body);
     if (input.error) return fail(response, 400, 'VALIDATION', input.error);
+    if (input.username.toLowerCase() === 'ers') return fail(response, 409, 'USERNAME_EXISTS', '이미 사용 중인 아이디입니다.');
+    if (await store.findByUsername(input.username)) return fail(response, 409, 'USERNAME_EXISTS', '이미 사용 중인 아이디입니다.');
     if (await store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
     const passwordHash = await hashPassword(input.password);
     // The hash step is asynchronous; recheck duplicates before the insert.
+    if (await store.findByUsername(input.username)) return fail(response, 409, 'USERNAME_EXISTS', '이미 사용 중인 아이디입니다.');
     if (await store.findByEmail(input.email)) return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
     try {
       await store.addUser(input, passwordHash);
@@ -76,19 +79,22 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
       if (error.message?.includes('UNIQUE constraint failed: users.email')) {
         return fail(response, 409, 'EMAIL_EXISTS', '이미 가입 요청된 이메일입니다.');
       }
+      if (error.message?.includes('users.username') || error.message?.includes('users_username_unique')) {
+        return fail(response, 409, 'USERNAME_EXISTS', '이미 사용 중인 아이디입니다.');
+      }
       throw error;
     }
     response.status(201).json({ status: 'pending', message: '가입 요청이 접수되었습니다. 관리자 승인 후 로그인할 수 있습니다.' });
   });
   app.post('/api/auth/login', async (request, response) => {
-    const email = typeof request.body?.email === 'string' ? request.body.email.trim().toLowerCase() : '';
+    const username = typeof request.body?.username === 'string' ? request.body.username.trim() : '';
     const password = request.body?.password;
-    if (typeof password !== 'string' || password.length > 128 || email.length > 254) {
-      return fail(response, 400, 'INVALID_CREDENTIALS', '이메일과 비밀번호를 확인해 주세요.');
+    if (typeof password !== 'string' || password.length > 128 || !/^[A-Za-z][A-Za-z0-9_]{2,31}$/.test(username)) {
+      return fail(response, 400, 'INVALID_CREDENTIALS', '아이디와 비밀번호를 확인해 주세요.');
     }
-    const user = await store.findByEmail(email);
+    const user = await store.findByUsername(username);
     const valid = await verifyPassword(password, user?.password_hash || dummyHash);
-    if (!user || !valid) return fail(response, 401, 'INVALID_CREDENTIALS', '이메일과 비밀번호를 확인해 주세요.');
+    if (!user || !valid) return fail(response, 401, 'INVALID_CREDENTIALS', '아이디와 비밀번호를 확인해 주세요.');
     if (user.status === 'pending') return fail(response, 403, 'PENDING', '관리자 승인 대기 중입니다. 승인 후 로그인할 수 있습니다.');
     if (user.status === 'rejected') return fail(response, 403, 'REJECTED', '가입 요청이 거절되었습니다. 관리자에게 문의해 주세요.');
     await store.deleteSession(readSessionCookie(request));

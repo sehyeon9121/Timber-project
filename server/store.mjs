@@ -24,18 +24,20 @@ export async function verifyPassword(password, stored) {
 
 export function validateRegistration(input) {
   const name = typeof input?.name === 'string' ? input.name.trim() : '';
+  const username = typeof input?.username === 'string' ? input.username.trim() : '';
   const email = typeof input?.email === 'string' ? input.email.trim().toLowerCase() : '';
   const affiliation = typeof input?.affiliation === 'string' ? input.affiliation.trim() : '';
   const password = typeof input?.password === 'string' ? input.password : '';
   if (name.length < 2 || name.length > 80) return { error: '이름은 2~80자로 입력해 주세요.' };
+  if (!/^[A-Za-z][A-Za-z0-9_]{2,31}$/.test(username)) return { error: '아이디는 영문으로 시작하는 영문·숫자·밑줄 3~32자로 입력해 주세요.' };
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: '올바른 이메일을 입력해 주세요.' };
   if (affiliation.length < 2 || affiliation.length > 120) return { error: '소속은 2~120자로 입력해 주세요.' };
   if (password.length < 12 || password.length > 128) return { error: '비밀번호는 12~128자로 입력해 주세요.' };
-  return { name, email, affiliation, password };
+  return { name, username, email, affiliation, password };
 }
 
 export function publicUser(user) {
-  return { id: user.id, name: user.name, email: user.email, affiliation: user.affiliation,
+  return { id: user.id, name: user.name, username: user.username, email: user.email, affiliation: user.affiliation,
     role: user.role, status: user.status, createdAt: user.created_at, reviewedAt: user.reviewed_at };
 }
 
@@ -45,6 +47,7 @@ export const storeSchema = `
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
+      username TEXT UNIQUE COLLATE NOCASE,
       email TEXT NOT NULL UNIQUE,
       affiliation TEXT NOT NULL,
       password_hash TEXT NOT NULL,
@@ -78,14 +81,34 @@ export function createStore(path = databasePath) {
     PRAGMA foreign_keys = ON;
 ${storeSchema}
   `);
+  if (!db.prepare('PRAGMA table_info(users)').all().some(column => column.name === 'username')) {
+    db.exec('ALTER TABLE users ADD COLUMN username TEXT');
+  }
+  db.exec('BEGIN');
+  try {
+    db.prepare("UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL").run();
+    db.exec('CREATE UNIQUE INDEX IF NOT EXISTS users_username_unique ON users(username COLLATE NOCASE)');
+    db.exec('COMMIT');
+  } catch (error) { db.exec('ROLLBACK'); db.close(); throw error; }
   return {
     db,
+    findByUsername: username => db.prepare('SELECT * FROM users WHERE username = ? COLLATE NOCASE').get(username),
     findByEmail: email => db.prepare('SELECT * FROM users WHERE email = ?').get(email),
     findById: id => db.prepare('SELECT * FROM users WHERE id = ?').get(id),
     addUser(input, passwordHash, role = 'member') {
-      const result = db.prepare('INSERT INTO users (name, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?)')
-        .run(input.name, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending');
+      const result = db.prepare('INSERT INTO users (name, username, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)')
+        .run(input.name, input.username, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending');
       return this.findById(Number(result.lastInsertRowid));
+    },
+    updateMasterCredentials(username, passwordHash) {
+      db.exec('BEGIN');
+      try {
+        const masters = db.prepare("SELECT id FROM users WHERE role = 'master'").all();
+        if (masters.length !== 1) throw new Error('관리자 계정이 정확히 하나여야 합니다.');
+        db.prepare('UPDATE users SET username = ?, password_hash = ? WHERE id = ?').run(username, passwordHash, masters[0].id);
+        db.prepare('DELETE FROM sessions WHERE user_id = ?').run(masters[0].id);
+        db.exec('COMMIT');
+      } catch (error) { db.exec('ROLLBACK'); throw error; }
     },
     listMembers: () => db.prepare("SELECT * FROM users WHERE role = 'member' ORDER BY CASE status WHEN 'pending' THEN 0 ELSE 1 END, created_at DESC, id DESC").all().map(publicUser),
     review(id, status, masterId) {

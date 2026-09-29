@@ -53,12 +53,12 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
   const source = createStore(path);
   const password = 'Test-only-password-2026';
   const hash = await hashPassword(password);
-  const master = source.addUser({ name: 'Master', email: 'master@example.test', affiliation: 'Admin' }, hash, 'master');
-  const author = source.addUser({ name: 'Member', email: 'member@example.test', affiliation: 'Lab' }, hash);
+  const master = source.addUser({ name: 'Master', username: 'ERS', email: 'master@example.test', affiliation: 'Admin' }, hash, 'master');
+  const author = source.addUser({ name: 'Member', username: 'member', email: 'member@example.test', affiliation: 'Lab' }, hash);
   source.review(author.id, 'approved', master.id);
-  const rejected = source.addUser({ name: 'Rejected', email: 'rejected@example.test', affiliation: 'Lab' }, hash);
+  const rejected = source.addUser({ name: 'Rejected', username: 'rejected', email: 'rejected@example.test', affiliation: 'Lab' }, hash);
   source.review(rejected.id, 'rejected', master.id);
-  const pending = source.addUser({ name: 'Pending', email: 'pending@example.test', affiliation: 'Lab' }, hash);
+  const pending = source.addUser({ name: 'Pending', username: 'pending', email: 'pending@example.test', affiliation: 'Lab' }, hash);
   const originalPost = source.createPost({ title: 'Before migration', body: 'Keep this body' }, author.id);
   source.createSession(master.id);
   const target = await createRemoteStore(remoteOptions);
@@ -95,19 +95,19 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
   let masterCookie;
   await t.test('original accounts login; roles and approved status are enforced', async () => {
     for (const [user, status] of [[master, 200], [author, 200], [pending, 403], [rejected, 403]]) {
-      const result = await request('/auth/login', 'POST', { email: user.email, password });
+      const result = await request('/auth/login', 'POST', { username: user.username, password });
       assert.equal(result.status, status);
       if (user.id === master.id) masterCookie = result.cookie.split(';')[0];
       if (user.id === author.id) memberCookie = result.cookie.split(';')[0];
       if (status === 200) { assert.match(result.cookie, /Secure/); assert.match(result.cookie, /HttpOnly/); }
     }
-    assert.equal((await request('/auth/login', 'POST', { email: master.email, password: 'wrong' })).status, 401);
+    assert.equal((await request('/auth/login', 'POST', { username: master.username, password: 'wrong' })).status, 401);
     assert.equal((await request('/admin/users', 'GET', undefined, memberCookie)).status, 403);
     assert.equal((await request('/admin/users', 'GET', undefined, masterCookie)).body.users.length, 3);
-    assert.equal((await request('/auth/login', 'POST', { email: master.email, password }, undefined, 'https://untrusted.example')).status, 403);
+    assert.equal((await request('/auth/login', 'POST', { username: master.username, password }, undefined, 'https://untrusted.example')).status, 403);
   });
   await t.test('signup conflicts are handled and approvals are persisted', async () => {
-    const input = { name: 'New member', email: 'new@example.test', affiliation: 'Lab', password };
+    const input = { name: 'New member', username: 'newmember', email: 'new@example.test', affiliation: 'Lab', password };
     const results = await Promise.all([request('/auth/signup', 'POST', input), request('/auth/signup', 'POST', input)]);
     assert.deepEqual(results.map(result => result.status).sort(), [201, 409]);
     const created = await target.findByEmail(input.email);

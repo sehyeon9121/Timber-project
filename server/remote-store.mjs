@@ -6,6 +6,15 @@ export async function createRemoteStore(options) {
   const client = createClient(options);
   try {
     await client.executeMultiple(`PRAGMA foreign_keys = ON; ${storeSchema}`);
+    const columns = (await client.execute('PRAGMA table_info(users)')).rows;
+    if (!columns.some(column => column.name === 'username')) {
+      try { await client.execute('ALTER TABLE users ADD COLUMN username TEXT'); }
+      catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+    }
+    await client.batch([
+      { sql: "UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL", args: [] },
+      { sql: 'CREATE UNIQUE INDEX IF NOT EXISTS users_username_unique ON users(username COLLATE NOCASE)', args: [] },
+    ], 'write');
   } catch (error) {
     client.close();
     throw error;
@@ -14,12 +23,21 @@ export async function createRemoteStore(options) {
   const first = async (sql, args) => (await execute(sql, args)).rows[0];
   return {
     client,
+    findByUsername: username => first('SELECT * FROM users WHERE username = ? COLLATE NOCASE', [username]),
     findByEmail: email => first('SELECT * FROM users WHERE email = ?', [email]),
     findById: id => first('SELECT * FROM users WHERE id = ?', [id]),
     async addUser(input, passwordHash, role = 'member') {
-      const result = await execute('INSERT INTO users (name, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?)',
-        [input.name, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending']);
+      const result = await execute('INSERT INTO users (name, username, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [input.name, input.username, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending']);
       return this.findById(Number(result.lastInsertRowid));
+    },
+    async updateMasterCredentials(username, passwordHash) {
+      const masters = (await execute("SELECT id FROM users WHERE role = 'master'")).rows;
+      if (masters.length !== 1) throw new Error('관리자 계정이 정확히 하나여야 합니다.');
+      await client.batch([
+        { sql: 'UPDATE users SET username = ?, password_hash = ? WHERE id = ?', args: [username, passwordHash, masters[0].id] },
+        { sql: 'DELETE FROM sessions WHERE user_id = ?', args: [masters[0].id] },
+      ], 'write');
     },
     async listMembers() {
       const result = await execute("SELECT * FROM users WHERE role = 'member' ORDER BY CASE status WHEN 'pending' THEN 0 ELSE 1 END, created_at DESC, id DESC");

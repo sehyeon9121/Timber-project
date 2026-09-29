@@ -1,6 +1,7 @@
 export interface User {
   id: number;
   name: string;
+  username: string;
   email: string;
   affiliation: string;
   role: 'member' | 'master';
@@ -39,10 +40,11 @@ export async function authApi<T>(path: string, options: RequestInit = {}): Promi
 
 const englishErrors: Record<string, string> = {
   CONNECTION: 'Unable to connect to the server. Please try again shortly.',
-  INVALID_CREDENTIALS: 'Please check your email and password.',
+  INVALID_CREDENTIALS: 'Please check your username and password.',
   PENDING: 'Your registration is awaiting administrator approval.',
   REJECTED: 'Your registration was rejected. Please contact the administrator.',
   EMAIL_EXISTS: 'This email has already been registered.',
+  USERNAME_EXISTS: 'This username is already in use.',
   UNAUTHENTICATED: 'Please sign in to continue.',
   FORBIDDEN: 'Only the master account can access this page.',
   RATE_LIMIT: 'Too many attempts. Please try again later.',

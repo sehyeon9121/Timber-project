@@ -26,6 +26,7 @@ export function MembersPage() {
     </> : user ? <>
       <div className={styles.notice}>{ko ? `${user.name}님, 환영합니다.` : `Welcome, ${user.name}.`}</div>
       <dl className={styles.profile}>
+        <dt>{ko ? '아이디' : 'Username'}</dt><dd>{user.username}</dd>
         <dt>{ko ? '이메일' : 'Email'}</dt><dd>{user.email}</dd>
         <dt>{ko ? '소속' : 'Affiliation'}</dt><dd>{user.affiliation}</dd>
         <dt>{ko ? '계정 권한' : 'Role'}</dt><dd>{user.role === 'master' ? (ko ? '마스터 관리자' : 'Master administrator') : (ko ? '일반 회원' : 'Member')}</dd>

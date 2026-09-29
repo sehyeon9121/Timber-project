@@ -30,8 +30,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.addEventListener('auth:expired', expire);
     return () => { active = false; window.removeEventListener('auth:expired', expire); };
   }, []);
-  const login = async (email: string, password: string) => {
-    const data = await authApi<{ user: User }>('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+  const login = async (username: string, password: string) => {
+    const data = await authApi<{ user: User }>('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) });
     setUser(data.user);
     setError(null);
     return data.user;

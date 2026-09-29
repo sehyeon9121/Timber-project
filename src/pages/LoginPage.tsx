@@ -23,14 +23,14 @@ export function LoginPage() {
     setBusy(true);
     setError(null);
     try {
-      await login(String(form.get('email')), String(form.get('password')));
+      await login(String(form.get('username')), String(form.get('password')));
     } catch (cause) { setError(cause); }
     finally { setBusy(false); }
   }
   return <AuthLayout title={ko ? '로그인' : 'Sign in'} description={ko ? '관리자가 승인한 계정으로 로그인해 주세요.' : 'Sign in with an account approved by the administrator.'}>
     {Boolean(error) && <div role="alert" className={styles.error}>{authErrorMessage(error, language)}</div>}
     <form className={styles.form} onSubmit={submit}>
-      <AuthField id="login-email" name="email" label={ko ? '이메일' : 'Email'} type="email" autoComplete="username" required maxLength={254} disabled={busy} />
+      <AuthField id="login-username" name="username" label={ko ? '아이디' : 'Username'} autoComplete="username" required minLength={3} maxLength={32} disabled={busy} />
       <AuthField id="login-password" name="password" label={ko ? '비밀번호' : 'Password'} type="password" autoComplete="current-password" required maxLength={128} disabled={busy} />
       <Button type="submit" disabled={busy}>{busy ? (ko ? '로그인 중…' : 'Signing in…') : (ko ? '로그인' : 'Sign in')}</Button>
     </form>
