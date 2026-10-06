@@ -70,8 +70,8 @@ export function NavigationBar({ className }: NavigationBarProps) {
               <img
                 src="/images/leeseunglab/ministry-land-transport-logo.jpg"
                 alt=""
-                width="842"
-                height="595"
+                width="2274"
+                height="477"
                 className={styles.ministryLogo}
               />
             </span>

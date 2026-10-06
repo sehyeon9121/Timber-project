@@ -234,13 +234,13 @@ const translations: Record<Language, Record<string, string>> = {
     'research.energyPerformance.description': '디지털 기반 시공 및 운영관리 기술을 통한 건축물 건주기 스마트 관리 시스템 구축',
 
     // Research Detail Pages (상세 페이지 전용)
-    'researchDetail.terrestrialCarbon.title': 'AI 기반 대공간 목구조 설계',
+    'researchDetail.terrestrialCarbon.title': '목조 대공간 건축물의 고성능 하이브리드 대단면 부재 기술개발',
     'researchDetail.terrestrialCarbon.description': 'AI와 데이터 기반 설계를 통해 대공간 목구조의 구조적 한계를 확장합니다.',
-    'researchDetail.naturalClimate.title': '탄소중립 건축 실현 기술',
+    'researchDetail.naturalClimate.title': '목조 대공간 건축물의 OSC 모듈화 및 탄소중립설계 기술개발',
     'researchDetail.naturalClimate.description': '목재 건축의 탄소 저감 효과를 정량적으로 분석하고 검증합니다.',
-    'researchDetail.smartConstruction.title': '스마트 시공 및 유지관리 기술',
+    'researchDetail.smartConstruction.title': '목조 대공간 건축물의 스마트 시공 및 유지관리 기술개발',
     'researchDetail.smartConstruction.description': '목조 대공간 건축물의 스마트 시공·유지관리 기술을 개발합니다.',
-    'researchDetail.energyPerformance.title': '친환경·에너지 성능 평가 기술',
+    'researchDetail.energyPerformance.title': '목조 대공간 건축물의 친환경 및 에너지 평가 기술개발',
     'researchDetail.energyPerformance.description': '목조 대공간 건축물의 환경·에너지 성능을 평가합니다.',
 
     // Research Page
@@ -258,7 +258,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bigQuestions.backTo': 'ACT LAB으로 돌아가기',
 
     // Publications Page
-    'publications.title': '연구성과·논문',
+    'publications.title': '연구개발',
     'publications.subtitle': '출판된 연구 성과와 학술적 기여를 확인하세요',
 
     // People Page

@@ -56,7 +56,7 @@ export function ShowcaseSection({
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="mx-auto w-full md:w-[65%] max-w-[700px]"
+        className="mx-auto w-full max-w-[1153px]"
       >
         <div
           className="bg-white rounded-xl border border-gray-200 drop-shadow-lg"
@@ -65,13 +65,13 @@ export function ShowcaseSection({
           <img
             src={image}
             alt={imageAlt}
-            className="w-full aspect-[16/10] max-h-[420px] object-contain"
+            className="block w-full h-auto"
           />
         </div>
       </motion.div>
 
       {/* Bottom Box - 20px gap from image */}
-      <Link to="/showcase" className="block no-underline w-full md:w-[65%] max-w-[700px]" style={{ marginTop: '20px' }}>
+      <Link to="/showcase" className="block no-underline w-full max-w-[1153px]" style={{ marginTop: '20px' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

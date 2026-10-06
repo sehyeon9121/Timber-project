@@ -3,10 +3,20 @@ export interface BoardPostSummary {
   title: string;
   authorId: number;
   authorName: string;
+  division: number | null;
   createdAt: string;
   updatedAt: string;
+  pinned?: number;
 }
 export interface BoardPost extends BoardPostSummary { body: string }
+export const boardDivisions = [1, 2, 3, 4] as const;
+export function boardDivisionLabel(division: number | null, language: 'KO' | 'EN') {
+  return division === null ? (language === 'KO' ? '기존 글' : 'Earlier post')
+    : (language === 'KO' ? `${division}세부` : `Division ${division}`);
+}
+export function boardListHref(division: number | null) {
+  return division === null ? '/board?division=all' : `/board?division=${division}`;
+}
 export interface BoardPostList {
   posts: BoardPostSummary[];
   page: number;

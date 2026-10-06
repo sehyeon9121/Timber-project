@@ -59,7 +59,7 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
   const rejected = source.addUser({ name: 'Rejected', username: 'rejected', email: 'rejected@example.test', affiliation: 'Lab' }, hash);
   source.review(rejected.id, 'rejected', master.id);
   const pending = source.addUser({ name: 'Pending', username: 'pending', email: 'pending@example.test', affiliation: 'Lab' }, hash);
-  const originalPost = source.createPost({ title: 'Before migration', body: 'Keep this body' }, author.id);
+  const originalPost = source.createPost({ title: 'Before migration', body: 'Keep this body', division: 2 }, author.id);
   source.createSession(master.id);
   const target = await createRemoteStore(remoteOptions);
   const second = await createRemoteStore(remoteOptions);
@@ -88,6 +88,7 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
     assert.equal(source.findById(master.id).password_hash, hash);
     assert.equal((await target.findById(author.id)).reviewed_by, master.id);
     assert.equal((await target.findPost(originalPost.id)).body, originalPost.body);
+    assert.equal((await target.findPost(originalPost.id)).division, 2);
     assert.equal((await target.client.execute('SELECT COUNT(*) AS count FROM sessions')).rows[0].count, 0);
     assert.ok(await verifyPassword(password, (await target.findById(master.id)).password_hash));
   });
@@ -118,12 +119,15 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
   await t.test('board writes persist, ownership is enforced, and sessions work across instances', async () => {
     assert.equal((await request('/board/posts')).status, 401);
     assert.equal((await second.sessionUser(memberCookie.split('=')[1])).id, author.id);
-    const created = await request('/board/posts', 'POST', { title: 'Cloud board', body: 'Persistent body' }, memberCookie);
+    const created = await request('/board/posts', 'POST', { title: 'Cloud board', body: 'Persistent body', division: 4 }, memberCookie);
     assert.equal(created.status, 201);
     const id = created.body.post.id;
     assert.ok(id > originalPost.id);
     assert.equal((await second.findPost(id)).body, 'Persistent body');
+    assert.equal((await second.findPost(id)).division, 4);
     assert.equal((await request('/board/posts', 'GET', undefined, memberCookie)).body.total, 2);
+    assert.equal((await request('/board/posts?division=4', 'GET', undefined, memberCookie)).body.total, 1);
+    assert.equal((await request('/board/posts?division=2', 'GET', undefined, memberCookie)).body.total, 1);
     assert.equal((await request(`/board/posts/${id}`, 'PATCH', { title: 'Edited', body: 'New body' }, masterCookie)).status, 403);
     assert.equal((await request(`/board/posts/${id}`, 'PATCH', { title: 'Edited', body: 'New body' }, memberCookie)).status, 200);
     assert.equal((await request(`/board/posts/${id}`, 'DELETE', undefined, masterCookie)).status, 200);

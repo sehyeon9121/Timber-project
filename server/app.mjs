@@ -1,6 +1,7 @@
 import express from 'express';
 import { getDevelopmentOrigins } from './origins.mjs';
 import { registerBoardRoutes } from './board.mjs';
+import { registerNoticeRoutes } from './notices.mjs';
 import { publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
 
 const cookieName = 'timber_session';
@@ -121,6 +122,7 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     response.json({ user: publicUser(await store.findById(id)) });
   });
   registerBoardRoutes(app, store, requireUser);
+  registerNoticeRoutes(app, store, requireUser, requireMaster);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));
   app.use((error, _request, response, _next) => {
     if (error.type === 'entity.parse.failed') return fail(response, 400, 'VALIDATION', '요청 형식이 올바르지 않습니다.');

@@ -1,0 +1,138 @@
+.page {
+  --ink: #173c3f;
+  --muted: #697b80;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 40px 80px;
+  color: var(--ink);
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+}
+.introduction { margin-bottom: 30px; }
+.eyebrow { margin-bottom: 12px; color: var(--muted); font-size: 14px; font-weight: 600; }
+.introduction h2 { font-size: clamp(25px, 3vw, 34px); font-weight: 750; letter-spacing: -1px; }
+.roadmap { display: grid; grid-template-columns: 1.4fr 1fr 170px; gap: 10px; }
+.firstPhase, .secondPhase { padding: 24px 28px; border-radius: 16px; }
+.firstPhase { background: #edf2f1; border: 1px solid #dbe6e2; }
+.secondPhase { background: #20545a; color: #fff; }
+.roadmap > div > span { font-size: 13px; font-weight: 700; }
+.roadmap h3 { margin-top: 8px; font-size: 21px; font-weight: 700; line-height: 1.5; }
+.phaseYears { display: flex; align-items: center; gap: 14px; margin-top: 18px; font-size: 13px; }
+.roadmap p { margin-top: 18px; font-size: 13px; }
+.secondPhase p { color: #d4e8e6; }
+.finalPhase { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; background: #12393e; color: white; border-radius: 16px; }
+.roadmap .finalPhase > span { font-size: 19px; }
+.sectionLinks { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 42px; }
+.sectionLinks a { display: flex; gap: 9px; align-items: center; padding: 9px 16px; border: 1px solid #dce5e2; border-radius: 30px; color: var(--muted); font-size: 12px; }
+.sectionLinks a span { color: var(--ink); font-size: 14px; font-weight: 700; }
+.sectionLinks a:hover { background: #edf4f1; border-color: #7a9a8d; }
+.sectionLinks a:focus-visible { outline: 3px solid #32796e; outline-offset: 3px; }
+.frameworkGroup { margin-bottom: 44px; }
+.groupTitle { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; font-size: 19px; font-weight: 700; line-height: 1.6; }
+.groupTitle::before { content: ''; width: 5px; height: 26px; flex-shrink: 0; border-radius: 4px; background: #2c746b; }
+.division { margin-top: 18px; border: 1px solid #dde5e2; border-radius: 18px; overflow: hidden; background: #fff; scroll-margin-top: 28px; box-shadow: 0 5px 22px #183d3410; }
+.divisionHeader { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 24px; background: #f7f9f8; border-bottom: 1px solid #e6ece9; }
+.divisionTitle { display: flex; align-items: center; gap: 14px; }
+.divisionTitle h3 { font-size: 23px; font-weight: 750; }
+.divisionNumber { padding: 5px 12px; border-radius: 7px; color: #fff; background: #245c55; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; list-style: none; }
+.legend li { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #54666a; }
+.legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); }
+.green { --tone: #709568; --tint: #f1f6ed; --edge: #c7d9bc; }
+.amber { --tone: #caa047; --tint: #fcf8eb; --edge: #ead6a7; }
+.rose { --tone: #b77e90; --tint: #faf0f3; --edge: #e8c8d3; }
+.blue { --tone: #5a94b0; --tint: #eef6fa; --edge: #b8d6e5; }
+.neutral { --tone: #7c8589; --tint: #f5f6f6; --edge: #d8dddf; }
+.divisionBody { display: grid; grid-template-columns: minmax(0, 1fr) 215px; gap: 22px; padding: 24px; }
+.researchFlow { min-width: 0; }
+.stageGuide, .flowRow { display: grid; grid-template-columns: minmax(0, 1.4fr) 78px minmax(0, 1fr); gap: 10px; }
+.stageGuide { margin-bottom: 14px; font-size: 12px; font-weight: 700; }
+.guideInitial > span, .guideAdvanced > span { display: block; padding-bottom: 8px; color: #486460; }
+.guideAdvanced > span { color: #1b646c; }
+.years { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); text-align: center; color: var(--muted); font-size: 11px; font-weight: 400; }
+.years span { padding: 7px 0; border-bottom: 2px solid #d2dfda; }
+.guideAdvanced .years span { border-color: #64999e; }
+.flowRow + .flowRow { margin-top: 9px; }
+.stageCards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.twoColumns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.taskCard { display: flex; align-items: center; justify-content: center; min-height: 83px; padding: 14px 10px; border: 1px solid var(--edge); border-top: 3px solid var(--tone); border-radius: 8px; background: var(--tint); color: #253b3f; text-align: center; font-size: 13px; font-weight: 700; line-height: 1.65; word-break: keep-all; overflow-wrap: anywhere; }
+.connector { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 7px; color: #7d8d91; }
+.connector span { color: #3f555a; text-align: center; font-size: 11px; font-weight: 600; line-height: 1.5; word-break: keep-all; }
+.mobileStage, .downArrow { display: none; }
+.goal { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 28px 22px; border-radius: 12px; border: 1px solid #bed3d0; background: linear-gradient(145deg, #f2f7f5, #e3efeb); }
+.goalLabel { padding-bottom: 10px; border-bottom: 2px solid #487e73; color: #426b63; font-size: 12px; font-weight: 700; }
+.goalText { margin-top: 25px; font-size: 19px; font-weight: 700; line-height: 1.7; letter-spacing: -.5px; }
+.goalText strong { display: block; margin: 9px 0; font-size: 42px; font-weight: 800; line-height: 1.2; letter-spacing: -1.5px; color: #195b54; overflow-wrap: anywhere; }
+.goalText strong:first-child { margin-top: 0; }
+.goalText strong:not(:first-child) { margin-top: 14px; }
+.goalText strong { font-size: clamp(29px, 2.7vw, 42px); }
+.goalText .wideGoalValue { font-size: 27px; white-space: nowrap; letter-spacing: -1.3px; }
+.linkage { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin: 0 24px 20px; padding: 13px 16px; border-radius: 8px; background: #f2f5f4; color: #5a6e6d; font-size: 12px; }
+.frameworkGroup > .linkage { width: fit-content; margin: 14px 0 0 24px; background: transparent; border-left: 2px solid #a8bbb4; border-radius: 0; }
+.linkage span:not(.linkBadge) { flex: 1 1 180px; }
+.linkBadge { padding: 2px 9px; flex-shrink: 0; border-radius: 20px; background: #dce6e0; color: #416455; font-size: 11px; font-weight: 700; }
+.linkage svg { flex-shrink: 0; }
+.linkageGroup { display: grid; gap: 10px; margin: 0 24px 24px; }
+.linkageGroup .linkage { margin: 0; }
+.planBadge { padding: 5px 12px; background: #b95c2f; color: #fff; border-radius: 7px; font-size: 13px; font-weight: 700; }
+.demonstration { border-color: #e7d7c6; }
+.demonstration .divisionHeader { background: #fdf8f2; border-color: #eee2d5; }
+.demonstrationGoal { background: #fff3e5; border-color: #edc59b; }
+.demonstrationGoal .goalLabel { color: #a35c24; border-color: #ca863d; }
+.demonstrationGoal .goalText { color: #985321; }
+.demonstrationGoal .goalText strong { color: #b95c2f; }
+.demonstrationGoal .goalText b { font-size: 23px; }
+.milestones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px; list-style: none; counter-reset: milestone; }
+.milestones li { display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding: 14px; border-radius: 8px; background: #edf2f1; font-size: 12px; font-weight: 600; color: #3f625b; counter-increment: milestone; }
+.milestones li::before { content: '0' counter(milestone); font-size: 11px; color: #778c85; }
+.milestones li:nth-child(2) { background: #e3efee; }
+.milestones li:nth-child(3) { background: #245c62; color: white; }
+.milestones li:nth-child(3)::before { color: #b0cdca; }
+.reference { margin-top: 22px; text-align: right; color: #79898c; font-size: 11px; }
+@media (max-width: 1150px) {
+  .page { padding: 44px 24px 60px; }
+  .divisionBody { grid-template-columns: minmax(0, 1fr); }
+  .goal { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 20px; align-items: center; padding: 20px 24px; }
+  .goalLabel { width: fit-content; }
+  .goalText { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 0; font-size: 17px; }
+  .goalText strong, .goalText strong:not(:first-child) { margin: 0; font-size: 32px; }
+  .taskCard { font-size: 14px; }
+}
+@media (max-width: 720px) {
+  .page { padding: 32px 16px 48px; }
+  .eyebrow { font-size: 12px; line-height: 1.7; }
+  .roadmap { grid-template-columns: minmax(0, 1fr); }
+  .firstPhase, .secondPhase { padding: 20px; }
+  .roadmap h3 { font-size: 20px; }
+  .finalPhase { flex-direction: row; padding: 15px; }
+  .finalPhase svg { transform: rotate(90deg); }
+  .phaseYears { gap: 12px; }
+  .sectionLinks { gap: 7px; margin-bottom: 30px; }
+  .sectionLinks a { padding: 7px 11px; font-size: 11px; }
+  .sectionLinks a span { font-size: 13px; }
+  .groupTitle { font-size: 17px; gap: 10px; }
+  .divisionHeader { align-items: flex-start; flex-direction: column; gap: 14px; padding: 18px; }
+  .divisionTitle h3 { font-size: 21px; }
+  .legend { gap: 8px 14px; }
+  .divisionBody { padding: 16px; gap: 16px; }
+  .stageGuide { display: none; }
+  .flowRow { grid-template-columns: minmax(0, 1fr); gap: 10px; padding-bottom: 16px; }
+  .flowRow + .flowRow { padding-top: 18px; margin-top: 0; border-top: 1px dashed #dce5e0; }
+  .stageCards, .stageCards.twoColumns { grid-template-columns: minmax(0, 1fr); gap: 7px; }
+  .taskCard { grid-column: 1 !important; min-height: 60px; padding: 13px 16px; font-size: 14px; }
+  .mobileStage { display: block; margin-bottom: 2px; color: #68807a; font-size: 11px; font-weight: 700; }
+  .connector { flex-direction: row; gap: 9px; padding: 0; }
+  .connector span { font-size: 12px; }
+  .rightArrow { display: none; }
+  .downArrow { display: block; }
+  .goal { grid-template-columns: minmax(0, 1fr); gap: 15px; padding: 22px; }
+  .goalText { display: block; font-size: 18px; }
+  .goalText strong, .goalText strong:not(:first-child) { margin: 10px 0; font-size: 34px; }
+  .linkage { margin: 0 16px 16px; font-size: 11px; padding: 12px; gap: 8px; }
+  .frameworkGroup > .linkage { margin-left: 16px; }
+  .linkage span:not(.linkBadge) { flex-basis: calc(100% - 55px); }
+  .linkage svg { margin-left: 42px; transform: rotate(90deg); }
+  .linkage span:last-child { margin-left: 42px; }
+  .linkageGroup { margin: 0 16px 16px; }
+  .milestones { grid-template-columns: minmax(0, 1fr); }
+  .milestones li { flex-direction: row; align-items: center; gap: 14px; padding: 13px 16px; }
+}

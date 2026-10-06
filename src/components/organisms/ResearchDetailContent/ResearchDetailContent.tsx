@@ -8,7 +8,7 @@ import { NaturalClimateDetail } from './NaturalClimateDetail';
 import { SmartConstructionDetail } from './SmartConstructionDetail';
 import { EnergyPerformanceDetail } from './EnergyPerformanceDetail';
 
-const detailComponents: Record<string, React.FC> = {
+const detailComponents: Partial<Record<string, React.FC<{ title: string }>>> = {
   'terrestrial-carbon': TerrestrialCarbonDetail,
   'natural-climate': NaturalClimateDetail,
   'smart-construction': SmartConstructionDetail,
@@ -19,7 +19,7 @@ export interface ResearchDetailContentProps {
   id: string;
   title: string;
   description: string;
-  backgroundImage: string;
+  backgroundImage?: string;
 }
 
 const getImageSrc = (src: string): string => {
@@ -45,46 +45,43 @@ export function ResearchDetailContent({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-4xl"
+      className={DetailComponent ? 'w-4/5 max-w-[960px]' : 'w-full max-w-4xl'}
       style={{ marginLeft: 'auto', marginRight: 'auto' }}
     >
-      {/* Hero Banner */}
-      <div
-        className="relative w-full h-[300px] md:h-[400px] overflow-hidden"
-        style={{
-          backgroundImage: `url(${getImageSrc(backgroundImage)})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 flex items-center justify-center h-full px-8">
-          <Heading level={1} className="font-lato text-2xl md:text-4xl font-bold text-white text-center">
+      {DetailComponent ? (
+        <DetailComponent title={title} />
+      ) : (
+        <>
+          <Heading level={1} className="font-lato text-2xl md:text-4xl font-bold">
             {title}
           </Heading>
-        </div>
-      </div>
+          <Spacer size="lg" />
+          {backgroundImage && (
+            <>
+              <img
+                src={getImageSrc(backgroundImage)}
+                alt=""
+                className="block w-full h-auto rounded-xl border border-gray-200"
+              />
+              <Spacer size="2xl" />
+            </>
+          )}
 
-      <Spacer size="2xl" />
-
-      {/* Description */}
-      <Text className="font-open-sans text-base md:text-lg leading-relaxed text-gray-700">
-        {description}
-      </Text>
-
-      <Spacer size="2xl" />
-      <Divider />
-      <Spacer size="2xl" />
-
-      {/* 카드별 상세 내용 */}
-      {DetailComponent ? (
-        <DetailComponent />
-      ) : (
-        <div className="min-h-[400px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8">
-          <Text className="text-gray-400 text-lg">
-            이 영역에 내용을 추가하세요
+          {/* Description */}
+          <Text className="font-open-sans text-base md:text-lg leading-relaxed text-gray-700">
+            {description}
           </Text>
-        </div>
+
+          <Spacer size="2xl" />
+          <Divider />
+          <Spacer size="2xl" />
+
+          <div className="min-h-[400px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8">
+            <Text className="text-gray-400 text-lg">
+              이 영역에 내용을 추가하세요
+            </Text>
+          </div>
+        </>
       )}
     </motion.div>
   );

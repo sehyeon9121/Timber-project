@@ -15,6 +15,17 @@
 .number, .author, .date { font-size: 13px; color: var(--color-text-light); overflow-wrap: anywhere; }
 .postTitle { color: var(--color-text); font-weight: 600; word-break: keep-all; overflow-wrap: anywhere; }
 .postTitle:hover { color: var(--color-primary); text-decoration: underline; }
+.divisionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 28px 0; }
+.divisionCard { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; min-height: 140px; padding: 24px; border: 1px solid var(--color-border); border-radius: 12px; color: var(--color-text); text-decoration: none; }
+.divisionCard:hover { border-color: var(--color-primary); background: #f8faf7; }
+.divisionCard strong { font-size: 22px; }
+.divisionCard span { color: var(--color-text-light); font-size: 14px; }
+.allPostsLink { display: inline-block; margin-bottom: 12px; color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
+.boardTabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 28px; }
+.boardTab { padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-text); text-decoration: none; font-size: 14px; }
+.boardTab:hover, .boardTabActive { border-color: var(--color-primary); background: #edf5eb; color: var(--color-primary); }
+.divisionBadge { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 4px; background: #edf5eb; color: var(--color-primary); font-size: 12px; vertical-align: middle; }
+.divisionCard:focus-visible, .boardTab:focus-visible, .allPostsLink:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
 .empty { padding: 48px 20px; text-align: center; color: var(--color-text-light); background: #f8faf7; border-radius: 10px; }
 .pagination { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 28px; }
 .meta { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-text-light); }
@@ -25,12 +36,23 @@
 .textareaField { display: grid; gap: 8px; }
 .textareaField label { font-weight: 600; }
 .textarea { width: 100%; min-height: 300px; padding: 14px; border: 1px solid #b8c4b7; border-radius: 8px; font: inherit; line-height: 1.8; resize: vertical; }
-.textarea:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.select { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid #b8c4b7; border-radius: 8px; background: #fff; font: inherit; }
+.textarea:focus-visible, .select:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .hint { color: var(--color-text-light); font-size: 13px; }
+.noticeIntro { display: flex; align-items: flex-start; gap: 12px; padding: 18px; margin-bottom: 24px; border-radius: 10px; background: #edf5eb; color: #345c37; font-size: 14px; line-height: 1.8; }
+.noticeIntro svg { flex-shrink: 0; margin-top: 2px; }
+.noticeBadge { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 4px; background: #f8e9d5; color: #8c5f21; font-size: 12px; font-weight: 700; }
+.pinOption { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.pinOption input { width: 18px; height: 18px; accent-color: var(--color-primary); }
+.search { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+.search label { font-size: 14px; font-weight: 600; }
+.search input { flex: 1; min-width: 150px; padding: 11px 12px; border: 1px solid #b8c4b7; border-radius: 8px; font: inherit; font-size: 14px; }
+.search input:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .error { padding: 16px; margin: 16px 0; border-radius: 8px; background: #fff1f0; color: #a02620; }
 .confirmation { padding: 20px; margin: 20px 0; border: 1px solid #edc3bf; background: #fff7f6; border-radius: 10px; }
 .confirmation p { margin-bottom: 16px; }
 @media (max-width: 700px) {
+  .divisionGrid { grid-template-columns: 1fr; }
   .columnLabels { display: none; }
   .row { grid-template-columns: 1fr 1fr; gap: 8px; padding: 20px 0; }
   .number { display: none; }

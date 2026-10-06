@@ -57,6 +57,7 @@ const englishErrors: Record<string, string> = {
   POST_NOT_FOUND: 'This post could not be found. It may have been deleted.',
   POST_FORBIDDEN: 'You do not have permission to change this post.',
   POST_VALIDATION: 'Use 1–120 characters for the title and 1–10,000 for the body.',
+  NOTICE_VALIDATION: 'Check the notice title, body, importance setting, and search query.',
 };
 export function authErrorMessage(error: unknown, language: 'KO' | 'EN') {
   if (error instanceof ApiError) {

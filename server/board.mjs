@@ -3,9 +3,11 @@ export const boardPageSize = 20;
 export function validatePost(input) {
   const title = typeof input?.title === 'string' ? input.title.trim() : '';
   const body = typeof input?.body === 'string' ? input.body.trim() : '';
+  const division = input?.division;
   if (!title || title.length > 120) return { error: '제목은 1~120자로 입력해 주세요.' };
   if (!body || body.length > 10000) return { error: '내용은 1~10,000자로 입력해 주세요.' };
-  return { title, body };
+  if (division !== undefined && ![1, 2, 3, 4].includes(division)) return { error: '올바른 세부 게시판을 선택해 주세요.' };
+  return { title, body, division };
 }
 
 export function registerBoardRoutes(app, store, requireUser) {
@@ -21,8 +23,12 @@ export function registerBoardRoutes(app, store, requireUser) {
     if (!Number.isSafeInteger(page) || page < 1 || page > 1000000) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 페이지 번호를 입력해 주세요.');
     }
-    const total = await store.countPosts();
-    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize), page,
+    const division = request.query.division === undefined ? undefined : Number(request.query.division);
+    if (division !== undefined && ![1, 2, 3, 4].includes(division)) {
+      return fail(response, 400, 'POST_VALIDATION', '올바른 세부 게시판을 선택해 주세요.');
+    }
+    const total = await store.countPosts(division);
+    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize, division), page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
   app.get('/api/board/posts/:id', requireUser, async (request, response) => {
@@ -41,7 +47,7 @@ export function registerBoardRoutes(app, store, requireUser) {
     if (post.authorId !== request.user.id) return fail(response, 403, 'POST_FORBIDDEN', '작성한 회원만 글을 수정할 수 있습니다.');
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
-    await store.updatePost(post.id, input);
+    await store.updatePost(post.id, { ...input, division: input.division ?? post.division });
     response.json({ post: await store.findPost(post.id) });
   });
   app.delete('/api/board/posts/:id', requireUser, async (request, response) => {

@@ -11,9 +11,15 @@ export async function createRemoteStore(options) {
       try { await client.execute('ALTER TABLE users ADD COLUMN username TEXT'); }
       catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
     }
+    const postColumns = (await client.execute('PRAGMA table_info(posts)')).rows;
+    if (!postColumns.some(column => column.name === 'division')) {
+      try { await client.execute('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)'); }
+      catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+    }
     await client.batch([
       { sql: "UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL", args: [] },
       { sql: 'CREATE UNIQUE INDEX IF NOT EXISTS users_username_unique ON users(username COLLATE NOCASE)', args: [] },
+      { sql: 'CREATE INDEX IF NOT EXISTS posts_division_id ON posts(division, id DESC)', args: [] },
     ], 'write');
   } catch (error) {
     client.close();
@@ -62,21 +68,43 @@ export async function createRemoteStore(options) {
     async deleteSession(token) {
       if (token) await execute('DELETE FROM sessions WHERE token_hash = ?', [tokenHash(token)]);
     },
-    async countPosts() { return (await first('SELECT COUNT(*) AS total FROM posts')).total; },
-    async listPosts(limit, offset) {
-      return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId,
-        users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
-        FROM posts JOIN users ON users.id = posts.author_id ORDER BY posts.id DESC LIMIT ? OFFSET ?`, [limit, offset])).rows;
+    async countPosts(division) {
+      return (await first(division === undefined ? 'SELECT COUNT(*) AS total FROM posts' : 'SELECT COUNT(*) AS total FROM posts WHERE division = ?',
+        division === undefined ? [] : [division])).total;
     },
-    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId,
+    async listPosts(limit, offset, division) {
+      return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
+        users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
+        FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division = ?'}
+        ORDER BY posts.id DESC LIMIT ? OFFSET ?`, [...(division === undefined ? [] : [division]), limit, offset])).rows;
+    },
+    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`, [id]),
     async createPost(input, authorId) {
-      const result = await execute('INSERT INTO posts (author_id, title, body) VALUES (?, ?, ?)', [authorId, input.title, input.body]);
+      const result = await execute('INSERT INTO posts (author_id, title, body, division) VALUES (?, ?, ?, ?)', [authorId, input.title, input.body, input.division ?? null]);
       return this.findPost(Number(result.lastInsertRowid));
     },
-    updatePost: (id, input) => execute("UPDATE posts SET title = ?, body = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, id]),
+    updatePost: (id, input) => execute("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.division ?? null, id]),
     deletePost: id => execute('DELETE FROM posts WHERE id = ?', [id]),
+    async countNotices(query = '') {
+      return (await first('SELECT COUNT(*) AS total FROM notices WHERE instr(lower(title), lower(?)) > 0', [query])).total;
+    },
+    async listNotices(limit, offset, query = '') {
+      return (await execute(`SELECT notices.id, notices.title, notices.author_id AS authorId,
+        NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
+        FROM notices JOIN users ON users.id = notices.author_id WHERE instr(lower(notices.title), lower(?)) > 0
+        ORDER BY notices.pinned DESC, notices.id DESC LIMIT ? OFFSET ?`, [query, limit, offset])).rows;
+    },
+    findNotice: id => first(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId,
+      NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
+      FROM notices JOIN users ON users.id = notices.author_id WHERE notices.id = ?`, [id]),
+    async createNotice(input, authorId) {
+      const result = await execute('INSERT INTO notices (author_id, title, body, pinned) VALUES (?, ?, ?, ?)', [authorId, input.title, input.body, input.pinned ? 1 : 0]);
+      return this.findNotice(Number(result.lastInsertRowid));
+    },
+    updateNotice: (id, input) => execute("UPDATE notices SET title = ?, body = ?, pinned = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.pinned ? 1 : 0, id]),
+    deleteNotice: id => execute('DELETE FROM notices WHERE id = ?', [id]),
     close: () => client.close(),
   };
 }

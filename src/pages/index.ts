@@ -1,8 +1,9 @@
 export { HomePage } from './HomePage';
 export { ResearchPage } from './ResearchPage';
 export { TeamPage } from './TeamPage';
-export { PublicationsPage } from './PublicationsPage';
+export { ResearchResultsPage } from './ResearchResultsPage';
 export { NewsPage } from './NewsPage';
+export { PressPage, PressDetailPage } from './PressPage';
 export { ContactPage } from './ContactPage';
 export { JoinUsPage } from './JoinUsPage';
 export { ClimateSnacksPage } from './ClimateSnacksPage';

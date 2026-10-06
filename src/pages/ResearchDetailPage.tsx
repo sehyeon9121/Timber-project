@@ -53,7 +53,7 @@ export function ResearchDetailPage() {
           id={theme.id}
           title={translatedTitle}
           description={translatedDescription}
-          backgroundImage={theme.backgroundImage || '/images/leeseunglab/hero-background.jpg'}
+          backgroundImage={theme.backgroundImage}
         />
       </ContentSection>
 

@@ -40,13 +40,15 @@ export function PartnershipCard({
   images,
   className,
 }: PartnershipCardProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const contentId = useId();
   const articleRef = useRef<HTMLElement>(null);
+  const scrollOnExpandRef = useRef(false);
 
   // 카드가 펼쳐지는 애니메이션이 끝나면 카드 전체가 보이도록 스크롤
   const handleAnimationComplete = () => {
-    if (!isOpen || !articleRef.current) return;
+    if (!isOpen || !scrollOnExpandRef.current || !articleRef.current) return;
+    scrollOnExpandRef.current = false;
     const rect = articleRef.current.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const padding = 24;
@@ -74,7 +76,10 @@ export function PartnershipCard({
       {/* Header (clickable) */}
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          scrollOnExpandRef.current = !isOpen;
+          setIsOpen((prev) => !prev);
+        }}
         aria-expanded={isOpen}
         aria-controls={isOpen ? contentId : undefined}
         className={cn(styles.header, 'transition-colors hover:bg-gray-50')}

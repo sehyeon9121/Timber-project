@@ -68,9 +68,20 @@ export const storeSchema = `
       author_id INTEGER NOT NULL REFERENCES users(id),
       title TEXT NOT NULL,
       body TEXT NOT NULL,
+      division INTEGER CHECK (division BETWEEN 1 AND 4),
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
     );
+    CREATE TABLE IF NOT EXISTS notices (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      author_id INTEGER NOT NULL REFERENCES users(id),
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      pinned INTEGER NOT NULL DEFAULT 0 CHECK (pinned IN (0, 1)),
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+    );
+    CREATE INDEX IF NOT EXISTS notices_pinned_id ON notices(pinned DESC, id DESC);
 `;
 
 export function createStore(path = databasePath) {
@@ -84,6 +95,10 @@ ${storeSchema}
   if (!db.prepare('PRAGMA table_info(users)').all().some(column => column.name === 'username')) {
     db.exec('ALTER TABLE users ADD COLUMN username TEXT');
   }
+  if (!db.prepare('PRAGMA table_info(posts)').all().some(column => column.name === 'division')) {
+    db.exec('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)');
+  }
+  db.exec('CREATE INDEX IF NOT EXISTS posts_division_id ON posts(division, id DESC)');
   db.exec('BEGIN');
   try {
     db.prepare("UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL").run();
@@ -127,21 +142,40 @@ ${storeSchema}
         .get(tokenHash(token), Date.now());
     },
     deleteSession(token) { if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token)); },
-    countPosts: () => db.prepare('SELECT COUNT(*) AS total FROM posts').get().total,
-    listPosts: (limit, offset) => db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId,
+    countPosts: division => division === undefined
+      ? db.prepare('SELECT COUNT(*) AS total FROM posts').get().total
+      : db.prepare('SELECT COUNT(*) AS total FROM posts WHERE division = ?').get(division).total,
+    listPosts: (limit, offset, division) => db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
-      FROM posts JOIN users ON users.id = posts.author_id ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(limit, offset),
-    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId,
+      FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division = ?'}
+      ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...(division === undefined ? [] : [division]), limit, offset),
+    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`).get(id),
     createPost(input, authorId) {
-      const result = db.prepare('INSERT INTO posts (author_id, title, body) VALUES (?, ?, ?)').run(authorId, input.title, input.body);
+      const result = db.prepare('INSERT INTO posts (author_id, title, body, division) VALUES (?, ?, ?, ?)').run(authorId, input.title, input.body, input.division ?? null);
       return this.findPost(Number(result.lastInsertRowid));
     },
     updatePost(id, input) {
-      db.prepare("UPDATE posts SET title = ?, body = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, id);
+      db.prepare("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.division ?? null, id);
     },
     deletePost: id => db.prepare('DELETE FROM posts WHERE id = ?').run(id),
+    countNotices: (query = '') => db.prepare('SELECT COUNT(*) AS total FROM notices WHERE instr(lower(title), lower(?)) > 0').get(query).total,
+    listNotices: (limit, offset, query = '') => db.prepare(`SELECT notices.id, notices.title, notices.author_id AS authorId,
+      NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
+      FROM notices JOIN users ON users.id = notices.author_id WHERE instr(lower(notices.title), lower(?)) > 0
+      ORDER BY notices.pinned DESC, notices.id DESC LIMIT ? OFFSET ?`).all(query, limit, offset),
+    findNotice: id => db.prepare(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId,
+      NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
+      FROM notices JOIN users ON users.id = notices.author_id WHERE notices.id = ?`).get(id),
+    createNotice(input, authorId) {
+      const result = db.prepare('INSERT INTO notices (author_id, title, body, pinned) VALUES (?, ?, ?, ?)').run(authorId, input.title, input.body, input.pinned ? 1 : 0);
+      return this.findNotice(Number(result.lastInsertRowid));
+    },
+    updateNotice(id, input) {
+      db.prepare("UPDATE notices SET title = ?, body = ?, pinned = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.pinned ? 1 : 0, id);
+    },
+    deleteNotice: id => db.prepare('DELETE FROM notices WHERE id = ?').run(id),
     close: () => db.close(),
   };
 }

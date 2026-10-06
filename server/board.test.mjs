@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 import { createApp } from './app.mjs';
 import { createStore } from './store.mjs';
 
@@ -42,6 +43,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     rmSync(directory, { recursive: true });
   });
   let postId;
+  let divisionPostId;
   await t.test('anonymous and inactive members cannot read or write board content', async () => {
     for (const session of [null, cookie(pending), cookie(rejected), 'timber_session=' + '0'.repeat(64)]) {
       for (const [suffix, method] of [['', 'GET'], ['/1', 'GET'], ['', 'POST'], ['/1', 'PATCH'], ['/1', 'DELETE']]) {
@@ -55,6 +57,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.equal(result.status, 201);
     postId = result.data.post.id;
     assert.equal(result.data.post.authorId, author.id);
+    assert.equal(result.data.post.division, null);
     assert.equal(result.data.post.title, '첫 번째 글');
     assert.equal(result.data.post.body, '회원 전용 내용\n<script>alert("xss")</script>');
     assert.ok(!('email' in result.data.post));
@@ -84,6 +87,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.equal(result.status, 200);
     assert.equal(result.data.post.title, changed.title);
     assert.equal(result.data.post.authorId, author.id);
+    assert.equal(result.data.post.division, null);
   });
   await t.test('untrusted sites cannot publish even with a valid session', async () => {
     const count = store.countPosts();
@@ -101,10 +105,33 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.ok(first.data.posts.every((post, index, posts) => index === 0 || posts[index - 1].id > post.id));
     assert.ok(!first.data.posts.some(post => second.data.posts.some(item => item.id === post.id)));
   });
+  await t.test('division boards keep posts separate and retain earlier posts', async () => {
+    assert.equal(store.findPost(postId).division, null);
+    const first = await request('', 'POST', { title: '1세부 활동', body: '첫 세부 글', division: 1 });
+    const second = await request('', 'POST', { title: '2세부 활동', body: '둘째 세부 글', division: 2 });
+    assert.equal(first.status, 201);
+    assert.equal(second.status, 201);
+    divisionPostId = first.data.post.id;
+    assert.equal(first.data.post.division, 1);
+    assert.deepEqual((await request('?division=1')).data.posts.map(post => post.id), [divisionPostId]);
+    assert.deepEqual((await request('?division=2')).data.posts.map(post => post.id), [second.data.post.id]);
+    assert.equal((await request('?division=3')).data.total, 0);
+    assert.ok((await request('?page=2')).data.posts.some(post => post.id === postId && post.division === null));
+    for (const division of ['0', '5', 'abc', '1.5']) assert.equal((await request(`?division=${division}`)).status, 400);
+    for (const division of [0, 5, '1', null]) {
+      assert.equal((await request('', 'POST', { title: 'Bad division', body: 'Body', division })).status, 400);
+    }
+    const moved = await request(`/${divisionPostId}`, 'PATCH', { title: '3세부 활동', body: '이동한 글', division: 3 });
+    assert.equal(moved.status, 200);
+    assert.equal(moved.data.post.division, 3);
+    assert.equal((await request('?division=1')).data.total, 0);
+    assert.deepEqual((await request('?division=3')).data.posts.map(post => post.id), [divisionPostId]);
+  });
   await t.test('posts and existing account roles survive a database reopen', () => {
     const reopened = createStore(path);
     assert.equal(reopened.findPost(postId).title, '수정한 제목');
     assert.equal(reopened.findPost(postId).authorId, author.id);
+    assert.equal(reopened.findPost(divisionPostId).division, 3);
     assert.equal(reopened.findById(master.id).role, 'master');
     assert.equal(reopened.findById(author.id).status, 'approved');
     reopened.close();
@@ -145,4 +172,36 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.equal((await request(`/${otherPost.id}`, 'DELETE', undefined, otherCookie)).status, 401);
     assert.deepEqual(store.findPost(otherPost.id), otherPost);
   });
+});
+
+test('opening an existing board adds division without losing older posts', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'timber-board-legacy-'));
+  const path = join(directory, 'auth.sqlite');
+  const old = new DatabaseSync(path);
+  old.exec(`CREATE TABLE posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+  INSERT INTO posts (author_id, title, body, created_at, updated_at)
+  VALUES (1, '기존 글', '기존 내용', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z');`);
+  old.close();
+  let store;
+  try {
+    store = createStore(path);
+    store.addUser({ name: 'Legacy', username: 'Legacy', email: 'legacy@example.test', affiliation: 'Test lab' }, 'unused-test-hash');
+    assert.equal(store.findPost(1).body, '기존 내용');
+    assert.equal(store.findPost(1).division, null);
+    assert.equal(store.countPosts(), 1);
+    assert.equal(store.countPosts(1), 0);
+    store.close();
+    store = createStore(path);
+    assert.equal(store.findPost(1).title, '기존 글');
+  } finally {
+    store?.close();
+    rmSync(directory, { recursive: true, maxRetries: 10, retryDelay: 100 });
+  }
 });
