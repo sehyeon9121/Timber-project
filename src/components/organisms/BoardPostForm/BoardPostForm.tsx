@@ -8,6 +8,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { authApi, authErrorMessage } from '@/lib/auth-api';
 import { boardDivisions, boardListHref } from '@/lib/board-api';
 import type { BoardPost } from '@/lib/board-api';
+import { boardTemplates, boardTemplateBody } from '@/lib/board-templates';
+import type { BoardTemplateId } from '@/lib/board-templates';
 import styles from '@/styles/board.module.css';
 
 export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number; notice?: boolean }
@@ -20,9 +22,28 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
   const [division, setDivision] = useState(post?.division === null ? 'legacy' : String(post?.division ?? initialDivision ?? ''));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
+  const [template, setTemplate] = useState<BoardTemplateId>('free');
+  const [appliedBody, setAppliedBody] = useState('');
+  const [pendingTemplate, setPendingTemplate] = useState<BoardTemplateId | null>(null);
   const ko = language === 'KO';
   const basePath = notice ? '/board/notices' : '/board';
   const apiPath = notice ? '/board/notices' : '/board/posts';
+  function applyTemplate(id: BoardTemplateId) {
+    setTemplate(id);
+    setPendingTemplate(null);
+    // Free writing keeps the current draft so choosing it never removes content.
+    if (id === 'free') return;
+    const nextBody = boardTemplateBody(id, language);
+    setBody(nextBody);
+    setAppliedBody(nextBody);
+  }
+  function chooseTemplate(id: BoardTemplateId) {
+    if (id !== 'free' && body.trim() && body !== appliedBody) {
+      setPendingTemplate(id);
+    } else {
+      applyTemplate(id);
+    }
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setBusy(true);
@@ -46,6 +67,31 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
           {post?.division === null && <option value="legacy">{ko ? '기존 글 (세부 미지정)' : 'Earlier post (no division)'}</option>}
           {boardDivisions.map(item => <option key={item} value={item}>{ko ? `${item}세부` : `Division ${item}`}</option>)}
         </select>
+      </div>}
+      {!notice && <div className={styles.textareaField}>
+        <label htmlFor="post-template">{ko ? '글 종류 / 기본 양식' : 'Post type / template'}</label>
+        <select id="post-template" className={styles.select} value={template}
+          onChange={event => chooseTemplate(event.target.value as BoardTemplateId)} disabled={busy}
+          aria-describedby="post-template-hint">
+          <option value="free">{ko ? '자유 글 (양식 없음)' : 'Free writing (no template)'}</option>
+          {boardTemplates.map(item => <option key={item.id} value={item.id}>{item.label[language]}</option>)}
+        </select>
+        <small id="post-template-hint" className={styles.hint}>
+          {ko ? '글 종류를 선택하면 내용에 기본 양식이 채워집니다. 항목은 자유롭게 수정할 수 있습니다.' : 'Choose a post type to fill in a template. You can edit every section freely.'}
+        </small>
+        {pendingTemplate && <div className={styles.confirmation} role="alert" aria-labelledby="post-template-confirm">
+          <p id="post-template-confirm">{ko
+            ? '작성한 내용이 있습니다. 선택한 양식으로 내용을 바꿀까요? 바꾸면 기존 내용은 사라집니다.'
+            : 'You have written content. Replace it with the selected template? Your current content will be removed.'}</p>
+          <div className={styles.actions}>
+            <Button type="button" className={styles.secondary} disabled={busy} onClick={() => setPendingTemplate(null)}>
+              {ko ? '기존 내용 유지' : 'Keep current content'}
+            </Button>
+            <Button type="button" className={styles.danger} disabled={busy} onClick={() => applyTemplate(pendingTemplate)}>
+              {ko ? '양식으로 바꾸기' : 'Replace with template'}
+            </Button>
+          </div>
+        </div>}
       </div>}
       {notice && <label className={styles.pinOption}>
         <input type="checkbox" checked={pinned} onChange={event => setPinned(event.target.checked)} disabled={busy} />
