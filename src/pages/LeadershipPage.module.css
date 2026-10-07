@@ -37,10 +37,6 @@
 }
 
 .role {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 4px;
-  background: #edf3ee;
   color: #00380a;
   font-size: 14px;
   font-weight: 700;

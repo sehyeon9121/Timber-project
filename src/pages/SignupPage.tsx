@@ -40,7 +40,7 @@ export function SignupPage() {
       <div role="status" className={styles.notice}>{ko ? '가입 요청이 접수되었습니다. 현재 승인 대기 중이며, 관리자 승인 후 로그인할 수 있습니다.' : 'Your request has been submitted and is awaiting approval. You can sign in once the administrator approves it.'}</div>
       <Link href="/login" className={styles.footnote}>{ko ? '로그인 화면으로 이동' : 'Go to sign in'}</Link>
     </> : <>
-      <div className={styles.notice}>{ko ? '가입 신청만으로는 로그인할 수 없습니다. 관리자 승인이 필요합니다.' : 'Registration does not grant access immediately. Administrator approval is required.'}</div>
+      <p className={styles.description}>{ko ? '가입 신청만으로는 로그인할 수 없습니다. 관리자 승인이 필요합니다.' : 'Registration does not grant access immediately. Administrator approval is required.'}</p>
       {Boolean(error) && <div role="alert" className={styles.error}>{authErrorMessage(error, language)}</div>}
       {mismatch && <div role="alert" className={styles.error}>{ko ? '비밀번호가 일치하지 않습니다.' : 'Passwords do not match.'}</div>}
       <form className={styles.form} onSubmit={submit}>
