@@ -27,6 +27,8 @@ import {
   NewsPage,
   PressPage,
   PressDetailPage,
+  ActivitiesPage,
+  ActivityDetailPage,
   ContactPage,
   // JoinUsPage,  // ACT INSTITUTE 비활성화
   ClimateSnacksPage,
@@ -89,6 +91,8 @@ function App() {
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/press" element={<PressPage />} />
         <Route path="/news/press/:id" element={<PressDetailPage />} />
+        <Route path="/news/activities" element={<ActivitiesPage />} />
+        <Route path="/news/activities/:id" element={<ActivityDetailPage />} />
 <Route path="/contact" element={<ContactPage />} />
         {/* <Route path="/join-us" element={<JoinUsPage />} /> */}{/* ACT INSTITUTE 라우트 비활성화 */}
         <Route path="/showcase" element={<ShowcasePage />} />

@@ -1,5 +1,28 @@
 # Timber project
 
+## 연구단 활동 사진과 자료 추가
+
+공개 메뉴 **연구단 소식 → 연구단 활동**(`/news/activities`)에서 행사 사진과 제목을 확인할 수 있습니다. 카드를 클릭하면 해당 행사의 자료를 원본 비율로 보여줍니다.
+
+새 행사를 올릴 때는 사진 파일을 `public/content/activities/images/`에 넣고 `src/content/activities/activities.yaml`에 아래처럼 항목을 추가한 뒤 빌드·배포합니다. `id`는 행사별로 서로 다른 영문 주소를 사용하고, `date`는 `YYYY-MM-DD` 형식으로 입력합니다. 최신 날짜순으로 표시됩니다. `images`에 사진을 추가하면 한 행사에 여러 장을 표시할 수 있습니다. 현재 등록된 제1차 워크샵은 기존 자료 이미지를 사용합니다.
+
+```yaml
+- id: workshop-2
+  title:
+    ko: "제2차 워크샵"
+    en: "2nd Workshop"
+  date: "2026-10-12"
+  images:
+    - src: "/content/activities/images/workshop-2.jpg"
+      alt:
+        ko: "제2차 워크샵 단체 사진"
+        en: "Group photo at the 2nd workshop"
+```
+
+## 연구성과 실적 수정
+
+연구성과 페이지(`/results`)의 실적은 `src/data/researchResults.ts`에서 수정합니다. 각 지표의 `completed`에 누적 완료 건수를 입력하고, `resultAsOfDate`에 집계 기준일을 `"2026-10-12"`처럼 입력합니다. `null`은 집계 전, `0`은 확인된 0건이며 목표값인 `first`, `second`는 그대로 둡니다. 입력한 실적의 합계와 전체 목표 대비 달성률은 자동 계산됩니다. 일부 지표만 입력한 경우 차트에 입력한 지표 수와 ‘입력된 실적 기준’ 표시가 나타납니다. 변경 후 빌드·배포하면 사이트에 반영됩니다.
+
 ## 로컬 실행과 승인제 회원가입
 
 Node.js 24 이상을 사용합니다. `npm run dev` 한 번으로 사이트(5173 포트)와 인증 서버(3001 포트)가 함께 실행됩니다.

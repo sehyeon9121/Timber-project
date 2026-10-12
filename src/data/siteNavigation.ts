@@ -52,6 +52,7 @@ export const siteNavigation: SiteMenuGroup[] = [
     id: 'news', label: { ko: '연구단 소식', en: 'Project News' },
     items: [
       { label: { ko: '언론보도', en: 'Press Coverage' }, href: '/news/press' },
+      { label: { ko: '연구단 활동', en: 'Project Activities' }, href: '/news/activities' },
     ],
   },
   {

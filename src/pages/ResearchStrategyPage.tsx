@@ -172,7 +172,7 @@ export function ResearchStrategyPage() {
             </div>
             <aside className={`${styles.goal} ${styles.demonstrationGoal}`} aria-label="실증 최종 목표">
               <span className={styles.goalLabel}>최종 목표</span>
-              <p className={styles.goalText}><strong>3차년도</strong>조기실증 완료 및 <b>200m급</b> 고도화 기술개발</p>
+              <p className={styles.goalText}>조기실증 완료 및 <b>200m급</b> 고도화 기술개발</p>
             </aside>
           </div>
         </section>

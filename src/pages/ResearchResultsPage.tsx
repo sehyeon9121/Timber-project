@@ -1,7 +1,8 @@
 import { Target, ArrowRight } from 'lucide-react';
 import { DetailPageLayout } from '@/components/templates/DetailPageLayout';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { resultTargetGroups, resultTargetTotals } from '@/data/researchResults';
+import { ResultProgress } from '@/components/molecules/ResultProgress';
+import { resultAsOfDate, resultTargetGroups, resultTargetTotals, resultTargets } from '@/data/researchResults';
 import styles from './ResearchResultsPage.module.css';
 
 export function ResearchResultsPage() {
@@ -33,7 +34,10 @@ export function ResearchResultsPage() {
             <p>{ko ? '2단계 목표치 합계' : 'Phase 2 target total'}</p>
           </div>
         </div>
-        <p className={styles.targetNote}>{ko ? '아래 수치는 연구개발 목표치이며, 달성 실적을 의미하지 않습니다.' : 'The figures below are research targets and do not represent achieved results.'}</p>
+        <ResultProgress target={resultTargetTotals.first + resultTargetTotals.second}
+          completed={resultTargetTotals.completed} reported={resultTargetTotals.reported}
+          indicatorCount={resultTargets.length} asOfDate={resultAsOfDate} language={language} />
+        <p className={styles.targetNote}>{ko ? '초록색은 전체 목표, 빨간색은 현재 달성 실적입니다. 아직 집계하지 않은 실적은 —로 표시합니다.' : 'Green indicates the total target; red indicates achieved results. Unreported results are shown as —.'}</p>
         {resultTargetGroups.map((group, index) => (
           <section key={group.id} className={styles.group} aria-labelledby={`${group.id}-title`}>
             <header className={styles.groupHeader}>
@@ -47,7 +51,10 @@ export function ResearchResultsPage() {
               {group.items.map(item => (
                 <article className={styles.card} key={item.id}>
                   <h4>{ko ? item.label.ko : item.label.en}</h4>
-                  <div className={styles.cardTotal}><strong>{item.first + item.second}</strong><span>{ko ? '전체 목표' : 'Total target'}</span></div>
+                  <div className={styles.cardTotal}>
+                    <div className={styles.targetMetric}><strong>{item.first + item.second}</strong><span>{ko ? '전체 목표' : 'Total target'}</span></div>
+                    <div className={styles.completedMetric}><strong>{item.completed ?? '—'}</strong><span>{ko ? '현재 달성' : 'Achieved'}{item.completed === null && <small>{ko ? '집계 전' : 'Not reported'}</small>}</span></div>
+                  </div>
                   <dl className={styles.breakdown}>
                     <div><dt>{ko ? '1단계' : 'Phase 1'} <small>2026–2028</small></dt><dd>{item.first}</dd></div>
                     <ArrowRight size={16} className={styles.arrow} aria-hidden="true" />

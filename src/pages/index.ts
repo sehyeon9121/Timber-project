@@ -4,6 +4,7 @@ export { TeamPage } from './TeamPage';
 export { ResearchResultsPage } from './ResearchResultsPage';
 export { NewsPage } from './NewsPage';
 export { PressPage, PressDetailPage } from './PressPage';
+export { ActivitiesPage, ActivityDetailPage } from './ActivitiesPage';
 export { ContactPage } from './ContactPage';
 export { JoinUsPage } from './JoinUsPage';
 export { ClimateSnacksPage } from './ClimateSnacksPage';

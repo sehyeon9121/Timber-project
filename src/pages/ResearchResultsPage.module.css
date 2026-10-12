@@ -25,9 +25,12 @@
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .card { padding: 24px; border: 1px solid #e1e8e2; border-radius: 12px; background: #fff; }
 .card h4 { font-size: 17px; font-weight: 700; color: #34433a; line-height: 1.5; }
-.cardTotal { display: flex; align-items: baseline; gap: 12px; margin: 12px 0 20px; }
+.cardTotal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 18px 0 20px; }
 .cardTotal strong { font-size: 42px; font-weight: 800; line-height: 1.2; color: #28573e; letter-spacing: -0.04em; }
-.cardTotal span { font-size: 12px; color: #859087; }
+.cardTotal span { display: block; margin-top: 7px; font-size: 12px; color: #859087; }
+.cardTotal small { display: block; margin-top: 3px; color: #a28787; font-size: 11px; }
+.completedMetric { border-left: 1px solid #edf0ed; padding-left: 18px; }
+.completedMetric strong { color: #c83c3c; }
 .breakdown { display: grid; grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr); align-items: center; gap: 12px; border-top: 1px solid #edf0ed; padding-top: 16px; }
 .breakdown dt { font-size: 12px; font-weight: 600; color: #718076; }
 .breakdown small { display: block; margin-top: 2px; font-size: 11px; font-weight: 400; color: #929b95; }
