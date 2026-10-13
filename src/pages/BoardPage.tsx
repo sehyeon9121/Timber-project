@@ -17,49 +17,44 @@ export function BoardPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = searchParams.get('division');
   const division = boardDivisions.find(item => String(item) === selected) ?? null;
-  const showingAll = selected === 'all';
   const q = (searchParams.get('q') ?? '').trim().slice(0, 120);
   const requestedPage = Number(searchParams.get('page') || 1);
   const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 && requestedPage <= 1000000 ? requestedPage : 1;
   const { data, loading, error, reload } = useBoardResource<PostListData>(
-    `/board/posts?page=${page}${showingAll ? '' : `&division=${division ?? 'activities'}`}&q=${encodeURIComponent(q)}`);
+    `/board/posts?page=${page}&division=${division ?? 'activities'}&q=${encodeURIComponent(q)}`);
   const ko = language === 'KO';
   const locale = ko ? 'ko' : 'en';
-  const archivedPosts = division === null || showingAll ? activities.filter(activity =>
+  const archivedPosts = division === null ? activities.filter(activity =>
     activity.title.ko.toLowerCase().includes(q.toLowerCase()) || activity.title.en.toLowerCase().includes(q.toLowerCase())).map(activity => ({
     id: `activity-${activity.id}`, href: `/board/activities/${activity.id}`,
     title: activity.title[locale], authorId: 0, authorName: ko ? '연구단' : 'Research Group',
     division: null, createdAt: activity.date, updatedAt: activity.date,
   })) : [];
   const list = data ? boardPageWithArchive(data, archivedPosts) : null;
-  const title = showingAll ? (ko ? '전체 글' : 'All posts') : boardDivisionLabel(division, language);
+  const title = boardDivisionLabel(division, language);
   function search(query: string) {
-    setSearchParams({ ...(showingAll ? { division: 'all' } : division !== null ? { division: String(division) } : {}), ...(query ? { q: query } : {}) });
+    setSearchParams({ ...(division !== null ? { division: String(division) } : {}), ...(query ? { q: query } : {}) });
   }
   function goToPage(next: number) {
-    setSearchParams({ ...(showingAll ? { division: 'all' } : division !== null ? { division: String(division) } : {}), ...(q ? { q } : {}), page: String(Math.max(1, Math.min(next, list?.totalPages ?? next))) });
+    setSearchParams({ ...(division !== null ? { division: String(division) } : {}), ...(q ? { q } : {}), page: String(Math.max(1, Math.min(next, list?.totalPages ?? next))) });
   }
 
   return <PageLayout animate={false}>
     <section className={styles.boardShell} aria-labelledby="board-title">
       <header className={styles.boardHeading}>
-        <p className={styles.eyebrow}>{ko ? '게시판' : 'Member Board'}</p>
+        <p className={styles.eyebrow}>{ko ? '연구단 소식' : 'Project News'}</p>
         <h1 id="board-title">{title}</h1>
         <p>{ko ? '연구단과 각 세부의 활동 소식을 공유합니다.' : 'Activities and updates from the research group and its divisions.'}</p>
       </header>
       <nav className={styles.boardTabs} aria-label={ko ? '게시판 선택' : 'Choose a board'}>
         {[null, ...boardDivisions].map(item => {
-          const active = !showingAll && division === item;
+          const active = division === item;
           return <RouterLink key={item ?? 'activities'} to={boardListHref(item)}
             aria-current={active ? 'page' : undefined}
             className={`${styles.boardTab} ${active ? styles.boardTabActive : ''}`}>
             {boardDivisionLabel(item, language)}
           </RouterLink>;
         })}
-        <RouterLink to="/board?division=all" aria-current={showingAll ? 'page' : undefined}
-          className={`${styles.boardTab} ${showingAll ? styles.boardTabActive : ''}`}>
-          {ko ? '전체 글' : 'All posts'}
-        </RouterLink>
       </nav>
       <form key={`${selected ?? 'activities'}:${q}`} className={styles.search} role="search" onSubmit={event => {
         event.preventDefault();
@@ -72,7 +67,7 @@ export function BoardPage() {
       </form>
       <div className={styles.toolbar}>
         <p className={styles.toolbarText} role="status">{list ? (ko ? `${q ? '검색 결과' : '총'} ${list.total}건` : `${list.total} posts${q ? ' found' : ''}`) : (ko ? '게시글 목록' : 'Posts')}</p>
-        <Link href={division !== null && !showingAll ? `/board/new?division=${division}` : '/board/new'} className={styles.primary}>
+        <Link href={division !== null ? `/board/new?division=${division}` : '/board/new'} className={styles.primary}>
           {ko ? '글쓰기' : 'Write a post'}
         </Link>
       </div>
@@ -82,7 +77,7 @@ export function BoardPage() {
           <Button className={styles.secondary} onClick={reload}>{ko ? '다시 시도' : 'Try again'}</Button>
         </> : list && <>
           {q && list.total === 0 ? <p className={styles.listStatus}>{ko ? '검색어와 일치하는 게시글이 없습니다.' : 'No posts match your search.'}</p>
-            : <BoardPostList posts={list.posts} language={language} showDivision={showingAll} startNumber={list.total - (page - 1) * list.pageSize} />}
+            : <BoardPostList posts={list.posts} language={language} startNumber={list.total - (page - 1) * list.pageSize} />}
           <BoardPagination page={page} totalPages={list.totalPages} language={language} onPageChange={goToPage} />
         </>}
     </section>

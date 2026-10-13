@@ -52,13 +52,13 @@ export const siteNavigation: SiteMenuGroup[] = [
     id: 'news', label: { ko: '연구단 소식', en: 'Project News' },
     items: [
       { label: { ko: '언론보도', en: 'Press Coverage' }, href: '/news/press' },
+      { label: { ko: '세부별 활동 내용', en: 'Division Activities' }, href: '/board' },
     ],
   },
   {
     id: 'board', label: { ko: '게시판', en: 'Member Board' }, membersOnly: true,
     items: [
       { label: { ko: '연구단 공지사항', en: 'Research Notices' }, href: '/board/notices' },
-      { label: { ko: '세부별 활동 내용', en: 'Division Activities' }, href: '/board' },
     ],
   },
 ];
