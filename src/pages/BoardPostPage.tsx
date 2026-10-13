@@ -49,7 +49,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
           <span>{ko ? '작성일: ' : 'Posted: '}<time dateTime={post.createdAt}>{boardDate(post.createdAt, language)}</time></span>
           {post.updatedAt !== post.createdAt && <span>{ko ? '수정일: ' : 'Updated: '}<time dateTime={post.updatedAt}>{boardDate(post.updatedAt, language)}</time></span>}
         </div>
-        <p className={styles.body}>{post.body}</p>
+        {post.body && <p className={styles.body}>{post.body}</p>}
         <BoardAttachments files={post.attachments ?? []} postId={post.id} notice={notice} />
         {Boolean(deleteError) && <div className={styles.error} role="alert">{authErrorMessage(deleteError, language)}</div>}
         {canDelete && confirmDelete && <div className={styles.confirmation} role="group" aria-label={ko ? '게시글 삭제 확인' : 'Confirm post deletion'}>

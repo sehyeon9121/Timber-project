@@ -32,8 +32,11 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     if (division !== undefined && division !== null && ![1, 2, 3, 4].includes(division)) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 게시판을 선택해 주세요.');
     }
-    const total = await store.countPosts(division, query.trim());
-    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize, division, query.trim()), page,
+    const [total, posts] = await Promise.all([
+      store.countPosts(division, query.trim()),
+      store.listPosts(boardPageSize, (page - 1) * boardPageSize, division, query.trim()),
+    ]);
+    response.json({ posts, page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
   app.get('/api/board/posts/:id', requireUser, async (request, response) => {

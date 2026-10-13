@@ -21,7 +21,7 @@ export function BoardEditorPage({ notice = false }: { notice?: boolean }) {
   const { data, loading, error, reload } = useBoardResource<{ post: BoardPost }>(id ? `${notice ? basePath : '/board/posts'}/${id}` : null);
   const ko = language === 'KO';
   const post = data?.post;
-  return <AuthLayout wide title={notice ? (id ? (ko ? '공지사항 수정' : 'Edit notice') : (ko ? '공지사항 작성' : 'Write a notice')) : id ? (ko ? '글 수정' : 'Edit post') : (ko ? '글쓰기' : 'Write a post')} description={notice ? (ko ? '회의 일정, 자료 제출, 연구단 운영 안내 등을 등록해 주세요. 공지는 승인된 회원에게 공개됩니다.' : 'Publish meeting schedules, submission deadlines, and operational guidance for approved members.') : (ko ? '작성한 글은 승인된 회원들이 함께 볼 수 있습니다.' : 'Your post will be shared with approved members.')}>
+  return <AuthLayout wide title={notice ? (id ? (ko ? '공지사항 수정' : 'Edit notice') : (ko ? '공지사항 작성' : 'Write a notice')) : id ? (ko ? '글 수정' : 'Edit post') : (ko ? '글쓰기' : 'Write a post')} description={notice ? (ko ? '제목과 이미지를 등록하면 공지 카드로 표시됩니다. 본문은 선택 사항이며, 공지는 승인된 회원에게 공개됩니다.' : 'Add a title and image to publish a notice card. The body is optional. Notices are visible to approved members.') : (ko ? '작성한 글은 승인된 회원들이 함께 볼 수 있습니다.' : 'Your post will be shared with approved members.')}>
     {loading ? <p role="status">{ko ? '게시글을 불러오는 중…' : 'Loading post…'}</p>
       : error ? <>
         <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>

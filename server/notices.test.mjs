@@ -59,7 +59,7 @@ for (const backend of ['local', 'libsql']) {
     assert.equal(board.status, 201);
     assert.equal((await request('/board/posts', 'GET', undefined, memberCookie)).data.total, 1);
     assert.equal((await request('/board/notices')).data.total, 1);
-    for (const body of [{ title: '', body: 'Body' }, { title: 'Title', body: '' }, { title: 'x'.repeat(121), body: 'Body' }, { title: 'Title', body: 'x'.repeat(10001) }, { title: 'Title', body: 'Body', pinned: 'true' }]) {
+    for (const body of [{ title: '', body: 'Body' }, { title: 'Title', body: 42 }, { title: 'x'.repeat(121), body: 'Body' }, { title: 'Title', body: 'x'.repeat(10001) }, { title: 'Title', body: 'Body', pinned: 'true' }]) {
       assert.equal((await request('/board/notices', 'POST', body)).status, 400);
     }
     assert.equal((await request('/board/notices', 'POST', { title: '긴 공지', body: '가'.repeat(10000) })).status, 201);
@@ -88,6 +88,30 @@ for (const backend of ['local', 'libsql']) {
     assert.equal((await request(`/board/notices/${notice.id}`, 'DELETE', undefined, freshCookie)).status, 200);
     assert.equal((await request(`/board/notices/${notice.id}`, 'GET', undefined, memberCookie)).status, 404);
     assert.equal((await request('/board/posts', 'GET', undefined, memberCookie)).data.total, 1);
+    await t.test('title-only cards show ready image covers, omit pending files and retain administrator-only writes', async () => {
+      const created = await request('/board/notices', 'POST', { title: '카드 공지' }, freshCookie);
+      assert.equal(created.status, 201);
+      const id = created.data.post.id;
+      assert.equal(created.data.post.body, '');
+      assert.equal((await request('/board/notices', 'POST', { title: '위조 카드' }, memberCookie)).status, 403);
+      for (const [fileId, contentType, ready] of [['card-pdf', 'application/pdf', true], ['card-pending', 'image/png', false], ['card-cover', 'image/png', true]]) {
+        await store.reserveAttachment('notices', id, { id: fileId, name: `${fileId}.png`, size: 1, contentType, pathname: `private/${fileId}`, backend: 'local' });
+        if (ready) await store.readyAttachment(fileId);
+      }
+      const list = await request('/board/notices?q=' + encodeURIComponent('카드 공지'), 'GET', undefined, memberCookie);
+      assert.equal(list.data.posts.length, 1);
+      assert.equal(list.data.posts[0].coverImageId, 'card-cover');
+      assert.equal(list.data.posts[0].coverImageName, 'card-cover.png');
+      assert.ok(!('pathname' in list.data.posts[0]));
+      const card = list.data.posts[0];
+      assert.ok(!JSON.stringify(card).includes('card-pending'));
+      await store.deleteAttachment('card-cover');
+      assert.equal((await request('/board/notices?q=' + encodeURIComponent('카드 공지'), 'GET', undefined, memberCookie)).data.posts[0].coverImageId, null);
+      assert.equal((await request(`/board/notices/${id}`, 'PATCH', { title: '제목 수정', body: '' }, freshCookie)).status, 200);
+      // Member board posts still require a body.
+      assert.equal((await request('/board/posts', 'POST', { title: '본문 필요', division: 1 }, memberCookie)).status, 400);
+      await store.deleteNotice(id);
+    });
   });
 }
 

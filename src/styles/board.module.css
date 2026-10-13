@@ -54,6 +54,8 @@
 .noticeBadge { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 4px; background: #f8e9d5; color: #8c5f21; font-size: 12px; font-weight: 700; }
 .pinOption { display: flex; align-items: center; gap: 10px; font-size: 14px; }
 .pinOption input { width: 18px; height: 18px; accent-color: var(--color-primary); }
+.noticeExtra summary { cursor: pointer; font-size: 14px; color: var(--color-text-light); }
+.noticeExtra[open] summary { margin-bottom: 16px; }
 .search { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
 .search label { font-size: 14px; font-weight: 600; }
 .search input { flex: 1; min-width: 150px; padding: 11px 12px; border: 1px solid #b8c4b7; border-radius: 8px; font: inherit; font-size: 14px; }

@@ -7,6 +7,8 @@ export interface BoardPostSummary {
   createdAt: string;
   updatedAt: string;
   pinned?: number;
+  coverImageId?: string | null;
+  coverImageName?: string | null;
 }
 export interface BoardAttachment {
   id: string;

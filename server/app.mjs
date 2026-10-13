@@ -53,6 +53,8 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   });
 
   async function requireUser(request, response, next) {
+    // Reuse authentication from earlier middleware within this request only.
+    if (request.user) return next();
     const user = await store.sessionUser(readSessionCookie(request));
     if (!user) return fail(response, 401, 'UNAUTHENTICATED', '로그인이 필요합니다.');
     request.user = user;

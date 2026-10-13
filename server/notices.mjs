@@ -1,14 +1,15 @@
-import { validatePost } from './board.mjs';
-
 const boardPageSize = 20;
 
 export function registerNoticeRoutes(app, store, requireUser, requireMaster, attachments) {
   const fail = (response, status, code, message) => response.status(status).json({ code, message });
   function validateNotice(body) {
-    const input = validatePost({ title: body?.title, body: body?.body });
-    if (input.error) return input;
+    const title = typeof body?.title === 'string' ? body.title.trim() : '';
+    if (!title || title.length > 120) return { error: '제목은 1~120자로 입력해 주세요.' };
+    if (body?.body !== undefined && typeof body.body !== 'string') return { error: '내용은 텍스트로 입력해 주세요.' };
+    const content = (body.body ?? '').trim();
+    if (content.length > 10000) return { error: '내용은 최대 10,000자로 입력해 주세요.' };
     if (body.pinned !== undefined && typeof body.pinned !== 'boolean') return { error: '중요 공지 여부를 확인해 주세요.' };
-    return { title: input.title, body: input.body, pinned: body.pinned ?? false };
+    return { title, body: content, pinned: body.pinned ?? false };
   }
   async function findNotice(request, response) {
     const id = Number(request.params.id);
@@ -22,8 +23,11 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     if (!Number.isSafeInteger(page) || page < 1 || page > 1000000 || typeof query !== 'string' || query.length > 120) {
       return fail(response, 400, 'NOTICE_VALIDATION', '올바른 페이지 번호와 검색어를 입력해 주세요.');
     }
-    const total = await store.countNotices(query.trim());
-    response.json({ posts: await store.listNotices(boardPageSize, (page - 1) * boardPageSize, query.trim()), page,
+    const [total, posts] = await Promise.all([
+      store.countNotices(query.trim()),
+      store.listNotices(boardPageSize, (page - 1) * boardPageSize, query.trim()),
+    ]);
+    response.json({ posts, page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
   app.get('/api/board/notices/:id', requireUser, async (request, response) => {

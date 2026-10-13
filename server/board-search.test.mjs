@@ -8,6 +8,60 @@ import { createStore } from './store.mjs';
 import { createRemoteStore } from './remote-store.mjs';
 import { createApp } from './app.mjs';
 
+test('board and notice lists start both queries before waiting for the count', async t => {
+  const store = createStore(':memory:');
+  const author = store.addUser({ name: 'Author', username: 'author', email: 'author@example.test', affiliation: 'Lab' }, 'unused', 'master');
+  const cookie = `timber_session=${store.createSession(author.id)}`;
+  store.createPost({ title: 'Activity', body: 'Private content', division: 1 }, author.id);
+  store.createNotice({ title: 'Notice', body: 'Private content', pinned: true }, author.id);
+  const server = (await createApp(store)).listen(0, '127.0.0.1');
+  await new Promise(done => server.once('listening', done));
+  t.after(async () => {
+    await new Promise(done => { server.close(done); server.closeAllConnections(); });
+    store.close();
+  });
+
+  for (const [path, countMethod, listMethod] of [
+    ['/board/posts?division=1', 'countPosts', 'listPosts'],
+    ['/board/notices', 'countNotices', 'listNotices'],
+  ]) {
+    await t.test(path, async () => {
+      const count = store[countMethod].bind(store);
+      const list = store[listMethod].bind(store);
+      let startCount;
+      let releaseCount;
+      const countStarted = new Promise(resolve => { startCount = resolve; });
+      const countGate = new Promise(resolve => { releaseCount = resolve; });
+      let listStarted = false;
+      store[countMethod] = async (...args) => {
+        startCount();
+        await countGate;
+        return count(...args);
+      };
+      store[listMethod] = async (...args) => {
+        listStarted = true;
+        return list(...args);
+      };
+      const request = fetch(`http://127.0.0.1:${server.address().port}/api${path}`, { headers: { Cookie: cookie } });
+      await countStarted;
+      try {
+        assert.ok(listStarted, 'The list query must start while the count query is still pending');
+      } finally {
+        releaseCount();
+        const response = await request;
+        assert.equal(response.status, 200);
+        const result = await response.json();
+        assert.equal(result.total, 1);
+        assert.equal(result.posts.length, 1);
+        assert.equal(result.totalPages, 1);
+        assert.ok(!('body' in result.posts[0]));
+        store[countMethod] = count;
+        store[listMethod] = list;
+      }
+    });
+  }
+});
+
 for (const backend of ['sqlite', 'libsql']) test(`${backend}: search filters before ten-post pagination and preserves board privacy`, async t => {
   const directory = await mkdtemp(join(tmpdir(), 'timber-board-search-'));
   const store = backend === 'sqlite' ? createStore(':memory:') : await createRemoteStore({ url: pathToFileURL(join(directory, 'remote.sqlite')).href });

@@ -97,6 +97,14 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
     } catch (cause) { setError(cause instanceof ApiError ? cause : new ApiError('파일 업로드에 실패했습니다. 연결을 확인한 뒤 다시 저장해 주세요.', 'ATTACHMENT_UPLOAD')); }
     finally { setBusy(false); setUploadStatus(''); }
   }
+  const bodyField = <div className={styles.textareaField}>
+    <label htmlFor="post-body">{notice ? (ko ? '내용 (선택)' : 'Body (optional)') : (ko ? '내용' : 'Body')}</label>
+    <textarea id="post-body" name="body" className={styles.textarea} value={body}
+      onChange={event => setBody(event.target.value)} required={!notice} maxLength={10000} disabled={busy} aria-describedby="post-body-hint" />
+    <small id="post-body-hint" className={styles.hint}>
+      {body.length.toLocaleString()} / 10,000 {ko ? '자 · 승인된 회원에게만 공개됩니다.' : 'characters · Only approved members can read this post.'}
+    </small>
+  </div>;
   return <>
     {Boolean(error) && <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>}
     {Boolean(error) && savedId && <p className={styles.hint}>{ko ? '글은 저장되었습니다. 첨부파일 상태를 확인한 뒤 다시 저장하거나 저장된 글로 이동하세요.' : 'The post has been saved. Check attachments and save again, or open the saved post.'} <Link href={`${basePath}/${savedId}`}>{ko ? '저장된 글 보기' : 'Open saved post'}</Link></p>}
@@ -141,18 +149,14 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
       <AuthField id="post-title" name="title" label={ko ? '제목' : 'Title'} value={title}
         onChange={event => setTitle(event.target.value)} required maxLength={120} disabled={busy}
         hint={ko ? '최대 120자' : 'Up to 120 characters'} />
-      <div className={styles.textareaField}>
-        <label htmlFor="post-body">{ko ? '내용' : 'Body'}</label>
-        <textarea id="post-body" name="body" className={styles.textarea} value={body}
-          onChange={event => setBody(event.target.value)} required maxLength={10000} disabled={busy} aria-describedby="post-body-hint" />
-        <small id="post-body-hint" className={styles.hint}>
-          {body.length.toLocaleString()} / 10,000 {ko ? '자 · 승인된 회원에게만 공개됩니다.' : 'characters · Only approved members can read this post.'}
-        </small>
-      </div>
+      {!notice && bodyField}
       <div className={styles.textareaField}>
         <label htmlFor="post-files">{ko ? '파일·사진 첨부' : 'Attach files and photos'}</label>
         <FileDropzone id="post-files" disabled={busy} describedBy="post-files-hint" onSelect={selectFiles} />
-        <small id="post-files-hint" className={styles.hint}>{ko ? '파일별 최대 20MB · 글당 최대 10개 · 사진, PDF, 한글, Office, ZIP, TXT, CSV · 등록/수정 완료 시 업로드됩니다.' : 'Up to 20 MB per file, 10 files per post · Photos, PDF, HWP, Office, ZIP, TXT, CSV · Uploaded when you save.'}</small>
+        <small id="post-files-hint" className={styles.hint}>
+          {notice && <>{ko ? '첫 번째 첨부 사진이 공지 카드의 대표 이미지로 표시됩니다. ' : 'The first attached image appears on the notice card. '}</>}
+          {ko ? '파일별 최대 20MB · 글당 최대 10개 · 사진, PDF, 한글, Office, ZIP, TXT, CSV · 등록/수정 완료 시 업로드됩니다.' : 'Up to 20 MB per file, 10 files per post · Photos, PDF, HWP, Office, ZIP, TXT, CSV · Uploaded when you save.'}
+        </small>
         {savedId && <BoardAttachments files={attachments} postId={savedId} notice={notice} removed={removed} disabled={busy}
           onToggleRemove={id => setRemoved(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])} />}
         {files.length > 0 && <ul className={styles.attachmentList}>{files.map(item => <li key={item.key} className={styles.attachmentRow}>
@@ -168,6 +172,10 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
         </li>)}</ul>}
         {uploadStatus && <p role="status" aria-live="polite">{uploadStatus}</p>}
       </div>
+      {notice && <details className={styles.noticeExtra} open={Boolean(post?.body)}>
+        <summary>{ko ? '추가 설명 작성 (선택)' : 'Additional description (optional)'}</summary>
+        {bodyField}
+      </details>}
       <div className={styles.actions}>
         <Button type="submit" className={styles.primary} disabled={busy}>
           {busy ? (ko ? '저장 중…' : 'Saving…') : post ? (ko ? '수정 완료' : 'Save changes') : (ko ? '등록' : 'Publish')}

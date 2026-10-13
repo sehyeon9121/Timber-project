@@ -95,8 +95,12 @@ export async function createRemoteStore(options) {
     },
     async listNotices(limit, offset, query = '') {
       return (await execute(`SELECT notices.id, notices.title, notices.author_id AS authorId,
-        NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
-        FROM notices JOIN users ON users.id = notices.author_id WHERE instr(lower(notices.title), lower(?)) > 0
+        NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt,
+        cover.id AS coverImageId, cover.name AS coverImageName
+        FROM notices JOIN users ON users.id = notices.author_id
+        LEFT JOIN attachments cover ON cover.id = (SELECT id FROM attachments
+          WHERE notice_id = notices.id AND state = 'ready' AND content_type LIKE 'image/%' ORDER BY created_at, id LIMIT 1)
+        WHERE instr(lower(notices.title), lower(?)) > 0
         ORDER BY notices.pinned DESC, notices.id DESC LIMIT ? OFFSET ?`, [query, limit, offset])).rows;
     },
     findNotice: id => first(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId,
