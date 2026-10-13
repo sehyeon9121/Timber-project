@@ -1,6 +1,28 @@
 import type { ParticipatingInstitution } from '@/types';
 import type { DemonstrationImage } from '@/components/organisms/DemonstrationImageSection';
 
+export const institutionNamesEn: Record<string, string> = {
+  '서울대학교': 'Seoul National University',
+  '연세대학교': 'Yonsei University',
+  '한양대학교': 'Hanyang University',
+  '부산대학교': 'Pusan National University',
+  '서울시립대학교': 'University of Seoul',
+  '한국기술교육대학교': 'Korea University of Technology and Education',
+  '전북대학교': 'Jeonbuk National University',
+  '전남대학교': 'Chonnam National University',
+  '숭실대학교': 'Soongsil University',
+  '한밭대학교': 'Hanbat National University',
+  '한국건설기술연구원': 'Korea Institute of Civil Engineering and Building Technology',
+  '국립산림과학원': 'National Institute of Forest Science',
+  '한국건설생활환경시험연구원': 'Korea Conformity Laboratories',
+  '한국강구조학회': 'Korean Society of Steel Construction',
+  '포스코 이앤씨': 'POSCO E&C',
+  '아리수 엔지니어링': 'ARISU Engineering',
+  '(주)하이멕': 'HIMEC',
+  '티아이구조기술사사무소': 'TI Structural Engineers',
+  'CS구조엔지니어링': 'CS Structural Engineering',
+};
+
 export interface Partnership {
   id: string;
   title: string;

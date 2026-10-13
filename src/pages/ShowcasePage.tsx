@@ -2,11 +2,11 @@ import { DetailPageLayout } from '@/components/templates/DetailPageLayout';
 import { ContentSection } from '@/components/templates/ContentSection';
 import { Container } from '@/components/atoms/Container';
 import { PartnershipCard } from '@/components/organisms/PartnershipCard';
-import { partnerships } from '@/data/partnerships';
+import { institutionNamesEn, partnerships } from '@/data/partnerships';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export function ShowcasePage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const translationKeyMap: Record<string, string> = {
     academic: 'showcase.academic',
@@ -43,7 +43,10 @@ export function ShowcasePage() {
                   title={t(`${key}.title`)}
                   description={t(`${key}.description`)}
                   icon={partnership.icon}
-                  institutions={partnership.institutions}
+                  institutions={partnership.institutions.map(institution => ({
+                    ...institution,
+                    name: language === 'KO' ? institution.name : (institutionNamesEn[institution.name] ?? institution.name),
+                  }))}
                   images={translatedImages}
                 />
             );

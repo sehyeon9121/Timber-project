@@ -29,7 +29,7 @@ export const siteNavigation: SiteMenuGroup[] = [
     items: [
       { label: { ko: '단장·부단장', en: 'Director & Deputy Director' }, href: '/team/leadership' },
       { label: { ko: '세부별 연구책임자', en: 'Division Leads' }, href: '/team' },
-      { label: { ko: '공동연구원', en: 'Participating Researchers' }, href: '/team/researchers' },
+      { label: { ko: '공동연구원', en: 'Co-Researchers' }, href: '/team/researchers' },
     ],
   },
   {
@@ -58,7 +58,7 @@ export const siteNavigation: SiteMenuGroup[] = [
     id: 'board', label: { ko: '게시판', en: 'Member Board' }, membersOnly: true,
     items: [
       { label: { ko: '연구단 공지사항', en: 'Research Notices' }, href: '/board/notices' },
-      { label: { ko: '세부별 활동 내용', en: 'Research Discussions' }, href: '/board' },
+      { label: { ko: '세부별 활동 내용', en: 'Division Activities' }, href: '/board' },
     ],
   },
 ];

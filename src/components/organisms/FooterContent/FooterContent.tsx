@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface FooterContentProps {
   className?: string;
 }
 
 export function FooterContent({ className }: FooterContentProps) {
+  const { language } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -23,7 +25,7 @@ export function FooterContent({ className }: FooterContentProps) {
           transition={{ duration: 0.2, ease: 'easeOut' }}
           className="text-white/80 text-sm md:text-base leading-relaxed"
         >
-          © Copyright {currentYear} | 200m급 목구조대공간 건축물 건설 기술개발
+          © Copyright {currentYear} | {language === 'KO' ? '200m급 목구조대공간 건축물 건설 기술개발' : 'Technology Development for 200m-class Large-Span Timber Buildings'}
         </motion.div>
       </div>
     </footer>

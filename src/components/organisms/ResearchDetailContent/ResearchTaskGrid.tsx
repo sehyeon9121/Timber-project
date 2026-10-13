@@ -1,4 +1,6 @@
 import styles from './ResearchTaskGrid.module.css';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useResearchTranslation } from '@/hooks/useResearchTranslation';
 
 export type ImageRegion = [x: number, y: number, width: number, height: number];
 
@@ -25,14 +27,17 @@ function ResearchDiagram({ region, alt, directory }: { region: ImageRegion; alt:
 }
 
 export function ResearchTaskGrid({ division, title, diagramDirectory, tasks }: ResearchTaskGridProps) {
+  const { language } = useLanguage();
+  const ko = language === 'KO';
+  const tr = useResearchTranslation();
   return (
     <div className={styles.detail}>
       <div className={styles.banner}>
-        <span className={styles.division}>{division}세부</span>
+        <span className={styles.division}>{ko ? `${division}세부` : `Division ${division}`}</span>
         <h1 className={styles.pageTitle}>{title}</h1>
-        <div className={styles.legend} aria-label="연구 추진 단계">
-          <span className={styles.firstStage}>1단계</span>
-          <span className={styles.secondStage}>2단계</span>
+        <div className={styles.legend} aria-label={tr('연구 추진 단계')}>
+          <span className={styles.firstStage}>{tr('1단계')}</span>
+          <span className={styles.secondStage}>{tr('2단계')}</span>
         </div>
       </div>
       <div className={styles.taskGrid}>
@@ -40,16 +45,16 @@ export function ResearchTaskGrid({ division, title, diagramDirectory, tasks }: R
           <section key={task.code} className={styles.task} aria-labelledby={`research-${task.code}`}>
             <div className={styles.taskHeading}>
               <span className={styles.taskCode}>{task.code}</span>
-              <h2 id={`research-${task.code}`} className={styles.taskTitle}>{task.title}</h2>
+              <h2 id={`research-${task.code}`} className={styles.taskTitle}>{tr(task.title)}</h2>
             </div>
             <div className={styles.stages}>
               {task.stages.map((stage, index) => (
                 <div key={stage.title} className={`${styles.stage} ${index === 0 ? styles.stageOne : styles.stageTwo}`}>
                   <div className={styles.stageHeading}>
-                    <span className={styles.stageLabel}>{index + 1}단계</span>
-                    <h3 className={styles.stageTitle}>{stage.title}</h3>
+                    <span className={styles.stageLabel}>{ko ? `${index + 1}단계` : `Phase ${index + 1}`}</span>
+                    <h3 className={styles.stageTitle}>{tr(stage.title)}</h3>
                   </div>
-                  <ResearchDiagram region={stage.image} alt={stage.alt} directory={diagramDirectory} />
+                  <ResearchDiagram region={stage.image} alt={tr(stage.alt)} directory={diagramDirectory} />
                 </div>
               ))}
             </div>

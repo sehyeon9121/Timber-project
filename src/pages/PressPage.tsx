@@ -8,10 +8,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const pressPosts = [{
   id: '408oq-VpguU',
-  title: '피라미드부터 800m 초고층 빌딩까지, 인간은 어떻게 이렇게 높이 쌓을 수 있었을까? (feat. 최경규 교수)',
+  title: { ko: '피라미드부터 800m 초고층 빌딩까지, 인간은 어떻게 이렇게 높이 쌓을 수 있었을까? (feat. 최경규 교수)', en: 'From Pyramids to 800m Skyscrapers: How Have Humans Built So High? (with Professor Kyoung-Kyu Choi)' },
   date: '2026. 9. 26.',
   dateTime: '2026-09-26',
-  channel: 'EBS 컬렉션 - 사이언스',
+  channel: { ko: 'EBS 컬렉션 - 사이언스', en: 'EBS Collection – Science' },
   url: 'https://www.youtube.com/watch?v=408oq-VpguU',
   thumbnailUrl: 'https://i.ytimg.com/vi/408oq-VpguU/maxresdefault.jpg',
 }];
@@ -31,7 +31,7 @@ export function PressPage() {
                   className="flex flex-col gap-3 px-3 py-6 text-[var(--color-text)] hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] md:flex-row md:items-center md:justify-between md:gap-8 md:px-5"
                 >
                   <span className="min-w-0 break-keep text-base font-semibold leading-relaxed md:text-lg">
-                    {post.title}
+                    {language === 'KO' ? post.title.ko : post.title.en}
                   </span>
                   <time className="shrink-0 text-sm font-normal text-gray-500 md:text-base" dateTime={post.dateTime}>
                     {post.date}
@@ -83,10 +83,10 @@ export function PressDetailPage() {
             </a>
             <div className="p-5 md:p-8">
               <h2 className="text-xl font-semibold leading-relaxed text-[var(--color-text)] md:text-2xl">
-                {video.title}
+                {language === 'KO' ? video.title.ko : video.title.en}
               </h2>
               <p className="mt-3 text-sm text-gray-600">
-                {video.channel} · <time dateTime={video.dateTime}>{video.date}</time>
+                {language === 'KO' ? video.channel.ko : video.channel.en} · <time dateTime={video.dateTime}>{video.date}</time>
               </p>
               <a
                 className="mt-5 inline-flex text-sm font-medium text-[var(--color-primary)] underline underline-offset-4 hover:opacity-70"

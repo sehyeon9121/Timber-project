@@ -14,9 +14,10 @@
     "master:update": "node server/update-master.mjs",
     "test:auth": "node --test server/auth.test.mjs",
     "test:input": "node --test src/lib/input-selection.test.mjs",
+    "test:translations": "node --test src/data/research-translations.test.mjs",
     "test:board": "node --test server/board.test.mjs server/board-pagination.test.mjs server/board-search.test.mjs",
     "test:attachments": "node --test server/attachments.test.mjs",
-    "test": "node --test server/auth.test.mjs server/board.test.mjs server/board-pagination.test.mjs server/board-search.test.mjs server/notices.test.mjs server/remote-store.test.mjs server/attachments.test.mjs src/lib/input-selection.test.mjs",
+    "test": "node --test server/auth.test.mjs server/board.test.mjs server/board-pagination.test.mjs server/board-search.test.mjs server/notices.test.mjs server/remote-store.test.mjs server/attachments.test.mjs src/lib/input-selection.test.mjs src/data/research-translations.test.mjs",
     "db:migrate": "node --env-file=.env server/migrate-to-turso.mjs",
     "start": "node server/index.mjs"
   },

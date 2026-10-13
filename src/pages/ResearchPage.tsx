@@ -8,12 +8,18 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 export function ResearchPage() {
   const { t } = useLanguage();
+  const themeKeys: Record<string, string> = {
+    'terrestrial-carbon': 'terrestrialCarbon',
+    'natural-climate': 'naturalClimate',
+    'smart-construction': 'smartConstruction',
+    'energy-performance': 'energyPerformance',
+  };
 
   // 번역된 연구 주제 데이터
   const translatedResearchThemes = researchThemes.map((theme) => ({
     ...theme,
-    title: t(`research.${theme.id === 'terrestrial-carbon' ? 'terrestrialCarbon' : 'naturalClimate'}.title`),
-    description: t(`research.${theme.id === 'terrestrial-carbon' ? 'terrestrialCarbon' : 'naturalClimate'}.description`),
+    title: t(`research.${themeKeys[theme.id]}.title`),
+    description: t(`research.${themeKeys[theme.id]}.description`),
   }));
 
   return (

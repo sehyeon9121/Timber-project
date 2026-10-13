@@ -19,7 +19,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.publications': 'Publications',
     'nav.people': 'People',
     'nav.news': 'News',
-    'nav.ourTeam': 'Our Team',
+    'nav.ourTeam': "Division Research Leads",
     'nav.joinUs': 'ACT INSTITUTE',
     'nav.newsUpdates': 'News & Updates',
     'nav.climateSnacks': 'Climate Snacks',
@@ -30,11 +30,11 @@ const translations: Record<Language, Record<string, string>> = {
     'home.hero.description': '200m Span ㅣ 50% Carbon Reduction ㅣ 4 Core Technologies',
     // Home Page - About
     'home.about.imageTitle': 'Project Overview',
-    'home.about.title': 'Research Team Goal',
+    'home.about.title': "Research Group Goals",
     'home.about.description': 'This research aims to advance large-span timber construction technology based on wooden structures, integrating the entire process of design, construction, and operation to achieve carbon-neutral architecture.',
     'home.research.title': 'Research Topics',
     'home.research.subtitle': 'Research for the Future',
-    'home.showcase.title': 'Associated Institutions',
+    'home.showcase.title': "Participating Institutions",
     'home.showcase.subtitle': 'Building a sustainable future through timber innovation',
     'home.showcase.boxTitle': 'AI Carbon-Neutral Timber Architecture Research',
     'home.showcase.boxDesc': 'We pursue innovative research that combines artificial intelligence with timber engineering to realize carbon-neutral large-span architecture.',
@@ -60,26 +60,26 @@ const translations: Record<Language, Record<string, string>> = {
     'showcase.demonstration.description': 'This study aims to validate the real-world applicability and performance of large-scale timber megastructure technologies through collaboration with a demonstration partner. Based on empirical data collected throughout the entire lifecycle—design, construction, and operation—the project seeks to enhance technological reliability and establish a foundation for commercialization and broader adoption of timber construction. In particular, in collaboration with Gangneung Development Corporation, a full-scale demonstration model will be constructed at Ojukheon Hanok Village in Gangneung to verify the developed technologies under real-world conditions.',
     'showcase.demonstration.image1Caption': 'Gangneung Ojukheon Hanok Village',
     'showcase.demonstration.image1Alt': 'Gangneung Ojukheon Hanok Village',
-    'showcase.demonstration.image2Alt': 'Gangneung Urban Development Corporation',
+    'showcase.demonstration.image2Alt': "Gangneung Development Corporation",
 
     // Research Themes
     'research.terrestrialCarbon.title': 'High-Performance Hybrid Large-Section Member Technology',
     'research.terrestrialCarbon.description': 'Development of high-strength, large-section hybrid structural members for realizing large-span timber structures.',
     'research.naturalClimate.title': 'OSC-Based Modularization & Carbon-Neutral Design',
     'research.naturalClimate.description': 'Development of integrated large-span architectural system technologies based on modular construction and carbon-neutral design.',
-    'research.smartConstruction.title': 'Eco-Friendly & Energy Performance Evaluation Technology',
-    'research.smartConstruction.description': 'Development of environmental and energy performance evaluation technologies based on the entire building lifecycle.',
-    'research.energyPerformance.title': 'Smart Construction & Maintenance System',
-    'research.energyPerformance.description': 'Establishing a smart lifecycle management system for buildings through digital-based construction and operation management technologies.',
+    'research.energyPerformance.title': 'Eco-Friendly & Energy Performance Evaluation Technology',
+    'research.energyPerformance.description': 'Development of environmental and energy performance evaluation technologies based on the entire building lifecycle.',
+    'research.smartConstruction.title': 'Smart Construction & Maintenance System',
+    'research.smartConstruction.description': 'Establishing a smart lifecycle management system for buildings through digital-based construction and operation management technologies.',
 
     // Research Detail Pages (상세 페이지 전용)
-    'researchDetail.terrestrialCarbon.title': 'AI-Based Design of Large-Span Timber Structures',
+    'researchDetail.terrestrialCarbon.title': "High-Performance Hybrid Large-Section Member Technologies for Large-Span Timber Buildings",
     'researchDetail.terrestrialCarbon.description': 'Through AI- and data-driven design approaches, we extend the structural limits of large-span timber systems.',
-    'researchDetail.naturalClimate.title': 'Technologies for Realizing Carbon-Neutral Architecture',
-    'researchDetail.naturalClimate.description': 'We quantitatively analyze the carbon reduction potential of timber construction and evaluate carbon-neutral performance across the entire building lifecycle.',
-    'researchDetail.smartConstruction.title': 'Smart Construction & Maintenance Technologies',
+    'researchDetail.naturalClimate.title': "OSC Modularization and Carbon-Neutral Design Technologies for Large-Span Timber Buildings",
+    'researchDetail.naturalClimate.description': "We quantitatively analyze and verify the carbon reduction benefits of timber construction.",
+    'researchDetail.smartConstruction.title': "Smart Construction and Maintenance Technologies for Large-Span Timber Buildings",
     'researchDetail.smartConstruction.description': 'We develop smart construction and maintenance technologies for large-span timber buildings.',
-    'researchDetail.energyPerformance.title': 'Environmental & Energy Performance Evaluation',
+    'researchDetail.energyPerformance.title': "Environmental and Energy Evaluation Technologies for Large-Span Timber Buildings",
     'researchDetail.energyPerformance.description': 'We evaluate the environmental and energy performance of large-span timber buildings.',
 
     // Research Page
@@ -94,7 +94,7 @@ const translations: Record<Language, Record<string, string>> = {
     'bigQuestions.title': 'Research Projects',
     'bigQuestions.subtitle': 'Structure of research projects within a national government–funded research program.',
     'bigQuestions.intro': 'Our research is driven by fundamental questions regarding the feasibility of 200-meter-class large-span timber buildings and the future of carbon-neutral construction technologies. These questions define an integrated research direction encompassing structural systems, modular design, environmental and energy performance, as well as construction and maintenance technologies.',
-    'bigQuestions.backTo': 'Back to Big Questions',
+    'bigQuestions.backTo': "Back to Research Projects",
 
     // Publications Page
     'publications.title': 'Results & Publications',
@@ -109,7 +109,7 @@ const translations: Record<Language, Record<string, string>> = {
     'people.researchAssistants': 'Research Assistants',
 
     // Team Page
-    'team.title': 'Introducing ACT Lab',
+    'team.title': "Introducing Division Research Leads",
     'team.heroDescription': 'Our research team aims to realize 200m-class large-span timber architecture, with expert researchers from all fields of structure, design, construction, and operation participating as a convergent research organization.',
     'team.team': 'Team',
     'team.alumni': 'Undergraduate Student',
@@ -121,15 +121,15 @@ const translations: Record<Language, Record<string, string>> = {
     'team.showLess': 'Show Less',
 
     // Email Modal
-    'email.title': 'Email',
+    'email.title': "Email Address",
     'email.subtitle': 'Check the email address.',
     'email.copy': 'Copy',
     'email.copied': 'Email copied!',
     'email.close': 'Close',
 
     // Join Us Page
-    'joinUs.title': 'Join Us',
-    'joinUs.subtitle': 'ACT LAB',
+    'joinUs.title': "ACT INSTITUTE",
+    'joinUs.subtitle': "ACT Lab’s Approach",
     'joinUs.values': 'VALUES',
     'joinUs.valuesIntro': 'In science, inclusion begins with inclusion in the research environment.',
     'joinUs.valuesDescription': 'At ACT Institute, research begins with mindset before it becomes technology. The challenges of climate change and carbon neutrality cannot be addressed through a single solution, and we believe that diverse perspectives and backgrounds are essential resources for solving structural problems. Through collaboration that transcends disciplinary boundaries, roles, and levels of experience, ACT Institute explores new possibilities for large-span timber structures.',
@@ -169,7 +169,7 @@ const translations: Record<Language, Record<string, string>> = {
     'language.korean': 'Korean',
 
     // Footer
-    'footer.copyright': '© 2024 Terrer Lab. All rights reserved.',
+    'footer.copyright': "© 2024 ACT Lab. All rights reserved.",
     'footer.contact': 'Contact',
     'footer.location': 'Location',
   },
@@ -228,10 +228,10 @@ const translations: Record<Language, Record<string, string>> = {
     'research.terrestrialCarbon.description': '목조 대공간 구조 실현을 위한 고강도 대단면 하이브리드 구조 부재 개발',
     'research.naturalClimate.title': 'OSC 기반 모듈화 및 탄소중립 설계',
     'research.naturalClimate.description': '모듈화 시공과 탄소중립 설계를 기반으로 대공간 건축 시스템 통합 기술 개발',
-    'research.smartConstruction.title': '친환경 및 에너지 성능 평가 기술',
-    'research.smartConstruction.description': '건축물 전 생애주기 기반의 환경 및 에너지 성능 평가 기술 개발',
-    'research.energyPerformance.title': '스마트 시공 및 유지관리 시스템',
-    'research.energyPerformance.description': '디지털 기반 시공 및 운영관리 기술을 통한 건축물 건주기 스마트 관리 시스템 구축',
+    'research.energyPerformance.title': '친환경 및 에너지 성능 평가 기술',
+    'research.energyPerformance.description': '건축물 전 생애주기 기반의 환경 및 에너지 성능 평가 기술 개발',
+    'research.smartConstruction.title': '스마트 시공 및 유지관리 시스템',
+    'research.smartConstruction.description': '디지털 기반 시공 및 운영관리 기술을 통한 건축물 건주기 스마트 관리 시스템 구축',
 
     // Research Detail Pages (상세 페이지 전용)
     'researchDetail.terrestrialCarbon.title': '목조 대공간 건축물의 고성능 하이브리드 대단면 부재 기술개발',
