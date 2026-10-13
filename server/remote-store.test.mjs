@@ -132,6 +132,14 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
     assert.equal((await request(`/board/posts/${id}`, 'PATCH', { title: 'Edited', body: 'New body' }, memberCookie)).status, 200);
     assert.equal((await request(`/board/posts/${id}`, 'DELETE', undefined, masterCookie)).status, 200);
     assert.equal((await second.findPost(id)), undefined);
+    const activity = await request('/board/posts', 'POST', { title: '공동 연구단 활동', body: '행사 기록', division: null }, memberCookie);
+    assert.equal(activity.status, 201);
+    assert.equal(await second.countPosts(null), 1);
+    assert.deepEqual((await second.listPosts(20, 0, null)).map(post => post.id), [activity.body.post.id]);
+    assert.equal((await request('/board/posts?division=activities', 'GET', undefined, memberCookie)).body.total, 1);
+    assert.equal((await request(`/board/posts/${activity.body.post.id}`, 'PATCH', { title: '4세부 활동', body: '이동', division: 4 }, memberCookie)).status, 200);
+    assert.equal(await second.countPosts(null), 0);
+    assert.equal((await request(`/board/posts/${activity.body.post.id}`, 'PATCH', { title: '연구단 활동', body: '이동', division: null }, memberCookie)).body.post.division, null);
     await request('/auth/logout', 'POST', undefined, memberCookie);
     assert.equal(await second.sessionUser(memberCookie.split('=')[1]), undefined);
   });

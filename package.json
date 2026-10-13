@@ -13,13 +13,15 @@
     "master:create": "node server/create-master.mjs",
     "master:update": "node server/update-master.mjs",
     "test:auth": "node --test server/auth.test.mjs",
-    "test:board": "node --test server/board.test.mjs",
-    "test": "node --test server/auth.test.mjs server/board.test.mjs server/notices.test.mjs server/remote-store.test.mjs",
+    "test:board": "node --test server/board.test.mjs server/board-pagination.test.mjs",
+    "test:attachments": "node --test server/attachments.test.mjs",
+    "test": "node --test server/auth.test.mjs server/board.test.mjs server/board-pagination.test.mjs server/notices.test.mjs server/remote-store.test.mjs server/attachments.test.mjs",
     "db:migrate": "node --env-file=.env server/migrate-to-turso.mjs",
     "start": "node server/index.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
+    "@vercel/blob": "^2.8.1",
     "clsx": "^2.1.1",
     "express": "^5.2.1",
     "framer-motion": "^12.26.2",

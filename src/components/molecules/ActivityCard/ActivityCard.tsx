@@ -15,7 +15,7 @@ export function ActivityCard({ activity, language }: ActivityCardProps) {
 
   return (
     <article className={styles.card}>
-      <Link href={`/news/activities/${activity.id}`} className={styles.link}>
+      <Link href={`/board/activities/${activity.id}`} className={styles.link}>
         <div className={styles.cover}>
           {cover && <Image src={cover.src} alt={cover.alt[locale]} objectFit="contain" className={styles.image} />}
         </div>

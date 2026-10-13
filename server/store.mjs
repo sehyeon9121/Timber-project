@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomBytes, scrypt, timingSafeEqual, createHash } from 'node:crypto';
 import { promisify } from 'node:util';
+import { attachmentStore } from './attachment-store.mjs';
 
 const deriveKey = promisify(scrypt);
 const scryptOptions = { N: 131072, r: 8, p: 1, maxmem: 256 * 1024 * 1024 };
@@ -82,6 +83,21 @@ export const storeSchema = `
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
     );
     CREATE INDEX IF NOT EXISTS notices_pinned_id ON notices(pinned DESC, id DESC);
+    CREATE TABLE IF NOT EXISTS attachments (
+      id TEXT PRIMARY KEY,
+      post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+      notice_id INTEGER REFERENCES notices(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      size INTEGER NOT NULL CHECK (size > 0 AND size <= 20971520),
+      content_type TEXT NOT NULL,
+      pathname TEXT NOT NULL UNIQUE,
+      backend TEXT NOT NULL CHECK (backend IN ('local', 'blob')),
+      state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN ('pending', 'ready')),
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+      CHECK ((post_id IS NULL) != (notice_id IS NULL))
+    );
+    CREATE INDEX IF NOT EXISTS attachments_post ON attachments(post_id);
+    CREATE INDEX IF NOT EXISTS attachments_notice ON attachments(notice_id);
 `;
 
 export function createStore(path = databasePath) {
@@ -107,6 +123,7 @@ ${storeSchema}
   } catch (error) { db.exec('ROLLBACK'); db.close(); throw error; }
   return {
     db,
+    ...attachmentStore((sql, args) => db.prepare(sql).run(...args), (sql, args) => db.prepare(sql).all(...args)),
     findByUsername: username => db.prepare('SELECT * FROM users WHERE username = ? COLLATE NOCASE').get(username),
     findByEmail: email => db.prepare('SELECT * FROM users WHERE email = ?').get(email),
     findById: id => db.prepare('SELECT * FROM users WHERE id = ?').get(id),
@@ -144,10 +161,10 @@ ${storeSchema}
     deleteSession(token) { if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token)); },
     countPosts: division => division === undefined
       ? db.prepare('SELECT COUNT(*) AS total FROM posts').get().total
-      : db.prepare('SELECT COUNT(*) AS total FROM posts WHERE division = ?').get(division).total,
+      : db.prepare('SELECT COUNT(*) AS total FROM posts WHERE division IS ?').get(division).total,
     listPosts: (limit, offset, division) => db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
-      FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division = ?'}
+      FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division IS ?'}
       ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...(division === undefined ? [] : [division]), limit, offset),
     findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt

@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 
-const server = spawn(process.execPath, ['server/index.mjs'], { stdio: 'inherit' });
+const server = spawn(process.execPath, ['--watch', 'server/index.mjs'], { stdio: 'inherit' });
 const client = spawn(process.execPath, ['node_modules/vite/bin/vite.js', ...process.argv.slice(2)], { stdio: 'inherit' });
 const children = [server, client];
 let stopping = false;

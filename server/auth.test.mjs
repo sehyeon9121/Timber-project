@@ -7,6 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { createApp } from './app.mjs';
 import { createStore, hashPassword, verifyPassword, storeSchema } from './store.mjs';
 import { getDevelopmentOrigins } from './origins.mjs';
+import { siteOrigin } from '../api/index.mjs';
 
 test('approval-based membership and master authorization', async t => {
   const directory = mkdtempSync(join(tmpdir(), 'timber-auth-test-'));
@@ -176,6 +177,40 @@ test('legacy accounts gain usernames without losing data; master password change
   assert.equal(reopened.findByUsername('ERS').email, 'master@example.test');
   assert.equal(reopened.findByUsername('user2').email, 'member@example.test');
   reopened.close();
+});
+
+test('the canonical wlss domain accepts signup and administrator login', async t => {
+  const origin = siteOrigin({ SITE_ORIGIN: 'https://www.wlss.re.kr' });
+  const store = createStore(':memory:');
+  const password = 'Test-only-password-2026';
+  const master = store.addUser({ name: 'Master', username: 'ERS', email: 'master@example.test', affiliation: 'Administration' }, await hashPassword(password), 'master');
+  const app = await createApp(store, { origins: [origin], secureCookies: true });
+  const server = app.listen(0, '127.0.0.1');
+  await new Promise(resolveReady => server.once('listening', resolveReady));
+  t.after(async () => {
+    await new Promise(resolveClosed => { server.close(resolveClosed); server.closeAllConnections(); });
+    store.close();
+  });
+  async function request(path, body, from = origin) {
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/auth/${path}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Origin: from }, body: JSON.stringify(body),
+    });
+    return { status: response.status, data: await response.json(), cookie: response.headers.get('set-cookie') };
+  }
+  const signup = await request('signup', { name: '연구원', username: 'researcher', email: 'member@example.test', affiliation: '연구단', password });
+  assert.equal(signup.status, 201);
+  assert.equal(store.findByUsername('researcher').status, 'pending');
+  const login = await request('login', { username: master.username, password });
+  assert.equal(login.status, 200);
+  assert.equal(login.data.user.role, 'master');
+  assert.ok(login.cookie.includes('Secure'));
+  for (const from of ['https://timber-project-ten.vercel.app', 'https://www.wlss.re.kr.attacker.example', 'http://www.wlss.re.kr']) {
+    for (const path of ['signup', 'login']) {
+      const rejected = await request(path, {}, from);
+      assert.equal(rejected.status, 403);
+      assert.equal(rejected.data.code, 'INVALID_ORIGIN');
+    }
+  }
 });
 
 test('an explicitly configured site origin does not inherit development origins', async t => {

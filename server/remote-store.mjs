@@ -1,6 +1,7 @@
 import { createClient } from '@libsql/client';
 import { randomBytes } from 'node:crypto';
 import { publicUser, sessionDuration, storeSchema, tokenHash } from './store.mjs';
+import { attachmentStore } from './attachment-store.mjs';
 
 export async function createRemoteStore(options) {
   const client = createClient(options);
@@ -29,6 +30,7 @@ export async function createRemoteStore(options) {
   const first = async (sql, args) => (await execute(sql, args)).rows[0];
   return {
     client,
+    ...attachmentStore(execute, async (sql, args) => (await execute(sql, args)).rows),
     findByUsername: username => first('SELECT * FROM users WHERE username = ? COLLATE NOCASE', [username]),
     findByEmail: email => first('SELECT * FROM users WHERE email = ?', [email]),
     findById: id => first('SELECT * FROM users WHERE id = ?', [id]),
@@ -69,13 +71,13 @@ export async function createRemoteStore(options) {
       if (token) await execute('DELETE FROM sessions WHERE token_hash = ?', [tokenHash(token)]);
     },
     async countPosts(division) {
-      return (await first(division === undefined ? 'SELECT COUNT(*) AS total FROM posts' : 'SELECT COUNT(*) AS total FROM posts WHERE division = ?',
+      return (await first(division === undefined ? 'SELECT COUNT(*) AS total FROM posts' : 'SELECT COUNT(*) AS total FROM posts WHERE division IS ?',
         division === undefined ? [] : [division])).total;
     },
     async listPosts(limit, offset, division) {
       return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
         users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
-        FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division = ?'}
+        FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division IS ?'}
         ORDER BY posts.id DESC LIMIT ? OFFSET ?`, [...(division === undefined ? [] : [division]), limit, offset])).rows;
     },
     findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,

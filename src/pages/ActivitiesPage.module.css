@@ -69,8 +69,10 @@
   width: 100%;
   height: auto;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 0;
 }
+
+.articleFooter { margin-top: 32px; }
 
 @media (max-width: 900px) {
   .grid {

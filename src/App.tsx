@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { AuthProvider } from '@/contexts/AuthProvider';
@@ -27,7 +27,6 @@ import {
   NewsPage,
   PressPage,
   PressDetailPage,
-  ActivitiesPage,
   ActivityDetailPage,
   ContactPage,
   // JoinUsPage,  // ACT INSTITUTE 비활성화
@@ -35,6 +34,11 @@ import {
   ResearchDetailPage,
   ShowcasePage,
 } from '@/pages';
+
+function ActivityRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/board/activities/${id}`} replace />;
+}
 
 function App() {
   const location = useLocation();
@@ -91,8 +95,8 @@ function App() {
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/press" element={<PressPage />} />
         <Route path="/news/press/:id" element={<PressDetailPage />} />
-        <Route path="/news/activities" element={<ActivitiesPage />} />
-        <Route path="/news/activities/:id" element={<ActivityDetailPage />} />
+        <Route path="/news/activities" element={<Navigate to="/board" replace />} />
+        <Route path="/news/activities/:id" element={<ActivityRedirect />} />
 <Route path="/contact" element={<ContactPage />} />
         {/* <Route path="/join-us" element={<JoinUsPage />} /> */}{/* ACT INSTITUTE 라우트 비활성화 */}
         <Route path="/showcase" element={<ShowcasePage />} />
@@ -102,6 +106,7 @@ function App() {
         <Route path="/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute masterOnly><AdminPage /></ProtectedRoute>} />
         <Route path="/board" element={<ProtectedRoute><BoardPage /></ProtectedRoute>} />
+        <Route path="/board/activities/:id" element={<ProtectedRoute><ActivityDetailPage /></ProtectedRoute>} />
         <Route path="/board/notices" element={<ProtectedRoute><NoticesPage /></ProtectedRoute>} />
         <Route path="/board/notices/new" element={<ProtectedRoute masterOnly><BoardEditorPage notice /></ProtectedRoute>} />
         <Route path="/board/notices/:id" element={<ProtectedRoute><BoardPostPage notice /></ProtectedRoute>} />

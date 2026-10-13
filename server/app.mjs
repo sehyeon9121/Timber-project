@@ -2,6 +2,7 @@ import express from 'express';
 import { getDevelopmentOrigins } from './origins.mjs';
 import { registerBoardRoutes } from './board.mjs';
 import { registerNoticeRoutes } from './notices.mjs';
+import { createAttachments } from './attachments.mjs';
 import { publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
 
 const cookieName = 'timber_session';
@@ -9,8 +10,9 @@ export function readSessionCookie(request) {
   return request.headers.cookie?.split(';').map(part => part.trim()).find(part => part.startsWith(`${cookieName}=`))?.slice(cookieName.length + 1);
 }
 
-export async function createApp(store, { origins = getDevelopmentOrigins(), secureCookies = false, rateLimit = 30 } = {}) {
+export async function createApp(store, { origins = getDevelopmentOrigins(), secureCookies = false, rateLimit = 30, fileStorage } = {}) {
   const app = express();
+  const attachments = createAttachments(store, fileStorage, origins[0]);
   const dummyHash = await hashPassword('unused-login-timing-placeholder');
   const attempts = new Map();
   let activeAuth = 0;
@@ -21,7 +23,9 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     response.set({ 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY' });
     next();
   });
-  // All writes must originate from the configured site, including login and signup.
+  // Blob completion webhooks use SDK signature verification instead of session cookies.
+  attachments.registerCallback(app);
+  // All browser writes must originate from the configured site, including login and signup.
   app.use('/api', (request, response, next) => {
     if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method) && !origins.includes(request.headers.origin)) {
       return fail(response, 403, 'INVALID_ORIGIN', '허용되지 않은 사이트에서 보낸 요청입니다.');
@@ -121,10 +125,12 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     if (!await store.review(id, status, request.user.id)) return fail(response, 409, 'ALREADY_REVIEWED', '이미 처리되었거나 존재하지 않는 가입 요청입니다.');
     response.json({ user: publicUser(await store.findById(id)) });
   });
-  registerBoardRoutes(app, store, requireUser);
-  registerNoticeRoutes(app, store, requireUser, requireMaster);
+  attachments.registerRoutes(app, requireUser);
+  registerBoardRoutes(app, store, requireUser, attachments);
+  registerNoticeRoutes(app, store, requireUser, requireMaster, attachments);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));
   app.use((error, _request, response, _next) => {
+    if (response.headersSent) return response.destroy();
     if (error.type === 'entity.parse.failed') return fail(response, 400, 'VALIDATION', '요청 형식이 올바르지 않습니다.');
     if (error.type === 'entity.too.large') return fail(response, 413, 'VALIDATION', '요청 크기가 너무 큽니다.');
     console.error('Auth server error:', error.message);

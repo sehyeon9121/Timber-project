@@ -1,6 +1,6 @@
 import { boardPageSize, validatePost } from './board.mjs';
 
-export function registerNoticeRoutes(app, store, requireUser, requireMaster) {
+export function registerNoticeRoutes(app, store, requireUser, requireMaster, attachments) {
   const fail = (response, status, code, message) => response.status(status).json({ code, message });
   function validateNotice(body) {
     const input = validatePost({ title: body?.title, body: body?.body });
@@ -26,7 +26,7 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster) {
   });
   app.get('/api/board/notices/:id', requireUser, async (request, response) => {
     const post = await findNotice(request, response);
-    if (post) response.json({ post });
+    if (post) response.json({ post: await attachments.enrich('notices', post, request.user) });
   });
   app.post('/api/board/notices', requireUser, requireMaster, async (request, response) => {
     const input = validateNotice(request.body);
@@ -45,6 +45,7 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster) {
   app.delete('/api/board/notices/:id', requireUser, requireMaster, async (request, response) => {
     const post = await findNotice(request, response);
     if (!post) return;
+    await attachments.removeFiles('notices', post.id);
     await store.deleteNotice(post.id);
     response.json({ ok: true });
   });

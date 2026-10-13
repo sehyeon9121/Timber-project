@@ -2,32 +2,52 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthField } from '@/components/molecules/AuthField';
+import { FileDropzone } from '@/components/molecules/FileDropzone';
 import { Button } from '@/components/atoms/Button';
 import { Link } from '@/components/atoms/Link';
+import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { authApi, authErrorMessage } from '@/lib/auth-api';
+import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
+import { attachmentAccept, attachmentPath, attachmentSize, maxAttachmentSize, uploadAttachment } from '@/lib/attachments-api';
+import type { PendingFile } from '@/lib/attachments-api';
 import { boardDivisions, boardListHref } from '@/lib/board-api';
 import type { BoardPost } from '@/lib/board-api';
 import { boardTemplates, boardTemplateBody } from '@/lib/board-templates';
 import type { BoardTemplateId } from '@/lib/board-templates';
 import styles from '@/styles/board.module.css';
 
-export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number; notice?: boolean }
+export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number | null; notice?: boolean }
 export function BoardPostForm({ post, initialDivision, notice = false }: BoardPostFormProps) {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [title, setTitle] = useState(post?.title ?? '');
   const [body, setBody] = useState(post?.body ?? '');
   const [pinned, setPinned] = useState(Boolean(post?.pinned));
-  const [division, setDivision] = useState(post?.division === null ? 'legacy' : String(post?.division ?? initialDivision ?? ''));
+  const [division, setDivision] = useState(String(post ? post.division ?? 'activities' : initialDivision ?? 'activities'));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [template, setTemplate] = useState<BoardTemplateId>('free');
   const [appliedBody, setAppliedBody] = useState('');
   const [pendingTemplate, setPendingTemplate] = useState<BoardTemplateId | null>(null);
+  const [savedId, setSavedId] = useState(post?.id);
+  const [attachments, setAttachments] = useState(post?.attachments ?? []);
+  const [removed, setRemoved] = useState<string[]>([]);
+  const [files, setFiles] = useState<PendingFile[]>([]);
+  const [uploadStatus, setUploadStatus] = useState('');
   const ko = language === 'KO';
   const basePath = notice ? '/board/notices' : '/board';
   const apiPath = notice ? '/board/notices' : '/board/posts';
+  function selectFiles(selected: File[]) {
+    if (busy) return;
+    if (attachments.length - removed.length + files.length + selected.length > 10) {
+      setError(new ApiError('글당 최대 10개까지 첨부할 수 있습니다.', 'ATTACHMENT_LIMIT')); return;
+    }
+    if (selected.some(file => !file.size || file.size > maxAttachmentSize || !attachmentAccept.split(',').includes('.' + file.name.split('.').at(-1)?.toLowerCase()))) {
+      setError(new ApiError('지원하는 파일을 선택해 주세요. 파일별 최대 20MB입니다.', 'ATTACHMENT_VALIDATION')); return;
+    }
+    setError(null);
+    setFiles(items => [...items, ...selected.map((file, index) => ({ key: `${Date.now()}-${index}-${Math.random()}`, file }))]);
+  }
   function applyTemplate(id: BoardTemplateId) {
     setTemplate(id);
     setPendingTemplate(null);
@@ -46,25 +66,41 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (busy) return;
     setBusy(true);
     setError(null);
     try {
-      const data = await authApi<{ post: BoardPost }>(post ? `${apiPath}/${post.id}` : apiPath, {
-        method: post ? 'PATCH' : 'POST', body: JSON.stringify(notice ? { title, body, pinned } : { title, body, division: division === 'legacy' ? undefined : Number(division) }),
+      const data = await authApi<{ post: BoardPost }>(savedId ? `${apiPath}/${savedId}` : apiPath, {
+        method: savedId ? 'PATCH' : 'POST', body: JSON.stringify(notice ? { title, body, pinned } : { title, body, division: division === 'activities' ? null : Number(division) }),
       });
+      setSavedId(data.post.id);
+      const base = attachmentPath(notice, data.post.id);
+      for (const id of removed) {
+        await authApi(`${base}/${id}`, { method: 'DELETE' });
+        setAttachments(items => items.filter(item => item.id !== id));
+        setRemoved(items => items.filter(item => item !== id));
+      }
+      for (const pending of files) {
+        setUploadStatus(ko ? `${pending.file.name} 업로드 중…` : `Uploading ${pending.file.name}…`);
+        const attachment = await uploadAttachment(base, pending,
+          updated => setFiles(items => items.map(item => item.key === pending.key ? updated : item)),
+          percent => setUploadStatus(`${pending.file.name} · ${percent}%`));
+        setFiles(items => items.filter(item => item.key !== pending.key));
+        setAttachments(items => [...items, { ...attachment, state: 'ready' }]);
+      }
       navigate(`${basePath}/${data.post.id}`, { replace: true });
-    } catch (cause) { setError(cause); }
-    finally { setBusy(false); }
+    } catch (cause) { setError(cause instanceof ApiError ? cause : new ApiError('파일 업로드에 실패했습니다. 연결을 확인한 뒤 다시 저장해 주세요.', 'ATTACHMENT_UPLOAD')); }
+    finally { setBusy(false); setUploadStatus(''); }
   }
   return <>
     {Boolean(error) && <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>}
+    {Boolean(error) && savedId && <p className={styles.hint}>{ko ? '글은 저장되었습니다. 첨부파일 상태를 확인한 뒤 다시 저장하거나 저장된 글로 이동하세요.' : 'The post has been saved. Check attachments and save again, or open the saved post.'} <Link href={`${basePath}/${savedId}`}>{ko ? '저장된 글 보기' : 'Open saved post'}</Link></p>}
     <form className={styles.form} onSubmit={submit}>
       {!notice && <div className={styles.textareaField}>
-        <label htmlFor="post-division">{ko ? '세부 게시판' : 'Division board'}</label>
+        <label htmlFor="post-division">{ko ? '게시판' : 'Board'}</label>
         <select id="post-division" name="division" className={styles.select} value={division}
           onChange={event => setDivision(event.target.value)} required disabled={busy}>
-          <option value="">{ko ? '세부를 선택해 주세요' : 'Choose a division'}</option>
-          {post?.division === null && <option value="legacy">{ko ? '기존 글 (세부 미지정)' : 'Earlier post (no division)'}</option>}
+          <option value="activities">{ko ? '연구단 활동' : 'Project Activities'}</option>
           {boardDivisions.map(item => <option key={item} value={item}>{ko ? `${item}세부` : `Division ${item}`}</option>)}
         </select>
       </div>}
@@ -108,12 +144,31 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
           {body.length.toLocaleString()} / 10,000 {ko ? '자 · 승인된 회원에게만 공개됩니다.' : 'characters · Only approved members can read this post.'}
         </small>
       </div>
+      <div className={styles.textareaField}>
+        <label htmlFor="post-files">{ko ? '파일·사진 첨부' : 'Attach files and photos'}</label>
+        <FileDropzone id="post-files" accept={attachmentAccept} disabled={busy} describedBy="post-files-hint" onSelect={selectFiles} />
+        <small id="post-files-hint" className={styles.hint}>{ko ? '파일별 최대 20MB · 글당 최대 10개 · 사진, PDF, 한글, Office, ZIP, TXT, CSV · 등록/수정 완료 시 업로드됩니다.' : 'Up to 20 MB per file, 10 files per post · Photos, PDF, HWP, Office, ZIP, TXT, CSV · Uploaded when you save.'}</small>
+        {savedId && <BoardAttachments files={attachments} postId={savedId} notice={notice} removed={removed} disabled={busy}
+          onToggleRemove={id => setRemoved(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])} />}
+        {files.length > 0 && <ul className={styles.attachmentList}>{files.map(item => <li key={item.key} className={styles.attachmentRow}>
+          <span>{item.file.name} <small className={styles.hint}>{attachmentSize(item.file.size)}</small></span>
+          <Button type="button" className={styles.secondary} disabled={busy} onClick={() => {
+            if (item.reservation && savedId) {
+              setBusy(true);
+              void authApi(`${attachmentPath(notice, savedId)}/${item.reservation.attachment.id}`, { method: 'DELETE' })
+                .then(() => setFiles(items => items.filter(file => file.key !== item.key)))
+                .catch(setError).finally(() => setBusy(false));
+            } else setFiles(items => items.filter(file => file.key !== item.key));
+          }}>{ko ? '선택 취소' : 'Remove selection'}</Button>
+        </li>)}</ul>}
+        {uploadStatus && <p role="status" aria-live="polite">{uploadStatus}</p>}
+      </div>
       <div className={styles.actions}>
         <Button type="submit" className={styles.primary} disabled={busy}>
           {busy ? (ko ? '저장 중…' : 'Saving…') : post ? (ko ? '수정 완료' : 'Save changes') : (ko ? '등록' : 'Publish')}
         </Button>
         {busy ? <Button type="button" className={styles.secondary} disabled>{ko ? '취소' : 'Cancel'}</Button>
-          : <Link href={post ? `${basePath}/${post.id}` : notice ? basePath : initialDivision ? boardListHref(initialDivision) : '/board'} className={styles.secondary}>{ko ? '취소' : 'Cancel'}</Link>}
+          : <Link href={savedId ? `${basePath}/${savedId}` : notice ? basePath : initialDivision ? boardListHref(initialDivision) : '/board'} className={styles.secondary}>{ko ? '취소' : 'Cancel'}</Link>}
       </div>
     </form>
   </>;

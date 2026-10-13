@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthLayout } from '@/components/templates/AuthLayout';
+import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { Button } from '@/components/atoms/Button';
 import { Link } from '@/components/atoms/Link';
 import { useAuth } from '@/contexts/auth-context';
@@ -49,6 +50,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
           {post.updatedAt !== post.createdAt && <span>{ko ? '수정일: ' : 'Updated: '}<time dateTime={post.updatedAt}>{boardDate(post.updatedAt, language)}</time></span>}
         </div>
         <p className={styles.body}>{post.body}</p>
+        <BoardAttachments files={post.attachments ?? []} postId={post.id} notice={notice} />
         {Boolean(deleteError) && <div className={styles.error} role="alert">{authErrorMessage(deleteError, language)}</div>}
         {canDelete && confirmDelete && <div className={styles.confirmation} role="group" aria-label={ko ? '게시글 삭제 확인' : 'Confirm post deletion'}>
           <p>{ko ? '이 게시글을 삭제할까요? 삭제한 글은 복구할 수 없습니다.' : 'Delete this post? Deleted posts cannot be restored.'}</p>

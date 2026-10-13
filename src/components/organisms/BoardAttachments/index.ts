@@ -1,0 +1,1 @@
+export { BoardAttachments } from './BoardAttachments';

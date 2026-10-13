@@ -1,6 +1,11 @@
-.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.boardShell { max-width: 1100px; margin: 0 auto; padding: 64px 28px 96px; }
+.boardHeading { margin-bottom: 36px; }
+.boardHeading .eyebrow { margin: 0 0 12px; color: var(--color-primary); font-size: 13px; font-weight: 600; }
+.boardHeading h1 { margin: 0 0 14px; font-size: 32px; font-weight: 700; letter-spacing: -.04em; line-height: 1.4; overflow-wrap: anywhere; }
+.boardHeading p { color: var(--color-text-light); font-size: 15px; line-height: 1.7; word-break: keep-all; }
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
 .toolbarText { color: var(--color-text-light); font-size: 14px; }
-.primary, .secondary, .danger { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 10px 16px; border: 1px solid var(--color-primary); border-radius: 8px; font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.primary, .secondary, .danger { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 10px 18px; border: 1px solid var(--color-primary); border-radius: 3px; font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .primary { background: var(--color-primary); color: #fff; }
 .primary:hover:not(:disabled) { background: var(--color-primary-light); color: #fff; }
 .secondary { background: #fff; color: var(--color-primary); }
@@ -9,24 +14,25 @@
 .danger:hover:not(:disabled) { color: #fff; background: #a02620; }
 .primary:disabled, .secondary:disabled, .danger:disabled { opacity: .5; cursor: not-allowed; }
 .primary:focus-visible, .secondary:focus-visible, .danger:focus-visible, .postTitle:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
-.rows { list-style: none; border-top: 2px solid var(--color-primary); }
-.row, .columnLabels { display: grid; grid-template-columns: 60px minmax(0, 1fr) 100px 160px; gap: 16px; align-items: center; padding: 18px 12px; border-bottom: 1px solid var(--color-border); }
-.columnLabels { background: #f8faf7; color: var(--color-text-light); font-size: 13px; font-weight: 600; }
+.postTable { width: 100%; table-layout: fixed; border-collapse: collapse; border-top: 2px solid var(--color-text); text-align: center; }
+.postTable th { padding: 16px 12px; border-bottom: 1px solid var(--color-border); color: var(--color-text-light); font-size: 13px; font-weight: 500; }
+.postTable td { padding: 22px 12px; border-bottom: 1px solid var(--color-border); }
+.postTable tbody tr:hover { background: #fafbf9; }
+.numberColumn { width: 64px; }
+.authorColumn { width: 120px; }
+.dateColumn { width: 140px; }
+.titleCell { text-align: left; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .number, .author, .date { font-size: 13px; color: var(--color-text-light); overflow-wrap: anywhere; }
-.postTitle { color: var(--color-text); font-weight: 600; word-break: keep-all; overflow-wrap: anywhere; }
+.postTitle { color: var(--color-text); font-size: 15px; font-weight: 500; word-break: keep-all; overflow-wrap: anywhere; }
 .postTitle:hover { color: var(--color-primary); text-decoration: underline; }
-.divisionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 28px 0; }
-.divisionCard { display: flex; flex-direction: column; justify-content: space-between; gap: 20px; min-height: 140px; padding: 24px; border: 1px solid var(--color-border); border-radius: 12px; color: var(--color-text); text-decoration: none; }
-.divisionCard:hover { border-color: var(--color-primary); background: #f8faf7; }
-.divisionCard strong { font-size: 22px; }
-.divisionCard span { color: var(--color-text-light); font-size: 14px; }
-.allPostsLink { display: inline-block; margin-bottom: 12px; color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
-.boardTabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 28px; }
-.boardTab { padding: 10px 16px; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-text); text-decoration: none; font-size: 14px; }
-.boardTab:hover, .boardTabActive { border-color: var(--color-primary); background: #edf5eb; color: var(--color-primary); }
-.divisionBadge { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 4px; background: #edf5eb; color: var(--color-primary); font-size: 12px; vertical-align: middle; }
-.divisionCard:focus-visible, .boardTab:focus-visible, .allPostsLink:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
-.empty { padding: 48px 20px; text-align: center; color: var(--color-text-light); background: #f8faf7; border-radius: 10px; }
+.boardTabs { display: flex; gap: 28px; margin-bottom: 30px; border-bottom: 1px solid var(--color-border); }
+.boardTab { flex-shrink: 0; padding: 14px 2px; border-bottom: 2px solid transparent; margin-bottom: -1px; color: var(--color-text-light); text-decoration: none; font-size: 15px; white-space: nowrap; }
+.boardTab:hover { color: var(--color-primary); }
+.boardTabActive { border-bottom-color: var(--color-primary); color: var(--color-primary); font-weight: 600; }
+.divisionBadge { display: inline-block; margin-right: 10px; color: var(--color-primary); font-size: 12px; vertical-align: middle; }
+.boardTab:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -3px; }
+.postTable td.empty, .listStatus { padding: 64px 20px; text-align: center; color: var(--color-text-light); font-size: 14px; }
 .pagination { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 28px; }
 .meta { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-text-light); }
 .body { padding: 28px 0; min-height: 180px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; }
@@ -51,13 +57,26 @@
 .error { padding: 16px; margin: 16px 0; border-radius: 8px; background: #fff1f0; color: #a02620; }
 .confirmation { padding: 20px; margin: 20px 0; border: 1px solid #edc3bf; background: #fff7f6; border-radius: 10px; }
 .confirmation p { margin-bottom: 16px; }
+.attachments { margin: 12px 0 28px; padding: 20px; border: 1px solid var(--color-border); border-radius: 10px; }
+.attachments h2 { font-size: 16px; margin-bottom: 16px; }
+.attachmentList { list-style: none; display: grid; gap: 16px; padding: 0; }
+.attachmentList li { min-width: 0; }
+.attachmentRow { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; overflow-wrap: anywhere; }
+.attachmentRow > div { flex: 1; min-width: 160px; }
+.attachmentImage { display: block; max-width: 100%; max-height: 480px; width: auto; height: auto; object-fit: contain; border-radius: 8px; margin-bottom: 12px; }
+.fileLink { color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; }
+.removedAttachment { opacity: .55; }
 @media (max-width: 700px) {
-  .divisionGrid { grid-template-columns: 1fr; }
-  .columnLabels { display: none; }
-  .row { grid-template-columns: 1fr 1fr; gap: 8px; padding: 20px 0; }
-  .number { display: none; }
-  .postTitle { grid-column: 1 / -1; }
-  .date { text-align: right; }
-  .toolbar { align-items: flex-start; }
+  .boardShell { padding: 36px 20px 64px; }
+  .boardHeading { margin-bottom: 24px; }
+  .boardHeading h1 { font-size: 27px; }
+  .boardTabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-bottom: 24px; }
+  .boardTab { display: flex; align-items: center; justify-content: center; font-size: 14px; text-align: center; white-space: normal; }
+  .numberColumn, .number, .authorColumn, .author { display: none; }
+  .dateColumn { width: 94px; }
+  .postTable th, .postTable td { padding: 18px 6px; }
+  .postTable td.empty { padding: 56px 12px; }
+  .postTitle { font-size: 14px; }
+  .date { font-size: 12px; }
   .textarea { min-height: 240px; }
 }

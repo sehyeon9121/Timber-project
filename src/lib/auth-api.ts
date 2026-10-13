@@ -39,6 +39,11 @@ export async function authApi<T>(path: string, options: RequestInit = {}): Promi
 }
 
 const englishErrors: Record<string, string> = {
+  ATTACHMENT_VALIDATION: 'Choose a supported file of up to 20 MB. Check that the upload has completed.',
+  ATTACHMENT_LIMIT: 'You can attach up to 10 files per post.',
+  ATTACHMENT_UNAVAILABLE: 'File storage is not connected. Contact the administrator.',
+  ATTACHMENT_NOT_FOUND: 'This file could not be found or has not finished uploading.',
+  ATTACHMENT_UPLOAD: 'File upload failed. Check your connection and save again.',
   CONNECTION: 'Unable to connect to the server. Please try again shortly.',
   INVALID_CREDENTIALS: 'Please check your username and password.',
   PENDING: 'Your registration is awaiting administrator approval.',

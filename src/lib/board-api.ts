@@ -8,14 +8,22 @@ export interface BoardPostSummary {
   updatedAt: string;
   pinned?: number;
 }
-export interface BoardPost extends BoardPostSummary { body: string }
+export interface BoardAttachment {
+  id: string;
+  name: string;
+  size: number;
+  contentType: string;
+  state: 'pending' | 'ready';
+}
+export interface BoardPost extends BoardPostSummary { body: string; attachments?: BoardAttachment[] }
+export type BoardListEntry = Omit<BoardPostSummary, 'id'> & { id: number | string; href?: string };
 export const boardDivisions = [1, 2, 3, 4] as const;
 export function boardDivisionLabel(division: number | null, language: 'KO' | 'EN') {
-  return division === null ? (language === 'KO' ? '기존 글' : 'Earlier post')
+  return division === null ? (language === 'KO' ? '연구단 활동' : 'Project Activities')
     : (language === 'KO' ? `${division}세부` : `Division ${division}`);
 }
 export function boardListHref(division: number | null) {
-  return division === null ? '/board?division=all' : `/board?division=${division}`;
+  return division === null ? '/board' : `/board?division=${division}`;
 }
 export interface BoardPostList {
   posts: BoardPostSummary[];
@@ -23,6 +31,16 @@ export interface BoardPostList {
   pageSize: number;
   total: number;
   totalPages: number;
+}
+// Published photo records follow member posts and share the same page size.
+export function boardPageWithArchive(data: BoardPostList, archive: BoardListEntry[]) {
+  const offset = (data.page - 1) * data.pageSize;
+  const archiveOffset = Math.max(0, offset - data.total);
+  const archivedPosts = offset + data.posts.length >= data.total
+    ? archive.slice(archiveOffset, archiveOffset + data.pageSize - data.posts.length) : [];
+  const total = data.total + archive.length;
+  return { ...data, posts: [...data.posts, ...archivedPosts], total,
+    totalPages: Math.max(1, Math.ceil(total / data.pageSize)) };
 }
 export function boardDate(value: string, language: 'KO' | 'EN') {
   return new Date(value).toLocaleString(language === 'KO' ? 'ko-KR' : 'en-US', {

@@ -118,7 +118,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.equal((await request('?division=3')).data.total, 0);
     assert.ok((await request('?page=2')).data.posts.some(post => post.id === postId && post.division === null));
     for (const division of ['0', '5', 'abc', '1.5']) assert.equal((await request(`?division=${division}`)).status, 400);
-    for (const division of [0, 5, '1', null]) {
+    for (const division of [0, 5, '1', 'activities']) {
       assert.equal((await request('', 'POST', { title: 'Bad division', body: 'Body', division })).status, 400);
     }
     const moved = await request(`/${divisionPostId}`, 'PATCH', { title: '3세부 활동', body: '이동한 글', division: 3 });
@@ -126,6 +126,46 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.equal(moved.data.post.division, 3);
     assert.equal((await request('?division=1')).data.total, 0);
     assert.deepEqual((await request('?division=3')).data.posts.map(post => post.id), [divisionPostId]);
+  });
+  await t.test('project activities can be published, filtered, and moved without affecting divisions', async () => {
+    const created = await request('', 'POST', { title: '연구단 활동', body: '연구단 공동 행사', division: null });
+    assert.equal(created.status, 201);
+    const id = created.data.post.id;
+    const activities = (await request('?division=activities')).data;
+    assert.ok(activities.posts.every(post => post.division === null));
+    assert.ok(activities.posts.some(post => post.id === id));
+    assert.ok(!activities.posts.some(post => post.id === divisionPostId));
+    assert.ok(!(await request('?division=3')).data.posts.some(post => post.id === id));
+    assert.equal((await request('?division=activities', 'GET', undefined, null)).status, 401);
+    const moved = await request(`/${id}`, 'PATCH', { title: '세부 행사', body: '세부로 이동', division: 4 });
+    assert.equal(moved.data.post.division, 4);
+    assert.ok(!(await request('?division=activities')).data.posts.some(post => post.id === id));
+    const returned = await request(`/${id}`, 'PATCH', { title: '공동 행사', body: '연구단으로 이동', division: null });
+    assert.equal(returned.data.post.division, null);
+    assert.equal((await request(`/${id}`, 'PATCH', { title: '제목 수정', body: '분류 유지' })).data.post.division, null);
+    const reopened = createStore(path);
+    assert.equal(reopened.findPost(id).division, null);
+    assert.ok(reopened.listPosts(20, 0, null).some(post => post.id === id));
+    reopened.close();
+    assert.equal((await request(`/${id}`, 'DELETE')).status, 200);
+  });
+  await t.test('the operating committee meeting can be published to project activities', async () => {
+    const body = [
+      '회의 일자: 2026.04.13.(월) 14:00~15:00',
+      '회의 장소: 서울대학교 관악캠퍼스',
+      '참석자: 연구단 참여연구원',
+      '회의 주제: 제1차 운영위원회',
+      '회의 내용: 연구단 조직, 회의 기구, 주요 일정 등 공유 및 운영 방안 논의 등',
+    ].join('\n\n');
+    const result = await request('', 'POST', { title: '제1차 운영위원회', body, division: null });
+    assert.equal(result.status, 201);
+    assert.equal(result.data.post.division, null);
+    assert.equal(result.data.post.body, body);
+    const listed = (await request('?division=activities')).data.posts;
+    assert.ok(listed.some(post => post.id === result.data.post.id));
+    assert.ok(!(await request('?division=1')).data.posts.some(post => post.id === result.data.post.id));
+    assert.equal((await request(`/${result.data.post.id}`)).data.post.body, body);
+    store.deletePost(result.data.post.id);
   });
   await t.test('posts and existing account roles survive a database reopen', () => {
     const reopened = createStore(path);

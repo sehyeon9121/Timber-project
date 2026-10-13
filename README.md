@@ -65,12 +65,14 @@ npm run master:create -- ERS master@example.com "관리자 이름"
 - `/board`에서 최신 글 목록을 보고, **글쓰기**로 제목과 내용을 입력합니다. 제목은 최대 120자, 내용은 최대 10,000자이며 한 페이지에 20개씩 표시됩니다.
 - 글을 작성한 회원만 수정할 수 있습니다. 삭제는 작성자 또는 마스터만 가능하며, 삭제 전 확인 화면이 표시됩니다.
 - 작성자는 서버의 로그인 정보로 결정합니다. 글에는 작성자 이름과 작성·수정 일시가 표시되며 이메일이나 비밀번호 정보는 노출하지 않습니다.
-- 글은 기존 SQLite DB의 `posts` 테이블에 저장되어 서버를 재시작해도 유지됩니다. 기존 회원 정보는 그대로 유지됩니다.
-- 내용은 일반 텍스트로 표시합니다. HTML 실행, 댓글, 파일 첨부는 포함하지 않습니다.
+- 글은 `posts`, 공지사항은 `notices`, 회원 정보는 `users` 테이블에 저장됩니다. Turso 환경 변수가 있으면 Turso를 사용하고, 없는 로컬 개발 환경에서는 SQLite를 사용합니다.
+- 연구단 활동·1~4세부 게시판과 공지사항에서 글 작성·수정 시 **파일·사진 첨부**를 선택할 수 있습니다. 파일별 최대 20MB, 글당 최대 10개이며 JPG/PNG/GIF/WebP, PDF, HWP/HWPX, Word/Excel/PowerPoint, ZIP, TXT, CSV를 지원합니다. 내용은 일반 텍스트로 표시합니다.
+- 사진은 글 상세 화면에서 원본 비율로 미리 보고, 파일명 또는 사진을 눌러 원본을 다운로드합니다. 승인된 로그인 회원만 미리보기·다운로드 API에 접근할 수 있습니다. 게시글 작성자만 첨부를 추가·삭제할 수 있고, 공지사항 첨부는 관리자만 변경합니다. 글을 삭제하면 첨부 원본과 목록도 삭제됩니다.
+- 글이 먼저 저장되고 파일은 순서대로 업로드됩니다. 중간에 실패하면 작성 내용과 완료된 첨부가 유지되며 **다시 저장**하면 이어서 처리합니다. 미완료 첨부는 작성자에게만 표시되고 수정 화면에서 삭제할 수 있습니다.
 
 ### 데이터와 세션
 
-- DB는 `server/data/auth.sqlite`에 저장됩니다. 서버를 재시작해도 계정과 승인 상태가 유지됩니다.
+- Turso 연결 시 회원·승인 상태·세션·글·첨부 목록이 동일한 Turso DB에 저장됩니다. Turso 설정이 없는 로컬 개발 환경의 DB는 `server/data/auth.sqlite`입니다.
 - DB와 환경 파일은 Git에서 제외됩니다. DB를 삭제하면 마스터 계정을 포함한 모든 계정이 삭제되므로 운영 데이터는 백업하세요.
 - 비밀번호는 salt가 포함된 scrypt 해시로 저장됩니다. [OWASP의 scrypt 설정](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)을 적용합니다.
 - 로그인 세션은 8시간 후 만료됩니다. 세션 쿠키는 HttpOnly와 SameSite=Strict를 사용하며, 서버 DB에는 세션 토큰의 해시를 저장합니다.
@@ -96,9 +98,9 @@ Vercel에서는 `api/index.mjs`가 기존 로그인·관리자 승인·게시판
 
 운영 시 Node 서버가 `dist` 사이트와 `/api`를 같은 도메인에서 제공하도록 구성하고 HTTPS 역방향 프록시를 연결합니다. `NODE_ENV=production`, `SITE_ORIGIN=https://실제사이트주소`를 지정하고 빌드 후 `npm start`로 실행합니다. 운영 쿠키에는 Secure가 추가됩니다. SQLite는 단일 서버와 지속 디스크를 전제로 합니다. HTTPS 접속과 DB 백업을 구성한 뒤 운영하세요.
 
-### Vercel + Turso 무료 DB 연결
+### Vercel + Turso DB 연결
 
-[Turso](https://turso.tech/pricing)의 Free 요금제에서 libSQL DB를 생성합니다. Vercel과 DB의 무료 한도 안에서 운영할 수 있으며 유료 요금제나 자동 추가 사용량 결제는 활성화하지 않습니다. Vercel Hobby는 개인·비상업용 대상이므로 실제 사이트 용도에 맞는지 [사용 조건](https://vercel.com/docs/plans/hobby)을 확인하세요.
+기존 Turso libSQL DB 연결을 유지합니다. 첨부 원본은 아래의 비공개 Vercel Blob 저장소에 저장하며, DB에는 첨부 목록과 파일 경로만 저장합니다. 파일 기능에는 별도의 Blob 저장소 연결이 필요합니다.
 
 1. Turso에서 빈 libSQL DB를 생성하고 Database URL과 읽기·쓰기 권한의 Auth Token을 발급합니다.
 2. Vercel 프로젝트의 **Settings → Environment Variables**에 아래 세 값을 등록합니다. Production 환경에 적용하세요.
@@ -107,9 +109,9 @@ Vercel에서는 `api/index.mjs`가 기존 로그인·관리자 승인·게시판
 | --- | --- |
 | `TURSO_DATABASE_URL` | Turso의 `libsql://…turso.io` 주소 |
 | `TURSO_AUTH_TOKEN` | DB 연결 토큰 |
-| `SITE_ORIGIN` | `https://timber-project-ten.vercel.app`처럼 실제 접속하는 사이트의 HTTPS 주소 |
+| `SITE_ORIGIN` | `https://www.wlss.re.kr` (메인 도메인의 최종 접속 주소) |
 
-토큰은 서버에서만 사용합니다. `VITE_`로 시작하는 변수, 프런트엔드 코드, Git 파일, 채팅에 토큰을 넣지 마세요. 커스텀 도메인을 사용하면 `SITE_ORIGIN`도 해당 주소로 바꿉니다. 별도의 Preview 주소는 승인된 운영 주소와 다르므로 로그인·회원가입 요청이 거절됩니다.
+토큰은 서버에서만 사용합니다. `VITE_`로 시작하는 변수, 프런트엔드 코드, Git 파일, 채팅에 토큰을 넣지 마세요. `wlss.re.kr`는 `www.wlss.re.kr`로 이동하므로 Production의 `SITE_ORIGIN`도 `https://www.wlss.re.kr`로 지정한 뒤 Redeploy해야 합니다. 이전 Vercel 주소가 남아 있으면 회원가입·관리자 로그인·글 등록 요청이 모두 거절됩니다. 다른 커스텀 도메인으로 바꿀 때도 브라우저에 최종 표시되는 HTTPS 주소와 맞춥니다. 별도의 Preview 주소는 승인된 운영 주소와 다르므로 로그인·회원가입 요청이 거절됩니다.
 
 3. 기존 계정을 유지하려면 이 컴퓨터에서 `.env.example`을 `.env`로 복사하고 동일한 Turso URL·토큰을 입력한 뒤 실행합니다. `.env`는 Git에서 제외됩니다.
 
@@ -129,6 +131,19 @@ node --env-file=.env server/create-master.mjs ERS master@example.com "관리자 
 5. `/api/health`가 `{"ok":true}`를 반환하는지 확인합니다. `/login`에서 기존 관리자·승인된 회원 계정으로 로그인합니다. 가입 신청자는 기존과 같이 관리자 승인을 받아야 합니다.
 
 Turso 환경 변수가 없는 로컬 실행에서는 기존 SQLite DB를 계속 사용합니다. 운영 DB를 로컬 DB로 바꾸면 운영에서 작성한 새 데이터는 로컬에 자동으로 복사되지 않으므로, 되돌리기 전에 운영 DB를 별도로 백업해야 합니다.
+
+### 비공개 첨부파일 저장소 연결
+
+1. Vercel의 해당 프로젝트 → **Storage → Create Storage → Blob → Private**로 비공개 저장소를 만듭니다. Public 저장소는 사용하지 마세요.
+2. 저장소를 이 프로젝트에 연결하고 Production 환경 변수에 `BLOB_READ_WRITE_TOKEN`을 설정합니다. 기존 `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `SITE_ORIGIN`도 유지합니다. 토큰 값은 Git·프런트엔드·채팅에 넣지 않습니다.
+3. 이 코드를 배포하고 환경 변수를 적용해 Redeploy합니다. `attachments` 테이블은 기존 데이터를 유지하면서 자동 생성됩니다.
+4. 관리자 또는 승인된 회원으로 로그인해 각 게시판에서 사진·문서를 첨부합니다. 다른 승인된 회원의 다운로드와 로그아웃 상태의 접근 차단도 확인합니다.
+
+브라우저가 파일을 Blob에 직접 전송하므로 큰 파일은 Vercel 함수의 요청 본문을 통과하지 않습니다. 서버는 로그인·작성 권한을 검사해 파일 경로와 크기가 제한된 업로드 토큰을 발급합니다. 완료 알림은 SDK의 서명을 검증하며, 실제 크기·형식을 확인한 파일만 다운로드에 공개합니다. 비공개 원본은 인증 API를 통해 스트리밍합니다.
+
+Blob이 연결되지 않은 운영 서버에서는 글 기능은 유지하고 첨부 요청에 503 오류를 반환합니다. 임시 디스크로 대체하지 않습니다. 로컬 개발에서는 `server/data/attachments/`를 사용하며 `ATTACHMENT_DIR`로 경로를 바꿀 수 있습니다. 로컬 첨부를 운영으로 옮기는 기능은 포함되지 않아, 첨부가 있는 로컬 DB에 `db:migrate`를 실행하면 파일 누락을 막기 위해 중단합니다.
+
+첨부 기능 검증: `npm run test:attachments`. 전체 회귀 검증: `npm test`, `npm run build`.
 
 ## Original Vite template notes
 

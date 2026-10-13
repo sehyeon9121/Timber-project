@@ -16,6 +16,10 @@ export async function migrateLocalStore(path, target) {
   let transaction;
   try {
     source.exec('BEGIN');
+    if (source.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'attachments'").get()
+      && source.prepare('SELECT count(*) AS total FROM attachments').get().total) {
+      throw new Error('첨부파일이 있는 로컬 DB는 이 도구로 이전할 수 없습니다. 파일 원본과 첨부 목록을 함께 이전해야 합니다. 원본 DB는 유지됩니다.');
+    }
     const snapshots = tables.map(table => ({ ...table, rows: table.name === 'notices' && !source.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notices'").get()
       ? [] : source.prepare(`SELECT * FROM ${table.name} ORDER BY id`).all() }));
     snapshots[1].rows = snapshots[1].rows.map(post => ({ ...post, division: post.division ?? null }));
