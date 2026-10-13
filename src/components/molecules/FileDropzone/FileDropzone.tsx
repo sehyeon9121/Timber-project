@@ -6,7 +6,7 @@ import styles from './FileDropzone.module.css';
 
 export interface FileDropzoneProps {
   id: string;
-  accept: string;
+  accept?: string;
   disabled?: boolean;
   describedBy?: string;
   onSelect: (files: File[]) => void;

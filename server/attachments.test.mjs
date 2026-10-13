@@ -237,6 +237,27 @@ test('private Blob tokens are scoped; signed completion and large streamed downl
   await store.deleteAttachment(id);
   assert.equal((await request('/attachments/callback', completed, { Cookie: '', Origin: '', 'x-vercel-signature': signature })).status, 200);
   assert.equal(objects.size, 0);
+  await t.test('private Blob permits every requested document type and downloads it without redirecting', async () => {
+    for (const name of ['회의자료.pdf', '회의자료.hwp', '회의자료.hwpx', '회의자료.ppt', '회의자료.pptx']) {
+      const bytes = Buffer.from(`private document fixture: ${name}`);
+      const reserved = await (await request(path, { name, size: bytes.length })).json();
+      const documentId = reserved.attachment.id;
+      const tokenResponse = await request(`${path}/${documentId}/token`, {
+        type: 'blob.generate-client-token', payload: { pathname: reserved.pathname, multipart: false, clientPayload: null },
+      });
+      assert.equal(tokenResponse.status, 200);
+      const token = getPayloadFromClientToken((await tokenResponse.json()).clientToken);
+      assert.deepEqual(token.allowedContentTypes, [validateAttachment({ name, size: bytes.length }).contentType]);
+      objects.set(reserved.pathname, bytes);
+      assert.equal((await request(`${path}/${documentId}/complete`, {})).status, 200);
+      const download = await fetch(`${url}${path}/${documentId}/content`, { headers: { Cookie: cookie }, redirect: 'manual' });
+      assert.equal(download.status, 200);
+      assert.equal(download.headers.get('location'), null);
+      assert.equal(download.headers.get('content-type'), reserved.attachment.contentType);
+      assert.ok(download.headers.get('content-disposition').includes(`filename*=UTF-8''${encodeURIComponent(name)}`));
+      assert.deepEqual(Buffer.from(await download.arrayBuffer()), bytes);
+    }
+  });
 });
 
 test('local migration refuses attachments rather than silently losing files', async t => {

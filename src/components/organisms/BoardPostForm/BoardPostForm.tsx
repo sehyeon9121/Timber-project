@@ -8,7 +8,7 @@ import { Link } from '@/components/atoms/Link';
 import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
-import { attachmentAccept, attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
+import { attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
 import type { PendingFile } from '@/lib/attachments-api';
 import { boardDivisions, boardListHref } from '@/lib/board-api';
 import type { BoardPost } from '@/lib/board-api';
@@ -151,7 +151,7 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
       </div>
       <div className={styles.textareaField}>
         <label htmlFor="post-files">{ko ? '파일·사진 첨부' : 'Attach files and photos'}</label>
-        <FileDropzone id="post-files" accept={attachmentAccept} disabled={busy} describedBy="post-files-hint" onSelect={selectFiles} />
+        <FileDropzone id="post-files" disabled={busy} describedBy="post-files-hint" onSelect={selectFiles} />
         <small id="post-files-hint" className={styles.hint}>{ko ? '파일별 최대 20MB · 글당 최대 10개 · 사진, PDF, 한글, Office, ZIP, TXT, CSV · 등록/수정 완료 시 업로드됩니다.' : 'Up to 20 MB per file, 10 files per post · Photos, PDF, HWP, Office, ZIP, TXT, CSV · Uploaded when you save.'}</small>
         {savedId && <BoardAttachments files={attachments} postId={savedId} notice={notice} removed={removed} disabled={busy}
           onToggleRemove={id => setRemoved(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])} />}
