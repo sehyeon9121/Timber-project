@@ -1,4 +1,6 @@
-import { boardPageSize, validatePost } from './board.mjs';
+import { validatePost } from './board.mjs';
+
+const boardPageSize = 20;
 
 export function registerNoticeRoutes(app, store, requireUser, requireMaster, attachments) {
   const fail = (response, status, code, message) => response.status(status).json({ code, message });

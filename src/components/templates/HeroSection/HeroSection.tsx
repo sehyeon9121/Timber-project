@@ -15,6 +15,8 @@ import styles from './HeroSection.module.css';
 
 export interface HeroSectionProps {
   backgroundImage?: string;
+  backgroundPosition?: CSSProperties['backgroundPosition'];
+  imageFit?: 'cover' | 'contain';
   title: string;
   subtitle?: string;
   description?: string;
@@ -37,6 +39,8 @@ export interface HeroSectionProps {
 
 export function HeroSection({
   backgroundImage,
+  backgroundPosition,
+  imageFit = 'cover',
   title,
   subtitle,
   description,
@@ -62,6 +66,7 @@ export function HeroSection({
   // Subpage variant
   if (variant === 'subpage') {
     const hasBackgroundImage = !!backgroundImage;
+    const showFullImage = hasBackgroundImage && imageFit === 'contain';
     const BASE_URL = import.meta.env.BASE_URL || '/';
     // 이미지 경로에 BASE_URL 추가 (이미 포함되어 있지 않은 경우)
     const imageSrc = backgroundImage && !backgroundImage.startsWith(BASE_URL)
@@ -70,7 +75,7 @@ export function HeroSection({
 
     return (
       <section
-        className={cn('hero-section relative overflow-hidden', className)}
+        className={cn('hero-section relative overflow-hidden', showFullImage && styles.fullImageHero, className)}
         style={{
           '--hero-max-height': `${heroMaxHeight ?? 400}px`,
           ...(!hasBackgroundImage ? { backgroundColor: '#f8f8f8' } : {}),
@@ -78,7 +83,7 @@ export function HeroSection({
       >
         {hasBackgroundImage && (
           <>
-            {/* 배너 높이는 콘텐츠 영역에서 결정하고 이미지는 영역에 맞춰 채웁니다. */}
+            {/* 사진을 배너에 채우거나 원본 비율로 전체를 표시합니다. */}
             <img
               src={imageSrc}
               alt=""
@@ -165,13 +170,16 @@ export function HeroSection({
         !aspectRatio && minHeightClasses[minHeight],
         className
       )}
-      style={aspectRatio ? { aspectRatio, width: '100%' } : undefined}
+      style={{
+        ...(aspectRatio ? { aspectRatio, width: '100%' } : {}),
+        '--hero-background-position': backgroundPosition,
+      } as CSSProperties}
     >
       {backgroundImage && (
         <>
           <BackgroundImage
             src={backgroundImage}
-            className="absolute inset-0 w-full h-full"
+            className={cn('absolute inset-0 w-full h-full', styles.landingBackground)}
             size="cover"
           />
           <Overlay opacity={overlayOpacity} />

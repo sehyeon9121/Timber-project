@@ -33,7 +33,7 @@ export function HomePage() {
       {/* About Section - Lab Introduction */}
       <section id="about" className="bg-white py-12 md:py-20">
         <AboutContent
-          image="/images/leeseunglab/test-homepage.jpg"
+          image="/images/leeseunglab/project-overview-banner.png"
           imageAlt="200m급 목구조대공간 건축물 건설 기술개발"
           imageTitle={t('home.about.imageTitle')}
           title={t('home.about.title')}

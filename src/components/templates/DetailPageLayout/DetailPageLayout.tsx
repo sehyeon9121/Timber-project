@@ -8,6 +8,7 @@ export interface DetailPageLayoutProps {
   subtitle?: string;
   heroDescription?: string;
   heroImage?: string;
+  heroImageFit?: 'cover' | 'contain';
   heroHeight?: number;
   noHeroImage?: boolean;
   heroMaxHeight?: number;
@@ -24,6 +25,7 @@ export function DetailPageLayout({
   title,
   subtitle,
   heroImage,
+  heroImageFit,
   heroDescription,
   heroHeight,
   noHeroImage,
@@ -40,6 +42,7 @@ export function DetailPageLayout({
         subtitle={subtitle}
         heroDescription={heroDescription}
         backgroundImage={noHeroImage ? undefined : (heroImage || '/images/leeseunglab/hero-background.jpg')}
+        imageFit={heroImageFit}
         height={heroHeight}
         heroMaxHeight={heroMaxHeight}
         titleAlign={titleAlign}

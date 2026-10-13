@@ -12,6 +12,7 @@ export function LandingHero({ className }: LandingHeroProps) {
   return (
     <HeroSection
       backgroundImage="/images/leeseunglab/hero_section.jpg"
+      backgroundPosition="center 60%"
       subtitle={t('home.hero.subtitle')}
       title={t('home.hero.title')}
       description={t('home.hero.description')}

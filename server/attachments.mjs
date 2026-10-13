@@ -144,9 +144,11 @@ export function createAttachments(store, storage = createFileStorage(), callback
       const stream = await storage.read(file);
       if (!stream) return fail(response, 404, 'ATTACHMENT_NOT_FOUND', '첨부파일을 찾을 수 없습니다.');
       const preview = request.query.preview === '1' && file.content_type.startsWith('image/');
-      response.set({ 'Content-Type': preview ? file.content_type : 'application/octet-stream',
-        'Content-Disposition': `${preview ? 'inline' : 'attachment'}; filename="download"; filename*=UTF-8''${encodeURIComponent(file.name).replace(/['()*]/g, c => '%' + c.charCodeAt(0).toString(16))}`,
-        'Content-Security-Policy': "default-src 'none'; sandbox", 'Cache-Control': 'private, no-store' });
+      response.attachment(file.name);
+      if (preview) response.set('Content-Disposition', response.get('Content-Disposition').replace(/^attachment/, 'inline'));
+      response.set({ 'Content-Type': file.content_type, 'Content-Length': String(file.size),
+        'Content-Security-Policy': preview ? "default-src 'none'; sandbox" : "default-src 'none'; sandbox allow-downloads",
+        'Cache-Control': 'private, no-store' });
       await pipeline(stream, response);
     });
     app.delete(`${base}/:fileId`, requireUser, access, ensureStorage, async (request, response) => {

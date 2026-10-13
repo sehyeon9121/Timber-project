@@ -1,4 +1,4 @@
-export const boardPageSize = 20;
+export const boardPageSize = 10;
 
 export function validatePost(input) {
   const title = typeof input?.title === 'string' ? input.title.trim() : '';
@@ -20,6 +20,10 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
   }
   app.get('/api/board/posts', requireUser, async (request, response) => {
     const page = Number(request.query.page ?? 1);
+    const query = request.query.q ?? '';
+    if (typeof query !== 'string' || query.length > 120) {
+      return fail(response, 400, 'POST_SEARCH_VALIDATION', '검색어는 최대 120자로 입력해 주세요.');
+    }
     if (!Number.isSafeInteger(page) || page < 1 || page > 1000000) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 페이지 번호를 입력해 주세요.');
     }
@@ -28,8 +32,8 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     if (division !== undefined && division !== null && ![1, 2, 3, 4].includes(division)) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 게시판을 선택해 주세요.');
     }
-    const total = await store.countPosts(division);
-    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize, division), page,
+    const total = await store.countPosts(division, query.trim());
+    response.json({ posts: await store.listPosts(boardPageSize, (page - 1) * boardPageSize, division, query.trim()), page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
   app.get('/api/board/posts/:id', requireUser, async (request, response) => {

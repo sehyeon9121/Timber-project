@@ -20,7 +20,7 @@ export function ShowcasePage() {
       title={t('showcase.heroTitle')}
       subtitle={t('showcase.heroSubtitle')}
       heroImage="/images/leeseunglab/Net.jpg?v=timber-network-20260927"
-      heroMaxHeight={320}
+      heroImageFit="contain"
     >
       <ContentSection
         background="light"

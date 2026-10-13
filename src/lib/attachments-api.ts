@@ -2,8 +2,7 @@ import { upload } from '@vercel/blob/client';
 import { authApi, ApiError } from './auth-api';
 import type { BoardAttachment } from './board-api';
 
-export const attachmentAccept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.txt,.csv,.zip,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx';
-export const maxAttachmentSize = 20 * 1024 * 1024;
+export { attachmentAccept, maxAttachmentSize, attachmentFileError } from './attachment-files';
 export interface PendingFile { key: string; file: File; reservation?: Reservation; uploaded?: boolean }
 interface Reservation { attachment: BoardAttachment; backend: 'local' | 'blob'; pathname: string }
 export function attachmentPath(notice: boolean, postId: number) {

@@ -99,9 +99,11 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     const first = await request('?page=1');
     const second = await request('?page=2');
     assert.equal(first.data.total, 25);
-    assert.equal(first.data.posts.length, 20);
-    assert.equal(second.data.posts.length, 5);
-    assert.equal(first.data.totalPages, 2);
+    assert.equal(first.data.posts.length, 10);
+    assert.equal(second.data.posts.length, 10);
+    assert.equal(first.data.totalPages, 3);
+    assert.equal(first.data.pageSize, 10);
+    assert.equal((await request('?page=3')).data.posts.length, 5);
     assert.ok(first.data.posts.every((post, index, posts) => index === 0 || posts[index - 1].id > post.id));
     assert.ok(!first.data.posts.some(post => second.data.posts.some(item => item.id === post.id)));
   });
@@ -116,7 +118,7 @@ test('member-only board permissions, content lifecycle, and persistence', async 
     assert.deepEqual((await request('?division=1')).data.posts.map(post => post.id), [divisionPostId]);
     assert.deepEqual((await request('?division=2')).data.posts.map(post => post.id), [second.data.post.id]);
     assert.equal((await request('?division=3')).data.total, 0);
-    assert.ok((await request('?page=2')).data.posts.some(post => post.id === postId && post.division === null));
+    assert.ok((await request('?page=3')).data.posts.some(post => post.id === postId && post.division === null));
     for (const division of ['0', '5', 'abc', '1.5']) assert.equal((await request(`?division=${division}`)).status, 400);
     for (const division of [0, 5, '1', 'activities']) {
       assert.equal((await request('', 'POST', { title: 'Bad division', body: 'Body', division })).status, 400);

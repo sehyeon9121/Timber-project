@@ -32,6 +32,10 @@ export interface BoardPostList {
   total: number;
   totalPages: number;
 }
+export function boardPageNumbers(page: number, totalPages: number) {
+  const start = Math.max(1, Math.min(page - 2, totalPages - 4));
+  return Array.from({ length: Math.min(5, totalPages) }, (_, index) => start + index);
+}
 // Published photo records follow member posts and share the same page size.
 export function boardPageWithArchive(data: BoardPostList, archive: BoardListEntry[]) {
   const offset = (data.page - 1) * data.pageSize;

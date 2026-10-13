@@ -8,7 +8,7 @@ import { Link } from '@/components/atoms/Link';
 import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
-import { attachmentAccept, attachmentPath, attachmentSize, maxAttachmentSize, uploadAttachment } from '@/lib/attachments-api';
+import { attachmentAccept, attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
 import type { PendingFile } from '@/lib/attachments-api';
 import { boardDivisions, boardListHref } from '@/lib/board-api';
 import type { BoardPost } from '@/lib/board-api';
@@ -42,8 +42,13 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
     if (attachments.length - removed.length + files.length + selected.length > 10) {
       setError(new ApiError('글당 최대 10개까지 첨부할 수 있습니다.', 'ATTACHMENT_LIMIT')); return;
     }
-    if (selected.some(file => !file.size || file.size > maxAttachmentSize || !attachmentAccept.split(',').includes('.' + file.name.split('.').at(-1)?.toLowerCase()))) {
-      setError(new ApiError('지원하는 파일을 선택해 주세요. 파일별 최대 20MB입니다.', 'ATTACHMENT_VALIDATION')); return;
+    for (const file of selected) {
+      const reason = attachmentFileError(file);
+      if (!reason) continue;
+      const message = reason === 'oversized' ? `${file.name}: ${attachmentSize(file.size)}입니다. 파일별 최대 20MB까지 첨부할 수 있습니다.`
+        : reason === 'empty' ? `${file.name}: 내용이 없는 파일은 첨부할 수 없습니다.`
+        : `${file.name}: 지원하지 않는 확장자입니다. PDF, HWP/HWPX, PPT/PPTX, Word, Excel 또는 사진 파일을 선택해 주세요.`;
+      setError(new ApiError(message, reason === 'oversized' ? 'ATTACHMENT_TOO_LARGE' : reason === 'empty' ? 'ATTACHMENT_EMPTY' : 'ATTACHMENT_TYPE')); return;
     }
     setError(null);
     setFiles(items => [...items, ...selected.map((file, index) => ({ key: `${Date.now()}-${index}-${Math.random()}`, file }))]);

@@ -33,7 +33,11 @@
 .divisionBadge { display: inline-block; margin-right: 10px; color: var(--color-primary); font-size: 12px; vertical-align: middle; }
 .boardTab:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -3px; }
 .postTable td.empty, .listStatus { padding: 64px 20px; text-align: center; color: var(--color-text-light); font-size: 14px; }
-.pagination { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 28px; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-top: 28px; }
+.pageNumber { min-width: 40px; padding: 10px; }
+.currentPage { background: var(--color-primary); color: #fff; }
+.currentPage:hover:not(:disabled) { background: var(--color-primary-light); color: #fff; }
+.pageStatus { width: 100%; margin-top: 4px; text-align: center; color: var(--color-text-light); font-size: 13px; }
 .meta { display: flex; flex-wrap: wrap; gap: 10px 24px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border); font-size: 14px; color: var(--color-text-light); }
 .body { padding: 28px 0; min-height: 180px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.9; }
 .postHeading { overflow-wrap: anywhere; }

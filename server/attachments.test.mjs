@@ -13,6 +13,22 @@ import { createRemoteStore } from './remote-store.mjs';
 import { createFileStorage } from './file-storage.mjs';
 import { maxFileSize } from './attachments.mjs';
 import { migrateLocalStore } from './migrate-to-turso.mjs';
+import { attachmentExtensions, attachmentFileError, maxAttachmentSize } from '../src/lib/attachment-files.ts';
+import { validateAttachment } from './attachments.mjs';
+
+test('file selection accepts supported document extensions and distinguishes size errors', () => {
+  assert.equal(maxAttachmentSize, maxFileSize);
+  for (const extension of attachmentExtensions) {
+    for (const name of [`회의 자료.${extension}`, `회의 자료.${extension.toUpperCase()}`]) {
+      assert.equal(attachmentFileError({ name, size: 512 }), null, name);
+      assert.ok(validateAttachment({ name, size: 512 }), name);
+    }
+  }
+  assert.equal(attachmentFileError({ name: '자료.pptx', size: maxFileSize }), null);
+  assert.equal(attachmentFileError({ name: '자료.pptx', size: maxFileSize + 1 }), 'oversized');
+  assert.equal(attachmentFileError({ name: '자료.hwp', size: 0 }), 'empty');
+  assert.equal(attachmentFileError({ name: '자료.exe', size: 512 }), 'unsupported');
+});
 
 for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecycle, permissions, limits and persistence`, async t => {
   const directory = await mkdtemp(join(tmpdir(), 'timber-attachments-'));
@@ -80,6 +96,28 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     assert.equal((await request(`/board/posts/${posts[1].id}/attachments/${file.id}/content`)).status, 404);
     assert.equal((await request(path, 'POST', { name: 'a.txt', size: 1 }, 'author', 'https://evil.example')).status, 403);
   });
+  await t.test('PDF, HWP and PowerPoint retain their filenames, MIME types and exact bytes', async () => {
+    const post = await store.createPost({ title: 'Documents', body: 'Body', division: null }, author.id);
+    const folder = `/board/posts/${post.id}/attachments`;
+    for (const name of ['회의자료.pdf', '회의자료.hwp', '회의자료.hwpx', '회의자료.ppt', '회의자료.PPTX', 'meeting.pdf']) {
+      const bytes = Buffer.from(`document fixture: ${name}`);
+      const current = await reserve(folder, name, bytes.length);
+      assert.equal((await request(`${folder}/${current.id}/content`, 'PUT', bytes)).status, 200);
+      assert.equal((await request(`${folder}/${current.id}/complete`, 'POST')).status, 200);
+      const download = await request(`${folder}/${current.id}/content`, 'GET', undefined, 'other');
+      assert.equal(download.status, 200);
+      assert.equal(download.headers.get('content-type'), validateAttachment({ name, size: bytes.length }).contentType);
+      assert.equal(download.headers.get('content-length'), String(bytes.length));
+      const disposition = download.headers.get('content-disposition');
+      assert.match(disposition, /^attachment;/);
+      if (name === 'meeting.pdf') assert.match(disposition, /filename="meeting.pdf"/);
+      else assert.ok(disposition.includes(`filename*=UTF-8''${encodeURIComponent(name)}`), disposition);
+      assert.match(disposition, new RegExp(`filename="[^\"]+\\.${name.split('.').at(-1)}"`));
+      assert.equal(download.headers.get('content-security-policy'), "default-src 'none'; sandbox allow-downloads");
+      assert.equal(download.headers.get('x-content-type-options'), 'nosniff');
+      assert.deepEqual(Buffer.from(await download.arrayBuffer()), bytes);
+    }
+  });
   await t.test('size, extension, filename and real image signatures are checked', async () => {
     for (const input of [{ name: 'a.txt', size: 0 }, { name: 'a.txt', size: maxFileSize + 1 },
       { name: '../a.txt', size: 1 }, { name: 'a\r\n.txt', size: 1 }, { name: 'x.svg', size: 1 }, { name: 'x.html', size: 1 }]) {
@@ -95,6 +133,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     const preview = await request(`${path}/${image.id}/content?preview=1`);
     assert.equal(preview.headers.get('content-type'), 'image/png');
     assert.match(preview.headers.get('content-disposition'), /^inline/);
+    assert.equal(preview.headers.get('content-security-policy'), "default-src 'none'; sandbox");
     assert.deepEqual(Buffer.from(await preview.arrayBuffer()), png);
     assert.equal((await request(`${path}/${image.id}/complete`, 'POST')).status, 200);
   });

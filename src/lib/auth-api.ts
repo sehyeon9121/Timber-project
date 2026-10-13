@@ -39,6 +39,10 @@ export async function authApi<T>(path: string, options: RequestInit = {}): Promi
 }
 
 const englishErrors: Record<string, string> = {
+  ATTACHMENT_TOO_LARGE: 'This file exceeds 20 MB. Choose a smaller file.',
+  ATTACHMENT_EMPTY: 'Empty files cannot be attached.',
+  ATTACHMENT_TYPE: 'Unsupported extension. Choose a PDF, HWP/HWPX, PPT/PPTX, Word, Excel, or image file.',
+  POST_SEARCH_VALIDATION: 'Enter a search term of up to 120 characters.',
   ATTACHMENT_VALIDATION: 'Choose a supported file of up to 20 MB. Check that the upload has completed.',
   ATTACHMENT_LIMIT: 'You can attach up to 10 files per post.',
   ATTACHMENT_UNAVAILABLE: 'File storage is not connected. Contact the administrator.',

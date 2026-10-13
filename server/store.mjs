@@ -44,6 +44,17 @@ export function publicUser(user) {
 
 export const tokenHash = token => createHash('sha256').update(token).digest('hex');
 
+export function postFilter(division, query = '') {
+  const conditions = [];
+  const args = [];
+  if (division !== undefined) { conditions.push('posts.division IS ?'); args.push(division); }
+  if (query) {
+    conditions.push('(instr(lower(posts.title), lower(?)) > 0 OR instr(lower(posts.body), lower(?)) > 0)');
+    args.push(query, query);
+  }
+  return { where: conditions.length ? `WHERE ${conditions.join(' AND ')}` : '', args };
+}
+
 export const storeSchema = `
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY,
@@ -159,13 +170,17 @@ ${storeSchema}
         .get(tokenHash(token), Date.now());
     },
     deleteSession(token) { if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token)); },
-    countPosts: division => division === undefined
-      ? db.prepare('SELECT COUNT(*) AS total FROM posts').get().total
-      : db.prepare('SELECT COUNT(*) AS total FROM posts WHERE division IS ?').get(division).total,
-    listPosts: (limit, offset, division) => db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
-      users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
-      FROM posts JOIN users ON users.id = posts.author_id ${division === undefined ? '' : 'WHERE posts.division IS ?'}
-      ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...(division === undefined ? [] : [division]), limit, offset),
+    countPosts(division, query = '') {
+      const filter = postFilter(division, query);
+      return db.prepare(`SELECT COUNT(*) AS total FROM posts ${filter.where}`).get(...filter.args).total;
+    },
+    listPosts(limit, offset, division, query = '') {
+      const filter = postFilter(division, query);
+      return db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
+        users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
+        FROM posts JOIN users ON users.id = posts.author_id ${filter.where}
+        ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...filter.args, limit, offset);
+    },
     findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`).get(id),
