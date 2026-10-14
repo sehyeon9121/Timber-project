@@ -36,6 +36,18 @@
 .breakdown small { display: block; margin-top: 2px; font-size: 11px; font-weight: 400; color: #929b95; }
 .breakdown dd { margin: 6px 0 0; font-size: 24px; font-weight: 700; color: #3c4e41; line-height: 1.3; }
 .arrow { color: #b3bfb6; }
+.annual { margin-top: 34px; }
+.annual header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.annual h3 { font-size: 22px; font-weight: 700; color: #28573e; }
+.annual header p { color: #637168; font-size: 13px; }
+.tableWrap { overflow-x: auto; border: 1px solid #dde5df; border-radius: 10px; }
+.tableWrap:focus-visible { outline: 2px solid #28573e; outline-offset: 2px; }
+.annualTable { width: 100%; min-width: 520px; border-collapse: collapse; text-align: left; font-size: 14px; }
+.annualTable th, .annualTable td { padding: 13px 18px; border-bottom: 1px solid #e5ebe6; }
+.annualTable thead { background: #183d32; color: white; }
+.annualTable td { text-align: right; font-variant-numeric: tabular-nums; }
+.annualTable td:last-child { color: #c83c3c; font-weight: 700; }
+.annualGroup { background: #edf4ef; color: #28573e; }
 @media (min-width: 768px) and (max-width: 1023px) {
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .total, .phase { padding: 24px 20px; }

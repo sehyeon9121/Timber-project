@@ -1,0 +1,17 @@
+.editor h2 { font-size: 22px; font-weight: 700; }
+.editor > p, .help { color: #637168; font-size: 14px; line-height: 1.8; margin: 10px 0 18px; }
+.settings { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; }
+.settings label { display: grid; gap: 6px; font-size: 14px; }
+.editor input, .editor select { padding: 9px 10px; border: 1px solid #ccd7ce; border-radius: 6px; background: white; min-height: 44px; font: inherit; }
+.editor input:focus-visible, .editor select:focus-visible, .scroll:focus-visible { outline: 2px solid #28573e; outline-offset: 2px; }
+.scroll { overflow-x: auto; border: 1px solid #dde5df; border-radius: 8px; }
+.scroll table { width: 100%; min-width: 800px; border-collapse: collapse; font-size: 13px; }
+.scroll th, .scroll td { padding: 10px; border-bottom: 1px solid #e5ebe6; text-align: left; }
+.scroll thead { background: #edf4ef; }
+.scroll input { width: 90px; }
+.group { background: #f6f8f6; color: #28573e; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 20px; }
+.actions a { color: #28573e; text-decoration: underline; }
+.error { color: #b42318 !important; }
+.notice { color: #28573e !important; background: #edf4ef; padding: 12px; border-radius: 6px; }
+.editor fieldset { min-width: 0; border: 0; }

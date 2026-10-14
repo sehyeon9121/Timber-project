@@ -39,6 +39,8 @@ export async function authApi<T>(path: string, options: RequestInit = {}): Promi
 }
 
 const englishErrors: Record<string, string> = {
+  RESULTS_VALIDATION: 'Check the year, reporting date, and nonnegative integer counts. Cumulative results must be at least the annual results.',
+  RESULTS_CONFLICT: 'The results were changed in another window. Reload the latest values before saving.',
   ATTACHMENT_TOO_LARGE: 'This file exceeds 20 MB. Choose a smaller file.',
   ATTACHMENT_EMPTY: 'Empty files cannot be attached.',
   ATTACHMENT_TYPE: 'Unsupported extension. Choose a PDF, HWP/HWPX, PPT/PPTX, Word, Excel, or image file.',

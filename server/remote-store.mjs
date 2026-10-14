@@ -2,6 +2,7 @@ import { createClient } from '@libsql/client';
 import { randomBytes } from 'node:crypto';
 import { publicUser, sessionDuration, storeSchema, tokenHash, postFilter } from './store.mjs';
 import { attachmentStore } from './attachment-store.mjs';
+import { researchResultsStore } from './research-results.mjs';
 
 export async function createRemoteStore(options) {
   const client = createClient(options);
@@ -30,6 +31,7 @@ export async function createRemoteStore(options) {
   const first = async (sql, args) => (await execute(sql, args)).rows[0];
   return {
     client,
+    ...researchResultsStore(execute, async (sql, args) => (await execute(sql, args)).rows),
     ...attachmentStore(execute, async (sql, args) => (await execute(sql, args)).rows),
     findByUsername: username => first('SELECT * FROM users WHERE username = ? COLLATE NOCASE', [username]),
     findByEmail: email => first('SELECT * FROM users WHERE email = ?', [email]),

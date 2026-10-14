@@ -3,6 +3,7 @@ import { getDevelopmentOrigins } from './origins.mjs';
 import { registerBoardRoutes } from './board.mjs';
 import { registerNoticeRoutes } from './notices.mjs';
 import { createAttachments } from './attachments.mjs';
+import { registerResearchResultsRoutes } from './research-results.mjs';
 import { publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
 
 const cookieName = 'timber_session';
@@ -130,6 +131,7 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   attachments.registerRoutes(app, requireUser);
   registerBoardRoutes(app, store, requireUser, attachments);
   registerNoticeRoutes(app, store, requireUser, requireMaster, attachments);
+  registerResearchResultsRoutes(app, store, requireUser, requireMaster);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));
   app.use((error, _request, response, _next) => {
     if (response.headersSent) return response.destroy();

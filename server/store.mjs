@@ -4,6 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { randomBytes, scrypt, timingSafeEqual, createHash } from 'node:crypto';
 import { promisify } from 'node:util';
 import { attachmentStore } from './attachment-store.mjs';
+import { researchResultsStore } from './research-results.mjs';
 
 const deriveKey = promisify(scrypt);
 const scryptOptions = { N: 131072, r: 8, p: 1, maxmem: 256 * 1024 * 1024 };
@@ -109,6 +110,13 @@ export const storeSchema = `
     );
     CREATE INDEX IF NOT EXISTS attachments_post ON attachments(post_id);
     CREATE INDEX IF NOT EXISTS attachments_notice ON attachments(notice_id);
+    CREATE TABLE IF NOT EXISTS research_results (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      payload TEXT NOT NULL,
+      revision INTEGER NOT NULL,
+      updated_at TEXT NOT NULL,
+      updated_by INTEGER NOT NULL REFERENCES users(id)
+    );
 `;
 
 export function createStore(path = databasePath) {
@@ -134,6 +142,7 @@ ${storeSchema}
   } catch (error) { db.exec('ROLLBACK'); db.close(); throw error; }
   return {
     db,
+    ...researchResultsStore((sql, args) => db.prepare(sql).run(...args), (sql, args) => db.prepare(sql).all(...args)),
     ...attachmentStore((sql, args) => db.prepare(sql).run(...args), (sql, args) => db.prepare(sql).all(...args)),
     findByUsername: username => db.prepare('SELECT * FROM users WHERE username = ? COLLATE NOCASE').get(username),
     findByEmail: email => db.prepare('SELECT * FROM users WHERE email = ?').get(email),

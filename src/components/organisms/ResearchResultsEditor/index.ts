@@ -1,0 +1,1 @@
+export { ResearchResultsEditor } from './ResearchResultsEditor';

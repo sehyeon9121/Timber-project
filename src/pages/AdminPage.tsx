@@ -9,6 +9,7 @@ import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import type { User } from '@/lib/auth-api';
 import styles from '@/styles/auth.module.css';
 import adminStyles from '@/styles/admin.module.css';
+import { ResearchResultsEditor } from '@/components/organisms/ResearchResultsEditor';
 
 export function AdminPage() {
   const { language } = useLanguage();
@@ -21,6 +22,7 @@ export function AdminPage() {
   const [query, setQuery] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const membersView = searchParams.get('view') === 'members';
+  const resultsView = searchParams.get('view') === 'results';
   const ko = language === 'KO';
   const labels = { pending: ko ? '승인 대기' : 'Pending', approved: ko ? '승인 완료' : 'Approved', rejected: ko ? '거절' : 'Rejected' };
   const load = useCallback(async () => {
@@ -60,7 +62,7 @@ export function AdminPage() {
     <section className={adminStyles.shell}>
       <header className={adminStyles.heading}>
         <Heading level={1}>{ko ? '관리자 설정' : 'Admin settings'}</Heading>
-        <p>{ko ? '가입 요청을 검토하고 등록된 회원 정보를 확인하세요.' : 'Review registration requests and browse registered members.'}</p>
+        <p>{ko ? '가입 요청, 회원 명단과 연구성과를 관리하세요.' : 'Manage registration requests, members, and research results.'}</p>
       </header>
       <div className={adminStyles.summary}>
         {(['pending', 'approved', 'rejected'] as const).map(status => <div key={status}>
@@ -69,14 +71,18 @@ export function AdminPage() {
       </div>
       <div className={adminStyles.workspace}>
         <nav className={adminStyles.sidebar} aria-label={ko ? '관리자 메뉴' : 'Admin menu'}>
-          <button type="button" aria-current={!membersView ? 'page' : undefined} onClick={() => setSearchParams({})}>
+          <button type="button" aria-current={!membersView && !resultsView ? 'page' : undefined} onClick={() => setSearchParams({})}>
             <Icon name="UserCheck" size={18} /><span>{ko ? '가입 승인' : 'Registration approval'}</span><span className={adminStyles.count}>{pendingCount}</span>
           </button>
           <button type="button" aria-current={membersView ? 'page' : undefined} onClick={() => setSearchParams({ view: 'members' })}>
             <Icon name="Users" size={18} /><span>{ko ? '회원 명단' : 'Member directory'}</span>
           </button>
+          <button type="button" aria-current={resultsView ? 'page' : undefined} onClick={() => setSearchParams({ view: 'results' })}>
+            <Icon name="Target" size={18} /><span>{ko ? '연구성과 관리' : 'Research results'}</span>
+          </button>
         </nav>
         <div className={adminStyles.panel}>
+          {resultsView ? <ResearchResultsEditor /> : <>
           <Heading level={2}>{membersView ? (ko ? '회원 명단' : 'Member directory') : (ko ? '가입 승인' : 'Registration approval')}</Heading>
           <p className={adminStyles.intro}>{membersView ? (ko ? '이름, 아이디, 이메일, 소속과 가입 상태를 확인할 수 있습니다.' : 'View names, usernames, emails, affiliations, and registration status.') : (ko ? '승인 대기 중인 가입 요청을 검토하세요.' : 'Review pending registration requests.')}</p>
     <div className={styles.filters}>
@@ -127,6 +133,7 @@ export function AdminPage() {
         </li>)}
       </ul>}
     </>}
+          </>}
         </div>
       </div>
     </section>
