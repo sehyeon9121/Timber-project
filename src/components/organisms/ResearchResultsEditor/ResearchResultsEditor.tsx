@@ -10,7 +10,7 @@ function today() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 }
 
-export function ResearchResultsEditor() {
+export function ResearchResultsEditor({ onSaved }: { onSaved?: () => void }) {
   const { language } = useLanguage();
   const ko = language === 'KO';
   const [data, setData] = useState<ResearchResults | null>(null);
@@ -52,6 +52,7 @@ export function ResearchResultsEditor() {
       });
       setData(saved); setDate(saved.asOfDate ?? today());
       setNotice(ko ? '연구성과와 집계 기준일을 저장했습니다.' : 'Research results and the reporting date have been saved.');
+      onSaved?.();
     } catch (cause) { setError(cause); }
     finally { setBusy(false); }
   }
