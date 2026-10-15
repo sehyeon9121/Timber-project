@@ -19,7 +19,7 @@ const silentOutput = new Writable({ write(_chunk, _encoding, callback) { callbac
 const terminal = createInterface({ input: process.stdin, output: silentOutput, terminal: true });
 let store;
 try {
-  process.stdout.write('마스터 비밀번호 (12~128자, 입력은 표시되지 않음): ');
+  process.stdout.write('마스터 비밀번호 (6~128자, 입력은 표시되지 않음): ');
   const password = await terminal.question('');
   process.stdout.write('\n비밀번호 확인: ');
   const confirmation = await terminal.question('');

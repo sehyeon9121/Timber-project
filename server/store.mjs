@@ -34,7 +34,7 @@ export function validateRegistration(input) {
   if (!/^[A-Za-z][A-Za-z0-9_]{2,31}$/.test(username)) return { error: '아이디는 영문으로 시작하는 영문·숫자·밑줄 3~32자로 입력해 주세요.' };
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: '올바른 이메일을 입력해 주세요.' };
   if (affiliation.length < 2 || affiliation.length > 120) return { error: '소속은 2~120자로 입력해 주세요.' };
-  if (password.length < 12 || password.length > 128) return { error: '비밀번호는 12~128자로 입력해 주세요.' };
+  if (password.length < 6 || password.length > 128) return { error: '비밀번호는 6~128자로 입력해 주세요.' };
   return { name, username, email, affiliation, password };
 }
 

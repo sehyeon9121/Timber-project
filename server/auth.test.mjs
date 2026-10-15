@@ -13,7 +13,7 @@ test('approval-based membership and master authorization', async t => {
   const directory = mkdtempSync(join(tmpdir(), 'timber-auth-test-'));
   const path = join(directory, 'auth.sqlite');
   const store = createStore(path);
-  const password = 'Test-only-password-2026';
+  const password = 'Test26';
   const passwordHash = await hashPassword(password);
   const master = store.addUser({ name: 'Master', username: 'ERS', email: 'master@example.com', affiliation: 'Administration' }, passwordHash, 'master');
   const app = await createApp(store);
@@ -49,6 +49,11 @@ test('approval-based membership and master authorization', async t => {
   await t.test('signup validates data, hashes passwords, and ignores role/status supplied by clients', async () => {
     const invalid = await request('/auth/signup', 'POST', { name: 'A', username: 'ab', email: 'bad', affiliation: 'Lab', password: 'short' });
     assert.equal(invalid.status, 400);
+    for (const password of ['short', 'x'.repeat(129)]) {
+      const rejected = await request('/auth/signup', 'POST', { name: 'Member', username: 'member', email: 'member@example.com', affiliation: 'Research lab', password });
+      assert.equal(rejected.status, 400);
+      assert.equal(rejected.data.message, '비밀번호는 6~128자로 입력해 주세요.');
+    }
     const registered = await request('/auth/signup', 'POST', { name: 'Member', username: 'member', email: ' MEMBER@example.com ', affiliation: 'Research lab', password, role: 'master', status: 'approved' });
     assert.equal(registered.status, 201);
     assert.equal(registered.data.status, 'pending');
