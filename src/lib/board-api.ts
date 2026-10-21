@@ -6,6 +6,7 @@ export interface BoardPostSummary {
   division: number | null;
   createdAt: string;
   updatedAt: string;
+  viewCount: number;
   pinned?: number;
   coverImageId?: string | null;
   coverImageName?: string | null;
@@ -18,7 +19,7 @@ export interface BoardAttachment {
   state: 'pending' | 'ready';
 }
 export interface BoardPost extends BoardPostSummary { body: string; attachments?: BoardAttachment[] }
-export type BoardListEntry = Omit<BoardPostSummary, 'id'> & { id: number | string; href?: string };
+export type BoardListEntry = Omit<BoardPostSummary, 'id' | 'viewCount'> & { id: number | string; href?: string; viewCount?: number };
 export const boardDivisions = [1, 2, 3, 4] as const;
 export function boardDivisionLabel(division: number | null, language: 'KO' | 'EN') {
   return division === null ? (language === 'KO' ? '연구단 활동' : 'Project Activities')

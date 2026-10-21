@@ -34,6 +34,14 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     const post = await findNotice(request, response);
     if (post) response.json({ post: await attachments.enrich('notices', post, request.user) });
   });
+  app.post('/api/board/notices/:id/views', requireUser, async (request, response) => {
+    const post = await findNotice(request, response);
+    if (!post) return;
+    const enriched = await attachments.enrich('notices', post, request.user);
+    const viewCount = await store.incrementNoticeViews(post.id);
+    if (viewCount === undefined) return fail(response, 404, 'POST_NOT_FOUND', '공지사항을 찾을 수 없습니다.');
+    response.json({ post: { ...enriched, viewCount } });
+  });
   app.post('/api/board/notices', requireUser, requireMaster, async (request, response) => {
     const input = validateNotice(request.body);
     if (input.error) return fail(response, 400, 'NOTICE_VALIDATION', input.error);

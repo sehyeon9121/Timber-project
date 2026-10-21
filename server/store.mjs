@@ -82,6 +82,7 @@ export const storeSchema = `
       title TEXT NOT NULL,
       body TEXT NOT NULL,
       division INTEGER CHECK (division BETWEEN 1 AND 4),
+      view_count INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
     );
@@ -91,6 +92,7 @@ export const storeSchema = `
       title TEXT NOT NULL,
       body TEXT NOT NULL,
       pinned INTEGER NOT NULL DEFAULT 0 CHECK (pinned IN (0, 1)),
+      view_count INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
     );
@@ -134,6 +136,11 @@ ${storeSchema}
     db.exec('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)');
   }
   db.exec('CREATE INDEX IF NOT EXISTS posts_division_id ON posts(division, id DESC)');
+  for (const table of ['posts', 'notices']) {
+    if (!db.prepare(`PRAGMA table_info(${table})`).all().some(column => column.name === 'view_count')) {
+      db.exec(`ALTER TABLE ${table} ADD COLUMN view_count INTEGER NOT NULL DEFAULT 0`);
+    }
+  }
   db.exec('BEGIN');
   try {
     db.prepare("UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL").run();
@@ -185,12 +192,12 @@ ${storeSchema}
     },
     listPosts(limit, offset, division, query = '') {
       const filter = postFilter(division, query);
-      return db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
+      return db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
         users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
         FROM posts JOIN users ON users.id = posts.author_id ${filter.where}
         ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...filter.args, limit, offset);
     },
-    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
+    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`).get(id),
     createPost(input, authorId) {
@@ -201,8 +208,9 @@ ${storeSchema}
       db.prepare("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.division ?? null, id);
     },
     deletePost: id => db.prepare('DELETE FROM posts WHERE id = ?').run(id),
+    incrementPostViews: id => db.prepare('UPDATE posts SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount').get(id)?.viewCount,
     countNotices: (query = '') => db.prepare('SELECT COUNT(*) AS total FROM notices WHERE instr(lower(title), lower(?)) > 0').get(query).total,
-    listNotices: (limit, offset, query = '') => db.prepare(`SELECT notices.id, notices.title, notices.author_id AS authorId,
+    listNotices: (limit, offset, query = '') => db.prepare(`SELECT notices.id, notices.title, notices.author_id AS authorId, notices.view_count AS viewCount,
       NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt,
       cover.id AS coverImageId, cover.name AS coverImageName
       FROM notices JOIN users ON users.id = notices.author_id
@@ -210,7 +218,7 @@ ${storeSchema}
         WHERE notice_id = notices.id AND state = 'ready' AND content_type LIKE 'image/%' ORDER BY created_at, id LIMIT 1)
       WHERE instr(lower(notices.title), lower(?)) > 0
       ORDER BY notices.pinned DESC, notices.id DESC LIMIT ? OFFSET ?`).all(query, limit, offset),
-    findNotice: id => db.prepare(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId,
+    findNotice: id => db.prepare(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId, notices.view_count AS viewCount,
       NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
       FROM notices JOIN users ON users.id = notices.author_id WHERE notices.id = ?`).get(id),
     createNotice(input, authorId) {
@@ -221,6 +229,7 @@ ${storeSchema}
       db.prepare("UPDATE notices SET title = ?, body = ?, pinned = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.pinned ? 1 : 0, id);
     },
     deleteNotice: id => db.prepare('DELETE FROM notices WHERE id = ?').run(id),
+    incrementNoticeViews: id => db.prepare('UPDATE notices SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount').get(id)?.viewCount,
     close: () => db.close(),
   };
 }

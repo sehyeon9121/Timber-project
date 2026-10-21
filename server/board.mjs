@@ -43,6 +43,14 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     const post = await findPost(request, response);
     if (post) response.json({ post: await attachments.enrich('posts', post, request.user) });
   });
+  app.post('/api/board/posts/:id/views', requireUser, async (request, response) => {
+    const post = await findPost(request, response);
+    if (!post) return;
+    const enriched = await attachments.enrich('posts', post, request.user);
+    const viewCount = await store.incrementPostViews(post.id);
+    if (viewCount === undefined) return fail(response, 404, 'POST_NOT_FOUND', '게시글을 찾을 수 없습니다.');
+    response.json({ post: { ...enriched, viewCount } });
+  });
   app.post('/api/board/posts', requireUser, async (request, response) => {
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);

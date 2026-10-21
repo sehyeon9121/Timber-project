@@ -19,7 +19,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
   const navigate = useNavigate();
   const basePath = notice ? '/board/notices' : '/board';
   const apiPath = notice ? '/board/notices' : '/board/posts';
-  const { data, loading, error, reload } = useBoardResource<{ post: BoardPost }>(`${apiPath}/${id}`);
+  const { data, loading, error, reload } = useBoardResource<{ post: BoardPost }>(`${apiPath}/${id}/views`, 'POST');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<unknown>(null);
@@ -46,6 +46,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
           <span>{ko ? '게시판: ' : 'Board: '}{notice ? (ko ? '연구단 공지사항' : 'Research Notices') : boardDivisionLabel(post.division, language)}</span>
           {notice && Boolean(post.pinned) && <span className={styles.noticeBadge}>{ko ? '중요 공지' : 'Important notice'}</span>}
           <span>{ko ? '작성자: ' : 'Author: '}{post.authorName}</span>
+          <span>{ko ? '조회수: ' : 'Views: '}{post.viewCount.toLocaleString(ko ? 'ko-KR' : 'en-US')}</span>
           <span>{ko ? '작성일: ' : 'Posted: '}<time dateTime={post.createdAt}>{boardDate(post.createdAt, language)}</time></span>
           {post.updatedAt !== post.createdAt && <span>{ko ? '수정일: ' : 'Updated: '}<time dateTime={post.updatedAt}>{boardDate(post.updatedAt, language)}</time></span>}
         </div>

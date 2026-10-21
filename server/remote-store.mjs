@@ -18,6 +18,13 @@ export async function createRemoteStore(options) {
       try { await client.execute('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)'); }
       catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
     }
+    for (const table of ['posts', 'notices']) {
+      const columns = (await client.execute(`PRAGMA table_info(${table})`)).rows;
+      if (!columns.some(column => column.name === 'view_count')) {
+        try { await client.execute(`ALTER TABLE ${table} ADD COLUMN view_count INTEGER NOT NULL DEFAULT 0`); }
+        catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+      }
+    }
     await client.batch([
       { sql: "UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL", args: [] },
       { sql: 'CREATE UNIQUE INDEX IF NOT EXISTS users_username_unique ON users(username COLLATE NOCASE)', args: [] },
@@ -78,12 +85,12 @@ export async function createRemoteStore(options) {
     },
     async listPosts(limit, offset, division, query = '') {
       const filter = postFilter(division, query);
-      return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division,
+      return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
         users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
         FROM posts JOIN users ON users.id = posts.author_id ${filter.where}
         ORDER BY posts.id DESC LIMIT ? OFFSET ?`, [...filter.args, limit, offset])).rows;
     },
-    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division,
+    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`, [id]),
     async createPost(input, authorId) {
@@ -92,11 +99,12 @@ export async function createRemoteStore(options) {
     },
     updatePost: (id, input) => execute("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.division ?? null, id]),
     deletePost: id => execute('DELETE FROM posts WHERE id = ?', [id]),
+    incrementPostViews: async id => (await first('UPDATE posts SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount', [id]))?.viewCount,
     async countNotices(query = '') {
       return (await first('SELECT COUNT(*) AS total FROM notices WHERE instr(lower(title), lower(?)) > 0', [query])).total;
     },
     async listNotices(limit, offset, query = '') {
-      return (await execute(`SELECT notices.id, notices.title, notices.author_id AS authorId,
+      return (await execute(`SELECT notices.id, notices.title, notices.author_id AS authorId, notices.view_count AS viewCount,
         NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt,
         cover.id AS coverImageId, cover.name AS coverImageName
         FROM notices JOIN users ON users.id = notices.author_id
@@ -105,7 +113,7 @@ export async function createRemoteStore(options) {
         WHERE instr(lower(notices.title), lower(?)) > 0
         ORDER BY notices.pinned DESC, notices.id DESC LIMIT ? OFFSET ?`, [query, limit, offset])).rows;
     },
-    findNotice: id => first(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId,
+    findNotice: id => first(`SELECT notices.id, notices.title, notices.body, notices.author_id AS authorId, notices.view_count AS viewCount,
       NULL AS division, notices.pinned, users.name AS authorName, notices.created_at AS createdAt, notices.updated_at AS updatedAt
       FROM notices JOIN users ON users.id = notices.author_id WHERE notices.id = ?`, [id]),
     async createNotice(input, authorId) {
@@ -114,6 +122,7 @@ export async function createRemoteStore(options) {
     },
     updateNotice: (id, input) => execute("UPDATE notices SET title = ?, body = ?, pinned = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.pinned ? 1 : 0, id]),
     deleteNotice: id => execute('DELETE FROM notices WHERE id = ?', [id]),
+    incrementNoticeViews: async id => (await first('UPDATE notices SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount', [id]))?.viewCount,
     close: () => client.close(),
   };
 }

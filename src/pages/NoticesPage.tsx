@@ -56,6 +56,7 @@ export function NoticesPage() {
                 alt="" loading="lazy" decoding="async" />
                 : <span className={cards.placeholder}>{ko ? '연구단 공지' : 'Research Notice'}</span>}
               <h2 className={cards.title}>{post.title}</h2>
+              <p className={cards.meta}>{ko ? '조회수 ' : 'Views '}{post.viewCount.toLocaleString(ko ? 'ko-KR' : 'en-US')}</p>
             </Link>
           </li>)}
         </ul>}

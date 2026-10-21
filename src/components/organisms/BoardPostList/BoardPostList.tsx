@@ -13,9 +13,10 @@ export function BoardPostList({ posts, language, showDivision = false, notice = 
       <th scope="col">{ko ? '제목' : 'Title'}</th>
       <th scope="col" className={styles.authorColumn}>{ko ? '작성자' : 'Author'}</th>
       <th scope="col" className={styles.dateColumn}>{ko ? '작성일' : 'Posted'}</th>
+      <th scope="col" className={styles.viewsColumn}>{ko ? '조회수' : 'Views'}</th>
     </tr></thead>
     <tbody>
-      {!posts.length && <tr><td colSpan={4} className={styles.empty}>
+      {!posts.length && <tr><td colSpan={5} className={styles.empty}>
         {notice ? (ko ? '등록된 공지사항이 없습니다.' : 'No notices have been published.') : (ko ? '등록된 게시글이 없습니다.' : 'No posts have been published.')}
       </td></tr>}
       {posts.map((post, index) => <tr key={post.id}>
@@ -27,6 +28,9 @@ export function BoardPostList({ posts, language, showDivision = false, notice = 
         </Link></td>
         <td className={styles.author}>{post.authorName}</td>
         <td className={styles.date}><time dateTime={post.createdAt}>{post.createdAt.slice(0, 10).replaceAll('-', '.')}</time></td>
+        <td className={styles.views}>{post.viewCount === undefined
+          ? <span aria-label={ko ? '조회수 집계 안 됨' : 'Views not tracked'}>—</span>
+          : post.viewCount.toLocaleString(ko ? 'ko-KR' : 'en-US')}</td>
       </tr>)}
     </tbody>
   </table>;

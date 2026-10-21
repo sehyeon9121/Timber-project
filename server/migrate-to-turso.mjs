@@ -5,8 +5,8 @@ import { openStore } from './open-store.mjs';
 
 const tables = [
   { name: 'users', columns: ['id', 'name', 'username', 'email', 'affiliation', 'password_hash', 'role', 'status', 'created_at', 'reviewed_at', 'reviewed_by'] },
-  { name: 'posts', columns: ['id', 'author_id', 'title', 'body', 'division', 'created_at', 'updated_at'] },
-  { name: 'notices', columns: ['id', 'author_id', 'title', 'body', 'pinned', 'created_at', 'updated_at'] },
+  { name: 'posts', columns: ['id', 'author_id', 'title', 'body', 'division', 'view_count', 'created_at', 'updated_at'] },
+  { name: 'notices', columns: ['id', 'author_id', 'title', 'body', 'pinned', 'view_count', 'created_at', 'updated_at'] },
 ];
 const values = (rows, columns) => rows.map(row => columns.map(column => row[column]));
 
@@ -23,6 +23,9 @@ export async function migrateLocalStore(path, target) {
     const snapshots = tables.map(table => ({ ...table, rows: table.name === 'notices' && !source.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notices'").get()
       ? [] : source.prepare(`SELECT * FROM ${table.name} ORDER BY id`).all() }));
     snapshots[1].rows = snapshots[1].rows.map(post => ({ ...post, division: post.division ?? null }));
+    for (const table of snapshots.slice(1)) {
+      table.rows = table.rows.map(row => ({ ...row, view_count: row.view_count ?? 0 }));
+    }
     const firstMasterId = snapshots[0].rows.find(user => user.role === 'master')?.id;
     snapshots[0].rows = snapshots[0].rows.map(user => ({ ...user, username: user.username || (user.id === firstMasterId ? 'ERS' : `user${user.id}`) }));
     if (!snapshots[0].rows.some(user => user.role === 'master')) throw new Error('이전할 로컬 DB에 관리자 계정이 없습니다.');
