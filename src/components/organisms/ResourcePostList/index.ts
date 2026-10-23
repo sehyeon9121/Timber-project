@@ -1,0 +1,1 @@
+export { ResourcePostList } from './ResourcePostList';

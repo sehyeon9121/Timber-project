@@ -45,13 +45,14 @@ export function publicUser(user) {
 
 export const tokenHash = token => createHash('sha256').update(token).digest('hex');
 
-export function postFilter(division, query = '') {
-  const conditions = [];
-  const args = [];
+export function postFilter(division, query = '', category = null) {
+  const conditions = ['posts.category IS ?'];
+  const args = [category];
   if (division !== undefined) { conditions.push('posts.division IS ?'); args.push(division); }
   if (query) {
-    conditions.push('(instr(lower(posts.title), lower(?)) > 0 OR instr(lower(posts.body), lower(?)) > 0)');
+    conditions.push(`(instr(lower(posts.title), lower(?)) > 0 OR instr(lower(posts.body), lower(?)) > 0${category ? ' OR instr(lower(posts.document_type), lower(?)) > 0' : ''})`);
     args.push(query, query);
+    if (category) args.push(query);
   }
   return { where: conditions.length ? `WHERE ${conditions.join(' AND ')}` : '', args };
 }
@@ -82,6 +83,7 @@ export const storeSchema = `
       title TEXT NOT NULL,
       body TEXT NOT NULL,
       division INTEGER CHECK (division BETWEEN 1 AND 4),
+      category TEXT, document_type TEXT NOT NULL DEFAULT '', meeting_date TEXT NOT NULL DEFAULT '',
       view_count INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
       updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
@@ -135,7 +137,11 @@ ${storeSchema}
   if (!db.prepare('PRAGMA table_info(posts)').all().some(column => column.name === 'division')) {
     db.exec('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)');
   }
+  for (const [name, definition] of Object.entries({ category: 'TEXT', document_type: "TEXT NOT NULL DEFAULT ''", meeting_date: "TEXT NOT NULL DEFAULT ''" })) {
+    if (!db.prepare('PRAGMA table_info(posts)').all().some(column => column.name === name)) db.exec(`ALTER TABLE posts ADD COLUMN ${name} ${definition}`);
+  }
   db.exec('CREATE INDEX IF NOT EXISTS posts_division_id ON posts(division, id DESC)');
+  db.exec('CREATE INDEX IF NOT EXISTS posts_category_id ON posts(category, id DESC)');
   for (const table of ['posts', 'notices']) {
     if (!db.prepare(`PRAGMA table_info(${table})`).all().some(column => column.name === 'view_count')) {
       db.exec(`ALTER TABLE ${table} ADD COLUMN view_count INTEGER NOT NULL DEFAULT 0`);
@@ -186,26 +192,26 @@ ${storeSchema}
         .get(tokenHash(token), Date.now());
     },
     deleteSession(token) { if (token) db.prepare('DELETE FROM sessions WHERE token_hash = ?').run(tokenHash(token)); },
-    countPosts(division, query = '') {
-      const filter = postFilter(division, query);
+    countPosts(division, query = '', category = null) {
+      const filter = postFilter(division, query, category);
       return db.prepare(`SELECT COUNT(*) AS total FROM posts ${filter.where}`).get(...filter.args).total;
     },
-    listPosts(limit, offset, division, query = '') {
-      const filter = postFilter(division, query);
-      return db.prepare(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
+    listPosts(limit, offset, division, query = '', category = null) {
+      const filter = postFilter(division, query, category);
+      return db.prepare(`SELECT posts.id, posts.title, substr(posts.body, 1, 180) AS excerpt, posts.author_id AS authorId, posts.division, posts.category, posts.document_type AS documentType, posts.meeting_date AS meetingDate, posts.view_count AS viewCount,
         users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
         FROM posts JOIN users ON users.id = posts.author_id ${filter.where}
         ORDER BY posts.id DESC LIMIT ? OFFSET ?`).all(...filter.args, limit, offset);
     },
-    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
+    findPost: id => db.prepare(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.category, posts.document_type AS documentType, posts.meeting_date AS meetingDate, posts.view_count AS viewCount,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`).get(id),
     createPost(input, authorId) {
-      const result = db.prepare('INSERT INTO posts (author_id, title, body, division) VALUES (?, ?, ?, ?)').run(authorId, input.title, input.body, input.division ?? null);
+      const result = db.prepare('INSERT INTO posts (author_id, title, body, division, category, document_type, meeting_date) VALUES (?, ?, ?, ?, ?, ?, ?)').run(authorId, input.title, input.body, input.division ?? null, input.category ?? null, input.documentType ?? '', input.meetingDate ?? '');
       return this.findPost(Number(result.lastInsertRowid));
     },
     updatePost(id, input) {
-      db.prepare("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.division ?? null, id);
+      db.prepare("UPDATE posts SET title = ?, body = ?, division = ?, category = ?, document_type = ?, meeting_date = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?").run(input.title, input.body, input.division ?? null, input.category ?? null, input.documentType ?? '', input.meetingDate ?? '', id);
     },
     deletePost: id => db.prepare('DELETE FROM posts WHERE id = ?').run(id),
     incrementPostViews: id => db.prepare('UPDATE posts SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount').get(id)?.viewCount,

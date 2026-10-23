@@ -8,16 +8,18 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useBoardResource } from '@/hooks/useBoardResource';
 import { authErrorMessage } from '@/lib/auth-api';
 import type { BoardPost } from '@/lib/board-api';
+import { resourceCategory, resourceHref } from '@/lib/resource-library';
 import { boardDivisions } from '@/lib/board-api';
 import styles from '@/styles/board.module.css';
 
 export function BoardEditorPage({ notice = false }: { notice?: boolean }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const initialCategory = resourceCategory(searchParams.get('category'));
   const initialDivision = boardDivisions.find(item => String(item) === searchParams.get('division'));
   const { language } = useLanguage();
   const { user } = useAuth();
-  const basePath = notice ? '/board/notices' : '/board';
+  const basePath = notice ? '/board/notices' : initialCategory ? resourceHref(initialCategory) : '/board';
   const { data, loading, error, reload } = useBoardResource<{ post: BoardPost }>(id ? `${notice ? basePath : '/board/posts'}/${id}` : null);
   const ko = language === 'KO';
   const post = data?.post;
@@ -30,6 +32,6 @@ export function BoardEditorPage({ notice = false }: { notice?: boolean }) {
       </> : (notice ? user?.role !== 'master' : id && post?.authorId !== user?.id) ? <>
         <div role="alert" className={styles.error}>{notice ? (ko ? '관리자만 공지사항을 작성·수정할 수 있습니다.' : 'Only administrators can create or edit notices.') : (ko ? '본인이 작성한 글만 수정할 수 있습니다.' : 'You can only edit your own posts.')}</div>
         <Link href={basePath} className={styles.secondary}>{ko ? '목록으로' : 'Back to board'}</Link>
-      </> : <BoardPostForm key={post?.id ?? 'new'} post={post} initialDivision={initialDivision} notice={notice} />}
+      </> : <BoardPostForm key={post?.id ?? 'new'} post={post} initialDivision={initialDivision} initialCategory={initialCategory} notice={notice} />}
   </AuthLayout>;
 }

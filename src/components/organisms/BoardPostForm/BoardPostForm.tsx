@@ -10,20 +10,25 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import { attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
 import type { PendingFile } from '@/lib/attachments-api';
+import { resourceCategories, resourceInfo, resourceHref } from '@/lib/resource-library';
+import type { ResourceCategory } from '@/lib/resource-library';
 import { boardDivisions, boardListHref } from '@/lib/board-api';
 import type { BoardPost } from '@/lib/board-api';
 import { boardTemplates, boardTemplateBody } from '@/lib/board-templates';
 import type { BoardTemplateId } from '@/lib/board-templates';
 import styles from '@/styles/board.module.css';
 
-export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number | null; notice?: boolean }
-export function BoardPostForm({ post, initialDivision, notice = false }: BoardPostFormProps) {
+export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number | null; notice?: boolean; initialCategory?: ResourceCategory }
+export function BoardPostForm({ post, initialDivision, initialCategory, notice = false }: BoardPostFormProps) {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const [title, setTitle] = useState(post?.title ?? '');
   const [body, setBody] = useState(post?.body ?? '');
   const [pinned, setPinned] = useState(Boolean(post?.pinned));
   const [division, setDivision] = useState(String(post ? post.division ?? 'activities' : initialDivision ?? 'activities'));
+  const [category, setCategory] = useState(post?.category ?? initialCategory);
+  const [documentType, setDocumentType] = useState(post?.documentType ?? '');
+  const [meetingDate, setMeetingDate] = useState(post?.meetingDate ?? '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [template, setTemplate] = useState<BoardTemplateId>('free');
@@ -76,7 +81,7 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
     setError(null);
     try {
       const data = await authApi<{ post: BoardPost }>(savedId ? `${apiPath}/${savedId}` : apiPath, {
-        method: savedId ? 'PATCH' : 'POST', body: JSON.stringify(notice ? { title, body, pinned } : { title, body, division: division === 'activities' ? null : Number(division) }),
+        method: savedId ? 'PATCH' : 'POST', body: JSON.stringify(notice ? { title, body, pinned } : { title, body, division: category || division === 'activities' ? null : Number(division), category: category ?? null, documentType, meetingDate: category === 'minutes' ? meetingDate : '' }),
       });
       setSavedId(data.post.id);
       const base = attachmentPath(notice, data.post.id);
@@ -109,7 +114,7 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
     {Boolean(error) && <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>}
     {Boolean(error) && savedId && <p className={styles.hint}>{ko ? '글은 저장되었습니다. 첨부파일 상태를 확인한 뒤 다시 저장하거나 저장된 글로 이동하세요.' : 'The post has been saved. Check attachments and save again, or open the saved post.'} <Link href={`${basePath}/${savedId}`}>{ko ? '저장된 글 보기' : 'Open saved post'}</Link></p>}
     <form className={styles.form} onSubmit={submit}>
-      {!notice && <div className={styles.textareaField}>
+      {!notice && !category && <div className={styles.textareaField}>
         <label htmlFor="post-division">{ko ? '게시판' : 'Board'}</label>
         <select id="post-division" name="division" className={styles.select} value={division}
           onChange={event => setDivision(event.target.value)} required disabled={busy}>
@@ -117,7 +122,7 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
           {boardDivisions.map(item => <option key={item} value={item}>{ko ? `${item}세부` : `Division ${item}`}</option>)}
         </select>
       </div>}
-      {!notice && <div className={styles.textareaField}>
+      {!notice && !category && <div className={styles.textareaField}>
         <label htmlFor="post-template">{ko ? '글 종류 / 기본 양식' : 'Post type / template'}</label>
         <select id="post-template" className={styles.select} value={template}
           onChange={event => chooseTemplate(event.target.value as BoardTemplateId)} disabled={busy}
@@ -142,6 +147,17 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
           </div>
         </div>}
       </div>}
+      {!notice && category && <>
+        <div className={styles.textareaField}>
+          <label htmlFor="post-category">{ko ? '자료실' : 'Library'}</label>
+          <select id="post-category" className={styles.select} value={category} onChange={event => setCategory(event.target.value as ResourceCategory)} disabled={busy}>
+            {resourceCategories.map(item => <option key={item} value={item}>{resourceInfo[item].label[ko ? 0 : 1]}</option>)}
+          </select>
+          <small className={styles.hint}>{resourceInfo[category].description[ko ? 0 : 1]}</small>
+        </div>
+        <AuthField id="document-type" name="documentType" label={ko ? (category === 'reports' || category === 'forms' ? '보고서 종류' : '자료 구분') : 'Document type'} value={documentType} onChange={event => setDocumentType(event.target.value)} maxLength={80} disabled={busy} hint={ko ? '예: 연차보고서, 최종보고서, 회의록 양식' : 'e.g. Annual report, Final report, Minutes template'} />
+        {category === 'minutes' && <AuthField id="meeting-date" name="meetingDate" label={ko ? '회의일' : 'Meeting date'} type="date" value={meetingDate} onChange={event => setMeetingDate(event.target.value)} required disabled={busy} />}
+      </>}
       {notice && <label className={styles.pinOption}>
         <input type="checkbox" checked={pinned} onChange={event => setPinned(event.target.checked)} disabled={busy} />
         {ko ? '중요 공지로 표시 (목록 상단에 배치)' : 'Important notice (show at the top of the list)'}
@@ -181,7 +197,7 @@ export function BoardPostForm({ post, initialDivision, notice = false }: BoardPo
           {busy ? (ko ? '저장 중…' : 'Saving…') : post ? (ko ? '수정 완료' : 'Save changes') : (ko ? '등록' : 'Publish')}
         </Button>
         {busy ? <Button type="button" className={styles.secondary} disabled>{ko ? '취소' : 'Cancel'}</Button>
-          : <Link href={savedId ? `${basePath}/${savedId}` : notice ? basePath : initialDivision ? boardListHref(initialDivision) : '/board'} className={styles.secondary}>{ko ? '취소' : 'Cancel'}</Link>}
+          : <Link href={savedId ? `${basePath}/${savedId}` : notice ? basePath : category ? resourceHref(category) : initialDivision ? boardListHref(initialDivision) : '/board'} className={styles.secondary}>{ko ? '취소' : 'Cancel'}</Link>}
       </div>
     </form>
   </>;

@@ -19,7 +19,7 @@ export function NewsPage() {
       {/* Latest News Header */}
       <ContentSection background="white" padding="lg" style={{ paddingBottom: 40 }}>
         <Container maxWidth="none" padding="none" className="max-w-[840px]">
-          <DecoratedSectionHeader title={t('news.latestNews')} subtitle="HI-WOOD" />
+          <DecoratedSectionHeader title={t('news.latestNews')} subtitle="WLSS" />
         </Container>
       </ContentSection>
 

@@ -5,7 +5,7 @@ import { openStore } from './open-store.mjs';
 
 const tables = [
   { name: 'users', columns: ['id', 'name', 'username', 'email', 'affiliation', 'password_hash', 'role', 'status', 'created_at', 'reviewed_at', 'reviewed_by'] },
-  { name: 'posts', columns: ['id', 'author_id', 'title', 'body', 'division', 'view_count', 'created_at', 'updated_at'] },
+  { name: 'posts', columns: ['id', 'author_id', 'title', 'body', 'division', 'category', 'document_type', 'meeting_date', 'view_count', 'created_at', 'updated_at'] },
   { name: 'notices', columns: ['id', 'author_id', 'title', 'body', 'pinned', 'view_count', 'created_at', 'updated_at'] },
 ];
 const values = (rows, columns) => rows.map(row => columns.map(column => row[column]));
@@ -22,7 +22,7 @@ export async function migrateLocalStore(path, target) {
     }
     const snapshots = tables.map(table => ({ ...table, rows: table.name === 'notices' && !source.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'notices'").get()
       ? [] : source.prepare(`SELECT * FROM ${table.name} ORDER BY id`).all() }));
-    snapshots[1].rows = snapshots[1].rows.map(post => ({ ...post, division: post.division ?? null }));
+    snapshots[1].rows = snapshots[1].rows.map(post => ({ ...post, division: post.division ?? null, category: post.category ?? null, document_type: post.document_type ?? '', meeting_date: post.meeting_date ?? '' }));
     for (const table of snapshots.slice(1)) {
       table.rows = table.rows.map(row => ({ ...row, view_count: row.view_count ?? 0 }));
     }

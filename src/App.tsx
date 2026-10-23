@@ -8,6 +8,7 @@ import { LoginPage } from '@/pages/LoginPage';
 import { SignupPage } from '@/pages/SignupPage';
 import { MembersPage } from '@/pages/MembersPage';
 import { AdminPage } from '@/pages/AdminPage';
+import { ResourceLibraryPage } from '@/pages/ResourceLibraryPage';
 import { BoardPage } from '@/pages/BoardPage';
 import { BoardPostPage } from '@/pages/BoardPostPage';
 import { BoardEditorPage } from '@/pages/BoardEditorPage';
@@ -106,6 +107,7 @@ function App() {
         <Route path="/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute masterOnly><AdminPage /></ProtectedRoute>} />
         <Route path="/board" element={<BoardPage />} />
+        <Route path="/board/resources" element={<ResourceLibraryPage />} />
         <Route path="/board/activities/:id" element={<ActivityDetailPage />} />
         <Route path="/board/notices" element={<NoticesPage />} />
         <Route path="/board/notices/new" element={<ProtectedRoute masterOnly><BoardEditorPage notice /></ProtectedRoute>} />

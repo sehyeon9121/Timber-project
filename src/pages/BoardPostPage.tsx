@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useBoardResource } from '@/hooks/useBoardResource';
 import { authApi, authErrorMessage } from '@/lib/auth-api';
 import type { BoardPost } from '@/lib/board-api';
+import { resourceInfo, resourceHref } from '@/lib/resource-library';
 import { boardDate, boardDivisionLabel, boardListHref } from '@/lib/board-api';
 import styles from '@/styles/board.module.css';
 
@@ -32,18 +33,20 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
     if (!post || !canDelete || deleting) return;
     setDeleting(true);
     setDeleteError(null);
-    try { await authApi(`${apiPath}/${post.id}`, { method: 'DELETE' }); navigate(notice ? basePath : boardListHref(post.division), { replace: true }); }
+    try { await authApi(`${apiPath}/${post.id}`, { method: 'DELETE' }); navigate(notice ? basePath : post.category ? resourceHref(post.category) : boardListHref(post.division), { replace: true }); }
     catch (cause) { setDeleteError(cause); }
     finally { setDeleting(false); }
   }
-  return <AuthLayout wide title={post?.title || (notice ? (ko ? '연구단 공지사항' : 'Research Notices') : (ko ? '게시글' : 'Post'))} description={notice ? (ko ? '연구단 운영과 일정에 관한 관리자 공지입니다.' : 'Official notices about research group operations and schedules.') : (ko ? '연구단과 각 세부의 활동 소식을 공유합니다.' : 'Activities and updates from the research group and its divisions.')}>
+  return <AuthLayout wide title={post?.title || (notice ? (ko ? '연구단 공지사항' : 'Research Notices') : (ko ? '게시글' : 'Post'))} description={notice ? (ko ? '연구단 운영과 일정에 관한 관리자 공지입니다.' : 'Official notices about research group operations and schedules.') : (post?.category ? resourceInfo[post.category].description[ko ? 0 : 1] : (ko ? '연구단과 각 세부의 활동 소식을 공유합니다.' : 'Activities and updates from the research group and its divisions.'))}>
     {loading ? <p role="status">{ko ? '게시글을 불러오는 중…' : 'Loading post…'}</p>
       : error ? <>
         <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>
         <Button className={styles.secondary} onClick={reload}>{ko ? '다시 시도' : 'Try again'}</Button>
       </> : post && <>
         <div className={styles.meta}>
-          <span>{ko ? '게시판: ' : 'Board: '}{notice ? (ko ? '연구단 공지사항' : 'Research Notices') : boardDivisionLabel(post.division, language)}</span>
+          <span>{ko ? '게시판: ' : 'Board: '}{notice ? (ko ? '연구단 공지사항' : 'Research Notices') : post.category ? resourceInfo[post.category].label[ko ? 0 : 1] : boardDivisionLabel(post.division, language)}</span>
+          {post.category && post.documentType && <span>{ko ? '문서 종류: ' : 'Document type: '}{post.documentType}</span>}
+          {post.category === 'minutes' && post.meetingDate && <span>{ko ? '회의일: ' : 'Meeting date: '}{post.meetingDate}</span>}
           {notice && Boolean(post.pinned) && <span className={styles.noticeBadge}>{ko ? '중요 공지' : 'Important notice'}</span>}
           <span>{ko ? '작성자: ' : 'Author: '}{post.authorName}</span>
           <span>{ko ? '조회수: ' : 'Views: '}{post.viewCount.toLocaleString(ko ? 'ko-KR' : 'en-US')}</span>
@@ -66,7 +69,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
         </div>
       </>}
     <div className={styles.toolbar} style={{ marginTop: 28 }}>
-      <Link href={notice ? basePath : post ? boardListHref(post.division) : '/board'} className={styles.secondary}>{ko ? '목록으로' : 'Back to board'}</Link>
+      <Link href={notice ? basePath : post ? post.category ? resourceHref(post.category) : boardListHref(post.division) : '/board'} className={styles.secondary}>{ko ? '목록으로' : 'Back to board'}</Link>
     </div>
   </AuthLayout>;
 }

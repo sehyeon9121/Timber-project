@@ -1,3 +1,4 @@
+export const resourceCategories = ['reports', 'materials', 'minutes', 'forms'];
 export const boardPageSize = 10;
 
 export function validatePost(input) {
@@ -7,7 +8,14 @@ export function validatePost(input) {
   if (!title || title.length > 120) return { error: '제목은 1~120자로 입력해 주세요.' };
   if (!body || body.length > 10000) return { error: '내용은 1~10,000자로 입력해 주세요.' };
   if (division !== undefined && division !== null && ![1, 2, 3, 4].includes(division)) return { error: '올바른 게시판을 선택해 주세요.' };
-  return { title, body, division };
+  const category = input?.category;
+  const documentType = input?.documentType;
+  const meetingDate = input?.meetingDate;
+  if (category !== undefined && category !== null && !resourceCategories.includes(category)) return { error: '올바른 자료실을 선택해 주세요.' };
+  if (category && division != null) return { error: '자료실에는 세부 게시판을 지정할 수 없습니다.' };
+  if (documentType !== undefined && (typeof documentType !== 'string' || documentType.length > 80)) return { error: '문서 종류는 80자 이내로 입력해 주세요.' };
+  if (meetingDate !== undefined && (typeof meetingDate !== 'string' || (meetingDate && (!/^\d{4}-\d{2}-\d{2}$/.test(meetingDate) || !Number.isFinite(Date.parse(meetingDate)) || new Date(meetingDate).toISOString().slice(0, 10) !== meetingDate)))) return { error: '올바른 회의일을 입력해 주세요.' };
+  return { title, body, division, category, documentType, meetingDate };
 }
 
 export function registerBoardRoutes(app, store, requireUser, attachments) {
@@ -32,10 +40,18 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     if (division !== undefined && division !== null && ![1, 2, 3, 4].includes(division)) {
       return fail(response, 400, 'POST_VALIDATION', '올바른 게시판을 선택해 주세요.');
     }
+    const category = request.query.category ?? null;
+    if (category !== null && !resourceCategories.includes(category)) return fail(response, 400, 'POST_VALIDATION', '올바른 자료실을 선택해 주세요.');
+    if (category && division != null) return fail(response, 400, 'POST_VALIDATION', '자료실에는 세부 게시판을 지정할 수 없습니다.');
     const [total, posts] = await Promise.all([
-      store.countPosts(division, query.trim()),
-      store.listPosts(boardPageSize, (page - 1) * boardPageSize, division, query.trim()),
+      store.countPosts(division, query.trim(), category),
+      store.listPosts(boardPageSize, (page - 1) * boardPageSize, division, query.trim(), category),
     ]);
+    if (category) {
+      await Promise.all(posts.map(async post => {
+        post.attachments = await store.listAttachments('posts', post.id);
+      }));
+    }
     response.json({ posts, page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
@@ -63,7 +79,8 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     if (post.authorId !== request.user.id) return fail(response, 403, 'POST_FORBIDDEN', '작성한 회원만 글을 수정할 수 있습니다.');
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
-    await store.updatePost(post.id, { ...input, division: input.division === undefined ? post.division : input.division });
+    if ((input.category === undefined ? post.category : input.category) && (input.division === undefined ? post.division : input.division) != null) return fail(response, 400, 'POST_VALIDATION', '자료실에는 세부 게시판을 지정할 수 없습니다.');
+    await store.updatePost(post.id, { ...input, division: input.division === undefined ? post.division : input.division, category: input.category === undefined ? post.category : input.category, documentType: input.documentType ?? post.documentType, meetingDate: input.meetingDate ?? post.meetingDate });
     response.json({ post: await store.findPost(post.id) });
   });
   app.delete('/api/board/posts/:id', requireUser, async (request, response) => {

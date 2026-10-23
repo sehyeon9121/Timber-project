@@ -4,6 +4,11 @@ export interface BoardPostSummary {
   authorId: number;
   authorName: string;
   division: number | null;
+  category?: import('./resource-library').ResourceCategory | null;
+  documentType?: string;
+  meetingDate?: string;
+  excerpt?: string;
+  attachments?: BoardAttachment[];
   createdAt: string;
   updatedAt: string;
   viewCount: number;

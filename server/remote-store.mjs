@@ -18,6 +18,12 @@ export async function createRemoteStore(options) {
       try { await client.execute('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)'); }
       catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
     }
+    for (const [name, definition] of Object.entries({ category: 'TEXT', document_type: "TEXT NOT NULL DEFAULT ''", meeting_date: "TEXT NOT NULL DEFAULT ''" })) {
+      if (!postColumns.some(column => column.name === name)) {
+        try { await client.execute(`ALTER TABLE posts ADD COLUMN ${name} ${definition}`); }
+        catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+      }
+    }
     for (const table of ['posts', 'notices']) {
       const columns = (await client.execute(`PRAGMA table_info(${table})`)).rows;
       if (!columns.some(column => column.name === 'view_count')) {
@@ -29,6 +35,7 @@ export async function createRemoteStore(options) {
       { sql: "UPDATE users SET username = CASE WHEN role = 'master' AND id = (SELECT MIN(id) FROM users WHERE role = 'master') THEN 'ERS' ELSE 'user' || id END WHERE username IS NULL", args: [] },
       { sql: 'CREATE UNIQUE INDEX IF NOT EXISTS users_username_unique ON users(username COLLATE NOCASE)', args: [] },
       { sql: 'CREATE INDEX IF NOT EXISTS posts_division_id ON posts(division, id DESC)', args: [] },
+      { sql: 'CREATE INDEX IF NOT EXISTS posts_category_id ON posts(category, id DESC)', args: [] },
     ], 'write');
   } catch (error) {
     client.close();
@@ -79,25 +86,25 @@ export async function createRemoteStore(options) {
     async deleteSession(token) {
       if (token) await execute('DELETE FROM sessions WHERE token_hash = ?', [tokenHash(token)]);
     },
-    async countPosts(division, query = '') {
-      const filter = postFilter(division, query);
+    async countPosts(division, query = '', category = null) {
+      const filter = postFilter(division, query, category);
       return (await first(`SELECT COUNT(*) AS total FROM posts ${filter.where}`, filter.args)).total;
     },
-    async listPosts(limit, offset, division, query = '') {
-      const filter = postFilter(division, query);
-      return (await execute(`SELECT posts.id, posts.title, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
+    async listPosts(limit, offset, division, query = '', category = null) {
+      const filter = postFilter(division, query, category);
+      return (await execute(`SELECT posts.id, posts.title, substr(posts.body, 1, 180) AS excerpt, posts.author_id AS authorId, posts.division, posts.category, posts.document_type AS documentType, posts.meeting_date AS meetingDate, posts.view_count AS viewCount,
         users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
         FROM posts JOIN users ON users.id = posts.author_id ${filter.where}
         ORDER BY posts.id DESC LIMIT ? OFFSET ?`, [...filter.args, limit, offset])).rows;
     },
-    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.view_count AS viewCount,
+    findPost: id => first(`SELECT posts.id, posts.title, posts.body, posts.author_id AS authorId, posts.division, posts.category, posts.document_type AS documentType, posts.meeting_date AS meetingDate, posts.view_count AS viewCount,
       users.name AS authorName, posts.created_at AS createdAt, posts.updated_at AS updatedAt
       FROM posts JOIN users ON users.id = posts.author_id WHERE posts.id = ?`, [id]),
     async createPost(input, authorId) {
-      const result = await execute('INSERT INTO posts (author_id, title, body, division) VALUES (?, ?, ?, ?)', [authorId, input.title, input.body, input.division ?? null]);
+      const result = await execute('INSERT INTO posts (author_id, title, body, division, category, document_type, meeting_date) VALUES (?, ?, ?, ?, ?, ?, ?)', [authorId, input.title, input.body, input.division ?? null, input.category ?? null, input.documentType ?? '', input.meetingDate ?? '']);
       return this.findPost(Number(result.lastInsertRowid));
     },
-    updatePost: (id, input) => execute("UPDATE posts SET title = ?, body = ?, division = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.division ?? null, id]),
+    updatePost: (id, input) => execute("UPDATE posts SET title = ?, body = ?, division = ?, category = ?, document_type = ?, meeting_date = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE id = ?", [input.title, input.body, input.division ?? null, input.category ?? null, input.documentType ?? '', input.meetingDate ?? '', id]),
     deletePost: id => execute('DELETE FROM posts WHERE id = ?', [id]),
     incrementPostViews: async id => (await first('UPDATE posts SET view_count = view_count + 1 WHERE id = ? RETURNING view_count AS viewCount', [id]))?.viewCount,
     async countNotices(query = '') {
