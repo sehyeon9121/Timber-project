@@ -107,7 +107,7 @@ export function BoardPostForm({ post, initialDivision, initialCategory, notice =
     <textarea id="post-body" name="body" className={styles.textarea} value={body}
       onChange={event => setBody(event.target.value)} required={!notice} maxLength={10000} disabled={busy} aria-describedby="post-body-hint" />
     <small id="post-body-hint" className={styles.hint}>
-      {body.length.toLocaleString()} / 10,000 {ko ? '자 · 누구나 볼 수 있습니다.' : 'characters · Visible to everyone.'}
+      {body.length.toLocaleString()} / 10,000 {ko ? '자 · 승인된 회원만 볼 수 있습니다.' : 'characters · Visible only to approved members.'}
     </small>
   </div>;
   return <>

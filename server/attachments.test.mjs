@@ -84,11 +84,11 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
       assert.equal(detail.post.attachments[0].pathname, undefined);
     }
   });
-  await t.test('public downloads work; anonymous and inactive users cannot upload; ownership stays enforced', async () => {
+  await t.test('member downloads work; anonymous and inactive users cannot read or upload; ownership stays enforced', async () => {
     for (const who of ['anonymous', 'pending']) {
       const download = await request(`${path}/${file.id}/content`, 'GET', undefined, who);
-      assert.equal(download.status, 200);
-      assert.equal(Buffer.from(await download.arrayBuffer()).toString(), '자료');
+      assert.equal(download.status, 401);
+      assert.equal((await download.json()).code, 'UNAUTHENTICATED');
       assert.equal((await request(path, 'POST', { name: 'a.txt', size: 1 }, who)).status, 401);
       assert.equal((await request(`${path}/${file.id}`, 'DELETE', undefined, who)).status, 401);
       assert.equal((await request(`${path}/${file.id}/content`, 'PUT', Buffer.from('자료'), who)).status, 401);
@@ -135,7 +135,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLttAAAAABJRU5ErkJggg==', 'base64');
     const image = await reserve(path, '사진.png', png.length);
     assert.equal((await request(`${path}/${image.id}/content`, 'PUT', png)).status, 200);
-    const preview = await request(`${path}/${image.id}/content?preview=1`, 'GET', undefined, 'anonymous');
+    const preview = await request(`${path}/${image.id}/content?preview=1`, 'GET', undefined, 'other');
     assert.equal(preview.status, 200);
     assert.equal(preview.headers.get('content-type'), 'image/png');
     assert.match(preview.headers.get('content-disposition'), /^inline/);
@@ -155,8 +155,9 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     assert.equal(member.post.attachments.length, 0);
     for (const who of ['anonymous', 'pending']) {
       const detail = await (await request(`/board/posts/${post.id}`, 'GET', undefined, who)).json();
-      assert.deepEqual(detail.post.attachments, []);
-      assert.equal((await request(`${folder}/${own.post.attachments[0].id}/content`, 'GET', undefined, who)).status, 404);
+      assert.equal(detail.post, undefined);
+      assert.equal(detail.code, 'UNAUTHENTICATED');
+      assert.equal((await request(`${folder}/${own.post.attachments[0].id}/content`, 'GET', undefined, who)).status, 401);
     }
     assert.equal((await request(`/board/posts/${post.id}`, 'DELETE')).status, 200);
     assert.equal((await store.listAttachments('posts', post.id, true)).length, 0);
@@ -167,7 +168,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     assert.equal((await request(folder, 'POST', { name: 'a.txt', size: 6 })).status, 403);
     const current = await reserve(folder, '공지.txt', 6, 'master');
     assert.equal((await request(`${folder}/${current.id}/content`, 'PUT', Buffer.from('자료'), 'master')).status, 200);
-    assert.equal((await request(`${folder}/${current.id}/content`, 'GET', undefined, 'anonymous')).status, 200);
+    assert.equal((await request(`${folder}/${current.id}/content`, 'GET', undefined, 'other')).status, 200);
     assert.equal((await request(`/board/notices/${notice.id}`, 'DELETE', undefined, 'master')).status, 200);
     assert.equal(await store.findAttachment(current.id), undefined);
     assert.ok(!(await readdir(join(directory, 'files'))).includes(current.id));

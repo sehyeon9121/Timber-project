@@ -7,7 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { createApp } from './app.mjs';
 import { createStore } from './store.mjs';
 
-test('public board reads, member write permissions, content lifecycle, and persistence', async t => {
+test('member-only board reads, member write permissions, content lifecycle, and persistence', async t => {
   const directory = mkdtempSync(join(tmpdir(), 'timber-board-test-'));
   const path = join(directory, 'auth.sqlite');
   const store = createStore(path);
@@ -44,10 +44,10 @@ test('public board reads, member write permissions, content lifecycle, and persi
   });
   let postId;
   let divisionPostId;
-  await t.test('anonymous and inactive members can list posts but cannot write', async () => {
+  await t.test('anonymous and inactive members cannot read or write', async () => {
     for (const session of [null, cookie(pending), cookie(rejected), 'timber_session=' + '0'.repeat(64)]) {
-      assert.equal((await request('', 'GET', undefined, session)).status, 200);
-      assert.equal((await request('/1', 'GET', undefined, session)).status, 404);
+      assert.equal((await request('', 'GET', undefined, session)).status, 401);
+      assert.equal((await request('/1', 'GET', undefined, session)).status, 401);
       for (const [suffix, method] of [['', 'POST'], ['/1', 'PATCH'], ['/1', 'DELETE']]) {
         assert.equal((await request(suffix, method, { title: 'Public', body: 'Public' }, session)).status, 401);
       }
@@ -71,10 +71,8 @@ test('public board reads, member write permissions, content lifecycle, and persi
     assert.ok(!('body' in list.data.posts[0]));
     for (const session of [null, cookie(pending), cookie(rejected), 'timber_session=' + '0'.repeat(64)]) {
       const detail = await request(`/${postId}`, 'GET', undefined, session);
-      assert.equal(detail.status, 200);
-      assert.equal(detail.data.post.body, result.data.post.body);
-      assert.ok(!('email' in detail.data.post));
-      assert.ok(!('password_hash' in detail.data.post));
+      assert.equal(detail.status, 401);
+      assert.equal(detail.data.post, undefined);
     }
   });
   await t.test('blank or oversized content is rejected; long Korean bodies fit the request limit', async () => {
@@ -147,7 +145,7 @@ test('public board reads, member write permissions, content lifecycle, and persi
     assert.ok(activities.posts.some(post => post.id === id));
     assert.ok(!activities.posts.some(post => post.id === divisionPostId));
     assert.ok(!(await request('?division=3')).data.posts.some(post => post.id === id));
-    assert.equal((await request('?division=activities', 'GET', undefined, null)).status, 200);
+    assert.equal((await request('?division=activities', 'GET', undefined, null)).status, 401);
     const moved = await request(`/${id}`, 'PATCH', { title: '세부 행사', body: '세부로 이동', division: 4 });
     assert.equal(moved.data.post.division, 4);
     assert.ok(!(await request('?division=activities')).data.posts.some(post => post.id === id));
@@ -211,15 +209,15 @@ test('public board reads, member write permissions, content lifecycle, and persi
     const next = store.createPost({ title: '새 게시글', body: '새 게시글' }, author.id);
     assert.ok(next.id > own.id);
   });
-  await t.test('logout and expired sessions remove writes but retain public reads', async () => {
+  await t.test('logout and expired sessions remove all board access', async () => {
     const authorPost = store.createPost({ title: '로그아웃 후 삭제 차단', body: '보존할 내용' }, author.id);
     const otherPost = store.createPost({ title: '세션 만료 후 삭제 차단', body: '보존할 내용' }, other.id);
     store.deleteSession(authorCookie.split('=')[1]);
-    assert.equal((await request()).status, 200);
+    assert.equal((await request()).status, 401);
     assert.equal((await request(`/${authorPost.id}`, 'DELETE')).status, 401);
     assert.deepEqual(store.findPost(authorPost.id), authorPost);
     store.db.prepare('UPDATE sessions SET expires_at = 0 WHERE user_id = ?').run(other.id);
-    assert.equal((await request('', 'GET', undefined, otherCookie)).status, 200);
+    assert.equal((await request('', 'GET', undefined, otherCookie)).status, 401);
     assert.equal((await request(`/${otherPost.id}`, 'DELETE', undefined, otherCookie)).status, 401);
     assert.deepEqual(store.findPost(otherPost.id), otherPost);
   });

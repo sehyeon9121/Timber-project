@@ -70,15 +70,17 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
   app.post('/api/board/posts', requireUser, async (request, response) => {
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
+    if (input.category && request.user.role !== 'master') return fail(response, 403, 'POST_FORBIDDEN', '관리자만 자료실에 등록할 수 있습니다.');
     const post = await store.createPost(input, request.user.id);
     response.status(201).location(`/api/board/posts/${post.id}`).json({ post });
   });
   app.patch('/api/board/posts/:id', requireUser, async (request, response) => {
     const post = await findPost(request, response);
     if (!post) return;
-    if (post.authorId !== request.user.id) return fail(response, 403, 'POST_FORBIDDEN', '작성한 회원만 글을 수정할 수 있습니다.');
+    if (post.category ? request.user.role !== 'master' : post.authorId !== request.user.id) return fail(response, 403, 'POST_FORBIDDEN', '자료실은 관리자만, 활동 글은 작성한 회원만 수정할 수 있습니다.');
     const input = validatePost(request.body);
     if (input.error) return fail(response, 400, 'POST_VALIDATION', input.error);
+    if (input.category && request.user.role !== 'master') return fail(response, 403, 'POST_FORBIDDEN', '관리자만 자료실에 등록할 수 있습니다.');
     if ((input.category === undefined ? post.category : input.category) && (input.division === undefined ? post.division : input.division) != null) return fail(response, 400, 'POST_VALIDATION', '자료실에는 세부 게시판을 지정할 수 없습니다.');
     await store.updatePost(post.id, { ...input, division: input.division === undefined ? post.division : input.division, category: input.category === undefined ? post.category : input.category, documentType: input.documentType ?? post.documentType, meetingDate: input.meetingDate ?? post.meetingDate });
     response.json({ post: await store.findPost(post.id) });
@@ -86,7 +88,7 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
   app.delete('/api/board/posts/:id', requireUser, async (request, response) => {
     const post = await findPost(request, response);
     if (!post) return;
-    if (post.authorId !== request.user.id && request.user.role !== 'master') {
+    if (post.category ? request.user.role !== 'master' : post.authorId !== request.user.id && request.user.role !== 'master') {
       return fail(response, 403, 'POST_FORBIDDEN', '작성자 또는 관리자만 글을 삭제할 수 있습니다.');
     }
     await attachments.removeFiles('posts', post.id);

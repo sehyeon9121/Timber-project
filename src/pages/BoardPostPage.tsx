@@ -27,8 +27,9 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
   const ko = language === 'KO';
   const post = data?.post;
   const isAuthor = Boolean(post && user && post.authorId === user.id);
-  const canEdit = notice ? user?.role === 'master' : isAuthor;
-  const canDelete = Boolean(post && user && (notice ? user.role === 'master' : isAuthor || user.role === 'master'));
+  const adminOnly = notice || Boolean(post?.category);
+  const canEdit = adminOnly ? user?.role === 'master' : isAuthor;
+  const canDelete = Boolean(post && user && (adminOnly ? user.role === 'master' : isAuthor || user.role === 'master'));
   async function remove() {
     if (!post || !canDelete || deleting) return;
     setDeleting(true);

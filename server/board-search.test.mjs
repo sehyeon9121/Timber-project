@@ -62,7 +62,7 @@ test('board and notice lists start both queries before waiting for the count', a
   }
 });
 
-for (const backend of ['sqlite', 'libsql']) test(`${backend}: public search filters before ten-post pagination`, async t => {
+for (const backend of ['sqlite', 'libsql']) test(`${backend}: member search filters before ten-post pagination`, async t => {
   const directory = await mkdtemp(join(tmpdir(), 'timber-board-search-'));
   const store = backend === 'sqlite' ? createStore(':memory:') : await createRemoteStore({ url: pathToFileURL(join(directory, 'remote.sqlite')).href });
   const author = await store.addUser({ name: 'Author', username: 'author', email: 'author@example.test', affiliation: 'Lab' }, 'unused', 'master');
@@ -106,7 +106,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: public search filt
   assert.equal(empty.totalPages, 1);
   assert.deepEqual(empty.posts, []);
   const publicSearch = await request('q=match', false);
-  assert.equal(publicSearch.status, 200);
-  assert.deepEqual((await publicSearch.json()).posts, first.posts);
+  assert.equal(publicSearch.status, 401);
+  assert.equal((await publicSearch.json()).posts, undefined);
   for (const query of ['q=' + 'x'.repeat(121), 'q=a&q=b']) assert.equal((await request(query)).status, 400);
 });

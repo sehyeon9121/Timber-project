@@ -45,18 +45,19 @@ for (const backend of ['local', 'libsql']) {
       assert.equal((await request(path, 'HEAD')).status, 200);
       assert.equal((await request(`/${kind}`)).data.posts[0].viewCount, 0);
       for (const session of [null, pendingCookie]) {
-        assert.equal((await request(path, 'GET', session)).status, 200);
+        assert.equal((await request(path, 'GET', session)).status, 401);
         assert.equal((await request(path, 'PATCH', session, undefined, { title: 'Forged', body: 'Forged' })).status, 401);
         assert.equal((await request(path, 'DELETE', session)).status, 401);
+        assert.equal((await request(viewPath, 'POST', session)).status, 401);
       }
       assert.equal((await request(viewPath, 'POST', cookie, 'https://untrusted.example')).status, 403);
       assert.equal((await request(`/${kind}/invalid/views`, 'POST')).status, 404);
       assert.equal((await request(`/${kind}/999999/views`, 'POST')).status, 404);
-      const first = (await request(viewPath, 'POST', null)).data.post;
+      const first = (await request(viewPath, 'POST', cookie)).data.post;
       assert.equal(first.viewCount, 1);
       assert.equal(first.body, post.body);
       assert.equal(first.updatedAt, post.updatedAt);
-      const visits = await Promise.all(Array.from({ length: 8 }, (_, index) => request(viewPath, 'POST', index % 2 ? pendingCookie : null)));
+      const visits = await Promise.all(Array.from({ length: 8 }, () => request(viewPath, 'POST', cookie)));
       assert.ok(visits.every(result => result.status === 200));
       assert.deepEqual(visits.map(result => result.data.post.viewCount).sort((a, b) => a - b), [2, 3, 4, 5, 6, 7, 8, 9]);
       assert.equal((await request(`/${kind}`)).data.posts[0].viewCount, 9);
