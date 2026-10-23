@@ -54,7 +54,7 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
   const password = 'Test-only-password-2026';
   const hash = await hashPassword(password);
   const master = source.addUser({ name: 'Master', username: 'ERS', email: 'master@example.test', affiliation: 'Admin' }, hash, 'master');
-  const author = source.addUser({ name: 'Member', username: 'member', email: 'member@example.test', affiliation: 'Lab' }, hash);
+  const author = source.addUser({ name: 'Member', username: 'member', email: 'member@example.test', affiliation: 'Research institute', lab: 'Timber lab' }, hash);
   source.review(author.id, 'approved', master.id);
   const rejected = source.addUser({ name: 'Rejected', username: 'rejected', email: 'rejected@example.test', affiliation: 'Lab' }, hash);
   source.review(rejected.id, 'rejected', master.id);
@@ -87,6 +87,8 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
     assert.deepEqual(await migrateLocalStore(path, target), { status: 'unchanged', users: 4, posts: 1 });
     assert.equal(source.findById(master.id).password_hash, hash);
     assert.equal((await target.findById(author.id)).reviewed_by, master.id);
+    assert.equal((await target.findById(author.id)).affiliation, 'Research institute');
+    assert.equal((await target.findById(author.id)).lab, 'Timber lab');
     assert.equal((await target.findPost(originalPost.id)).body, originalPost.body);
     assert.equal((await target.findPost(originalPost.id)).division, 2);
     assert.equal((await target.client.execute('SELECT COUNT(*) AS count FROM sessions')).rows[0].count, 0);
@@ -108,11 +110,13 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
     assert.equal((await request('/auth/login', 'POST', { username: master.username, password }, undefined, 'https://untrusted.example')).status, 403);
   });
   await t.test('signup conflicts are handled and approvals are persisted', async () => {
-    const input = { name: 'New member', username: 'newmember', email: 'new@example.test', affiliation: 'Lab', password };
+    const input = { name: 'New member', username: 'newmember', email: 'new@example.test', affiliation: ' University ', lab: ' Structures laboratory ', password };
     const results = await Promise.all([request('/auth/signup', 'POST', input), request('/auth/signup', 'POST', input)]);
     assert.deepEqual(results.map(result => result.status).sort(), [201, 409]);
     const created = await target.findByEmail(input.email);
     assert.equal(created.status, 'pending');
+    assert.equal(created.affiliation, 'University');
+    assert.equal(created.lab, 'Structures laboratory');
     assert.equal((await request(`/admin/users/${created.id}`, 'PATCH', { status: 'approved' }, masterCookie)).status, 200);
     assert.equal((await second.findById(created.id)).status, 'approved');
   });

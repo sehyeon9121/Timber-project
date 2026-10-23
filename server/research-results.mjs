@@ -58,11 +58,11 @@ export function researchResultsStore(execute, rows) {
   };
 }
 
-export function registerResearchResultsRoutes(app, store, requireUser, requireMaster) {
+export function registerResearchResultsRoutes(app, store, requireUser, requireAdmin) {
   app.get('/api/research/results', async (_request, response) => {
     response.json(await store.getResearchResults());
   });
-  app.put('/api/admin/research/results', requireUser, requireMaster, async (request, response) => {
+  app.put('/api/admin/research/results', requireUser, requireAdmin, async (request, response) => {
     const input = validateResearchResults(request.body);
     if (!input) return response.status(400).json({ code: 'RESULTS_VALIDATION', message: '연도, 기준일과 0 이상의 정수를 확인해 주세요. 누적 실적은 연간 실적 이상이어야 합니다.' });
     if (!await store.saveResearchResults(input, request.body.revision, request.user.id)) {

@@ -29,18 +29,24 @@ export function validateRegistration(input) {
   const username = typeof input?.username === 'string' ? input.username.trim() : '';
   const email = typeof input?.email === 'string' ? input.email.trim().toLowerCase() : '';
   const affiliation = typeof input?.affiliation === 'string' ? input.affiliation.trim() : '';
+  const lab = typeof input?.lab === 'string' ? input.lab.trim() : '';
   const password = typeof input?.password === 'string' ? input.password : '';
   if (name.length < 2 || name.length > 80) return { error: '이름은 2~80자로 입력해 주세요.' };
   if (!/^[A-Za-z][A-Za-z0-9_]{2,31}$/.test(username)) return { error: '아이디는 영문으로 시작하는 영문·숫자·밑줄 3~32자로 입력해 주세요.' };
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: '올바른 이메일을 입력해 주세요.' };
-  if (affiliation.length < 2 || affiliation.length > 120) return { error: '소속은 2~120자로 입력해 주세요.' };
+  if (affiliation.length < 2 || affiliation.length > 120) return { error: '소속기관은 2~120자로 입력해 주세요.' };
+  if ((input?.lab !== undefined && typeof input.lab !== 'string') || lab.length > 120) return { error: '연구실은 120자 이내로 입력해 주세요.' };
   if (password.length < 6 || password.length > 128) return { error: '비밀번호는 6~128자로 입력해 주세요.' };
-  return { name, username, email, affiliation, password };
+  return { name, username, email, affiliation, lab, password };
+}
+
+export function isAdministrator(user) {
+  return Boolean(user && (user.role === 'master' || user.is_admin === 1));
 }
 
 export function publicUser(user) {
-  return { id: user.id, name: user.name, username: user.username, email: user.email, affiliation: user.affiliation,
-    role: user.role, status: user.status, createdAt: user.created_at, reviewedAt: user.reviewed_at };
+  return { id: user.id, name: user.name, username: user.username, email: user.email, affiliation: user.affiliation, lab: user.lab ?? '',
+    role: user.role, isAdmin: isAdministrator(user), status: user.status, createdAt: user.created_at, reviewedAt: user.reviewed_at };
 }
 
 export const tokenHash = token => createHash('sha256').update(token).digest('hex');
@@ -64,7 +70,9 @@ export const storeSchema = `
       username TEXT UNIQUE COLLATE NOCASE,
       email TEXT NOT NULL UNIQUE,
       affiliation TEXT NOT NULL,
+      lab TEXT NOT NULL DEFAULT '',
       password_hash TEXT NOT NULL,
+      is_admin INTEGER NOT NULL DEFAULT 0 CHECK (is_admin IN (0, 1)),
       role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('member', 'master')),
       status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
       created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
@@ -134,6 +142,12 @@ ${storeSchema}
   if (!db.prepare('PRAGMA table_info(users)').all().some(column => column.name === 'username')) {
     db.exec('ALTER TABLE users ADD COLUMN username TEXT');
   }
+  if (!db.prepare('PRAGMA table_info(users)').all().some(column => column.name === 'is_admin')) {
+    db.exec('ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0 CHECK (is_admin IN (0, 1))');
+  }
+  if (!db.prepare('PRAGMA table_info(users)').all().some(column => column.name === 'lab')) {
+    db.exec("ALTER TABLE users ADD COLUMN lab TEXT NOT NULL DEFAULT ''");
+  }
   if (!db.prepare('PRAGMA table_info(posts)').all().some(column => column.name === 'division')) {
     db.exec('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)');
   }
@@ -161,8 +175,8 @@ ${storeSchema}
     findByEmail: email => db.prepare('SELECT * FROM users WHERE email = ?').get(email),
     findById: id => db.prepare('SELECT * FROM users WHERE id = ?').get(id),
     addUser(input, passwordHash, role = 'member') {
-      const result = db.prepare('INSERT INTO users (name, username, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)')
-        .run(input.name, input.username, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending');
+      const result = db.prepare('INSERT INTO users (name, username, email, affiliation, lab, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+        .run(input.name, input.username, input.email, input.affiliation, input.lab ?? '', passwordHash, role, role === 'master' ? 'approved' : 'pending');
       return this.findById(Number(result.lastInsertRowid));
     },
     updateMasterCredentials(username, passwordHash) {
@@ -174,6 +188,9 @@ ${storeSchema}
         db.prepare('DELETE FROM sessions WHERE user_id = ?').run(masters[0].id);
         db.exec('COMMIT');
       } catch (error) { db.exec('ROLLBACK'); throw error; }
+    },
+    setAdministrator(id, enabled) {
+      return db.prepare("UPDATE users SET is_admin = ? WHERE id = ? AND role = 'member' AND status = 'approved'").run(enabled ? 1 : 0, id).changes === 1;
     },
     listMembers: () => db.prepare("SELECT * FROM users WHERE role = 'member' ORDER BY CASE status WHEN 'pending' THEN 0 ELSE 1 END, created_at DESC, id DESC").all().map(publicUser),
     review(id, status, masterId) {

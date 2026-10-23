@@ -3,7 +3,7 @@ import { AuthLayout } from '@/components/templates/AuthLayout';
 import { Button } from '@/components/atoms/Button';
 import { Link } from '@/components/atoms/Link';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { authApi, authErrorMessage } from '@/lib/auth-api';
+import { isAdministrator, authApi, authErrorMessage } from '@/lib/auth-api';
 import type { User } from '@/lib/auth-api';
 import styles from '@/styles/auth.module.css';
 
@@ -28,10 +28,11 @@ export function MembersPage() {
       <dl className={styles.profile}>
         <dt>{ko ? '아이디' : 'Username'}</dt><dd>{user.username}</dd>
         <dt>{ko ? '이메일' : 'Email'}</dt><dd>{user.email}</dd>
-        <dt>{ko ? '소속' : 'Affiliation'}</dt><dd>{user.affiliation}</dd>
-        <dt>{ko ? '계정 권한' : 'Role'}</dt><dd>{user.role === 'master' ? (ko ? '마스터 관리자' : 'Master administrator') : (ko ? '일반 회원' : 'Member')}</dd>
+        <dt>{ko ? '소속기관' : 'Institution'}</dt><dd>{user.affiliation}</dd>
+        <dt>{ko ? '연구실' : 'Laboratory'}</dt><dd>{user.lab || '—'}</dd>
+        <dt>{ko ? '계정 권한' : 'Role'}</dt><dd>{user.role === 'master' ? (ko ? '최고관리자' : 'Master administrator') : isAdministrator(user) ? (ko ? '관리자' : 'Administrator') : (ko ? '일반 회원' : 'Member')}</dd>
       </dl>
-      {user.role === 'master' && <Link href="/admin">{ko ? '관리자 설정으로 이동 →' : 'Open admin settings →'}</Link>}
+      {isAdministrator(user) && <Link href="/admin">{ko ? '관리자 설정으로 이동 →' : 'Open admin settings →'}</Link>}
     </> : <p role="status">{ko ? '회원 정보를 불러오는 중…' : 'Loading your profile…'}</p>}
   </AuthLayout>;
 }

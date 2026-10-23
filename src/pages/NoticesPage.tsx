@@ -5,7 +5,7 @@ import { Link } from '@/components/atoms/Link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/auth-context';
 import { useBoardResource } from '@/hooks/useBoardResource';
-import { authErrorMessage } from '@/lib/auth-api';
+import { isAdministrator, authErrorMessage } from '@/lib/auth-api';
 import type { BoardPostList as PostListData } from '@/lib/board-api';
 import styles from '@/styles/board.module.css';
 import cards from '@/styles/notice-cards.module.css';
@@ -39,7 +39,7 @@ export function NoticesPage() {
     </form>
     <div className={styles.toolbar}>
       <span className={styles.toolbarText}>{data ? (ko ? `${q ? '검색 결과' : '전체'} ${data.total}개의 공지` : `${data.total} notices${q ? ' found' : ''}`) : (ko ? '연구단 공지사항' : 'Research Notices')}</span>
-      {user?.role === 'master' && <Link href="/board/notices/new" className={styles.primary}>{ko ? '공지사항 작성' : 'Write a notice'}</Link>}
+      {isAdministrator(user) && <Link href="/board/notices/new" className={styles.primary}>{ko ? '공지사항 작성' : 'Write a notice'}</Link>}
     </div>
     {loading ? <p role="status">{ko ? '공지사항을 불러오는 중…' : 'Loading notices…'}</p> : error ? <>
       <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>

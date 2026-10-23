@@ -1,6 +1,6 @@
 const boardPageSize = 20;
 
-export function registerNoticeRoutes(app, store, requireUser, requireMaster, attachments) {
+export function registerNoticeRoutes(app, store, requireUser, requireAdmin, attachments) {
   const fail = (response, status, code, message) => response.status(status).json({ code, message });
   function validateNotice(body) {
     const title = typeof body?.title === 'string' ? body.title.trim() : '';
@@ -42,13 +42,13 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     if (viewCount === undefined) return fail(response, 404, 'POST_NOT_FOUND', '공지사항을 찾을 수 없습니다.');
     response.json({ post: { ...enriched, viewCount } });
   });
-  app.post('/api/board/notices', requireUser, requireMaster, async (request, response) => {
+  app.post('/api/board/notices', requireUser, requireAdmin, async (request, response) => {
     const input = validateNotice(request.body);
     if (input.error) return fail(response, 400, 'NOTICE_VALIDATION', input.error);
     const post = await store.createNotice(input, request.user.id);
     response.status(201).location(`/api/board/notices/${post.id}`).json({ post });
   });
-  app.patch('/api/board/notices/:id', requireUser, requireMaster, async (request, response) => {
+  app.patch('/api/board/notices/:id', requireUser, requireAdmin, async (request, response) => {
     const post = await findNotice(request, response);
     if (!post) return;
     const input = validateNotice(request.body);
@@ -56,7 +56,7 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     await store.updateNotice(post.id, input);
     response.json({ post: await store.findNotice(post.id) });
   });
-  app.delete('/api/board/notices/:id', requireUser, requireMaster, async (request, response) => {
+  app.delete('/api/board/notices/:id', requireUser, requireAdmin, async (request, response) => {
     const post = await findNotice(request, response);
     if (!post) return;
     await attachments.removeFiles('notices', post.id);

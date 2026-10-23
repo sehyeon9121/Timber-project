@@ -13,6 +13,14 @@ export async function createRemoteStore(options) {
       try { await client.execute('ALTER TABLE users ADD COLUMN username TEXT'); }
       catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
     }
+    if (!columns.some(column => column.name === 'is_admin')) {
+      try { await client.execute('ALTER TABLE users ADD COLUMN is_admin INTEGER NOT NULL DEFAULT 0 CHECK (is_admin IN (0, 1))'); }
+      catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+    }
+    if (!columns.some(column => column.name === 'lab')) {
+      try { await client.execute("ALTER TABLE users ADD COLUMN lab TEXT NOT NULL DEFAULT ''"); }
+      catch (error) { if (!error.message?.includes('duplicate column name')) throw error; }
+    }
     const postColumns = (await client.execute('PRAGMA table_info(posts)')).rows;
     if (!postColumns.some(column => column.name === 'division')) {
       try { await client.execute('ALTER TABLE posts ADD COLUMN division INTEGER CHECK (division BETWEEN 1 AND 4)'); }
@@ -51,8 +59,8 @@ export async function createRemoteStore(options) {
     findByEmail: email => first('SELECT * FROM users WHERE email = ?', [email]),
     findById: id => first('SELECT * FROM users WHERE id = ?', [id]),
     async addUser(input, passwordHash, role = 'member') {
-      const result = await execute('INSERT INTO users (name, username, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [input.name, input.username, input.email, input.affiliation, passwordHash, role, role === 'master' ? 'approved' : 'pending']);
+      const result = await execute('INSERT INTO users (name, username, email, affiliation, lab, password_hash, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [input.name, input.username, input.email, input.affiliation, input.lab ?? '', passwordHash, role, role === 'master' ? 'approved' : 'pending']);
       return this.findById(Number(result.lastInsertRowid));
     },
     async updateMasterCredentials(username, passwordHash) {
@@ -62,6 +70,10 @@ export async function createRemoteStore(options) {
         { sql: 'UPDATE users SET username = ?, password_hash = ? WHERE id = ?', args: [username, passwordHash, masters[0].id] },
         { sql: 'DELETE FROM sessions WHERE user_id = ?', args: [masters[0].id] },
       ], 'write');
+    },
+    async setAdministrator(id, enabled) {
+      const result = await execute("UPDATE users SET is_admin = ? WHERE id = ? AND role = 'member' AND status = 'approved'", [enabled ? 1 : 0, id]);
+      return result.rowsAffected === 1;
     },
     async listMembers() {
       const result = await execute("SELECT * FROM users WHERE role = 'member' ORDER BY CASE status WHEN 'pending' THEN 0 ELSE 1 END, created_at DESC, id DESC");

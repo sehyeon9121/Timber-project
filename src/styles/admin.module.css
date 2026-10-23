@@ -18,10 +18,13 @@
 .sidebar button:focus-visible, .search input:focus-visible, .tableWrap:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .result { margin-bottom: 12px; font-size: 13px; color: var(--color-text-light); }
 .tableWrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: 8px; }
-.table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 13px; text-align: left; }
+.table { width: 100%; min-width: 820px; border-collapse: collapse; font-size: 13px; text-align: left; }
 .table th { padding: 12px; background: #f5f7f4; font-weight: 600; white-space: nowrap; }
 .table td { padding: 14px 12px; border-top: 1px solid var(--color-border); overflow-wrap: anywhere; max-width: 240px; }
 .table th:last-child, .table td:last-child { white-space: nowrap; }
+.confirmation { margin: 16px 0; padding: 20px; border: 1px solid var(--color-border); border-radius: 8px; background: #f5f8f2; }
+.confirmation h3 { font-size: 16px; font-weight: 600; }
+.confirmation p { margin: 12px 0 18px; color: var(--color-text-light); font-size: 14px; line-height: 1.7; }
 @media (max-width: 767px) {
   .shell { padding: 32px 20px 48px; }
   .heading h1 { font-size: 24px; }

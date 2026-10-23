@@ -8,7 +8,7 @@ import { Link } from '@/components/atoms/Link';
 import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
+import { isAdministrator, authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import { attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
 import type { PendingFile } from '@/lib/attachments-api';
 import { resourceCategories, resourceInfo, resourceHref } from '@/lib/resource-library';
@@ -153,7 +153,7 @@ export function BoardPostForm({ post, initialDivision, initialCategory, notice =
         <div className={styles.textareaField}>
           <label htmlFor="post-category">{ko ? '자료실' : 'Library'}</label>
           <select id="post-category" className={styles.select} value={category} onChange={event => setCategory(event.target.value as ResourceCategory)} disabled={busy}>
-            {resourceCategories.map(item => <option key={item} value={item} disabled={item === 'forms' && user?.role !== 'master'}>{resourceInfo[item].label[ko ? 0 : 1]}</option>)}
+            {resourceCategories.map(item => <option key={item} value={item} disabled={item === 'forms' && !isAdministrator(user)}>{resourceInfo[item].label[ko ? 0 : 1]}</option>)}
           </select>
           <small className={styles.hint}>{resourceInfo[category].description[ko ? 0 : 1]}</small>
         </div>

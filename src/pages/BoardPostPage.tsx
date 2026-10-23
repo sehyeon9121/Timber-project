@@ -7,7 +7,7 @@ import { Link } from '@/components/atoms/Link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useBoardResource } from '@/hooks/useBoardResource';
-import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
+import { isAdministrator, authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import type { BoardPost } from '@/lib/board-api';
 import { resourceInfo, resourceHref } from '@/lib/resource-library';
 import { boardDate, boardDivisionLabel, boardListHref } from '@/lib/board-api';
@@ -28,8 +28,8 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
   const post = data?.post;
   const isAuthor = Boolean(post && user && post.authorId === user.id);
   const adminOnly = notice || post?.category === 'forms';
-  const canEdit = adminOnly ? user?.role === 'master' : isAuthor || Boolean(post?.category && user?.role === 'master');
-  const canDelete = Boolean(post && user && (adminOnly ? user.role === 'master' : isAuthor || user.role === 'master'));
+  const canEdit = adminOnly ? isAdministrator(user) : isAuthor || Boolean(post?.category && isAdministrator(user));
+  const canDelete = Boolean(post && user && (adminOnly ? isAdministrator(user) : isAuthor || isAdministrator(user)));
   async function remove() {
     if (!post || !canDelete || deleting) return;
     setDeleting(true);

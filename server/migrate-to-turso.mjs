@@ -4,7 +4,7 @@ import { databasePath } from './store.mjs';
 import { openStore } from './open-store.mjs';
 
 const tables = [
-  { name: 'users', columns: ['id', 'name', 'username', 'email', 'affiliation', 'password_hash', 'role', 'status', 'created_at', 'reviewed_at', 'reviewed_by'] },
+  { name: 'users', columns: ['id', 'name', 'username', 'email', 'affiliation', 'lab', 'password_hash', 'is_admin', 'role', 'status', 'created_at', 'reviewed_at', 'reviewed_by'] },
   { name: 'posts', columns: ['id', 'author_id', 'title', 'body', 'division', 'category', 'document_type', 'meeting_date', 'view_count', 'created_at', 'updated_at'] },
   { name: 'notices', columns: ['id', 'author_id', 'title', 'body', 'pinned', 'view_count', 'created_at', 'updated_at'] },
 ];
@@ -27,7 +27,7 @@ export async function migrateLocalStore(path, target) {
       table.rows = table.rows.map(row => ({ ...row, view_count: row.view_count ?? 0 }));
     }
     const firstMasterId = snapshots[0].rows.find(user => user.role === 'master')?.id;
-    snapshots[0].rows = snapshots[0].rows.map(user => ({ ...user, username: user.username || (user.id === firstMasterId ? 'ERS' : `user${user.id}`) }));
+    snapshots[0].rows = snapshots[0].rows.map(user => ({ ...user, lab: user.lab ?? '', is_admin: user.is_admin ?? 0, username: user.username || (user.id === firstMasterId ? 'ERS' : `user${user.id}`) }));
     if (!snapshots[0].rows.some(user => user.role === 'master')) throw new Error('이전할 로컬 DB에 관리자 계정이 없습니다.');
     transaction = await target.client.transaction('write');
     const existing = [];

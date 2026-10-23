@@ -6,7 +6,7 @@ import { ResultProgress } from '@/components/molecules/ResultProgress';
 import { resultTotals } from '@/data/researchResults';
 import type { ResearchResults } from '@/data/researchResults';
 import { useBoardResource } from '@/hooks/useBoardResource';
-import { authErrorMessage } from '@/lib/auth-api';
+import { isAdministrator, authErrorMessage } from '@/lib/auth-api';
 import { Button } from '@/components/atoms/Button';
 import { useAuth } from '@/contexts/auth-context';
 import { ResearchResultsEditor } from '@/components/organisms/ResearchResultsEditor';
@@ -38,7 +38,7 @@ export function ResearchResultsPage() {
           <p className={styles.eyebrow}>RESEARCH PERFORMANCE TARGETS</p>
           <h2 id="results-title">{ko ? '연구성과 지표 및 목표' : 'Research Performance Indicators & Targets'}</h2>
           <p className={styles.description}>{ko ? '연구개발의 가치를 학술·기술·인력 성과로 연결합니다. 2026년부터 2030년까지 단계별 목표를 설정하고 체계적으로 추진합니다.' : 'Translate research into academic, technological, and training outcomes through phased targets for 2026–2030.'}</p>
-          {user?.role === 'master' && <div className={styles.editControls}>
+          {isAdministrator(user) && <div className={styles.editControls}>
             <Button type="button" aria-expanded={editing} aria-controls="research-results-editor" onClick={() => { setEditing(current => !current); setSaved(false); }}>
               {editing ? (ko ? '수정 닫기' : 'Close editor') : (ko ? '지표 값 수정' : 'Edit indicator values')}
             </Button>
@@ -46,7 +46,7 @@ export function ResearchResultsPage() {
           </div>}
           {saved && <p role="status" className={styles.savedNotice}>{ko ? '지표 값과 집계 기준일을 저장했습니다.' : 'Indicator values and the reporting date have been saved.'}</p>}
         </header>
-        {user?.role === 'master' && editing && <section id="research-results-editor" className={styles.editPanel} aria-label={ko ? '지표 값 수정' : 'Edit indicator values'}>
+        {isAdministrator(user) && editing && <section id="research-results-editor" className={styles.editPanel} aria-label={ko ? '지표 값 수정' : 'Edit indicator values'}>
           <ResearchResultsEditor onSaved={() => { setEditing(false); setSaved(true); reload(); }} />
         </section>}
         <div className={styles.summary}>

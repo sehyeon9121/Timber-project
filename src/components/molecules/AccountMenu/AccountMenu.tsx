@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from '@/components/atoms/Link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { authErrorMessage } from '@/lib/auth-api';
+import { isAdministrator, authErrorMessage } from '@/lib/auth-api';
 import styles from '@/styles/auth.module.css';
 
 export function AccountMenu({ onNavigate }: { onNavigate?: () => void }) {
@@ -25,7 +25,7 @@ export function AccountMenu({ onNavigate }: { onNavigate?: () => void }) {
     <div className={styles.menu}>
       {user ? <>
         <Link href="/members" onClick={onNavigate}>{ko ? '회원 공간' : 'Members'}</Link>
-        {user.role === 'master' && <Link href="/admin" className={styles.adminLink} onClick={onNavigate}>{ko ? '관리자 설정' : 'Admin settings'}</Link>}
+        {isAdministrator(user) && <Link href="/admin" className={styles.adminLink} onClick={onNavigate}>{ko ? '관리자 설정' : 'Admin settings'}</Link>}
         <button type="button" disabled={busy} onClick={() => void signOut()}>{ko ? '로그아웃' : 'Sign out'}</button>
       </> : <>
         <Link href="/login" onClick={onNavigate}>{ko ? '로그인' : 'Sign in'}</Link>

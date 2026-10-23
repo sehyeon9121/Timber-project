@@ -4,7 +4,7 @@ import { registerBoardRoutes } from './board.mjs';
 import { registerNoticeRoutes } from './notices.mjs';
 import { createAttachments } from './attachments.mjs';
 import { registerResearchResultsRoutes } from './research-results.mjs';
-import { publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
+import { isAdministrator, publicUser, hashPassword, verifyPassword, validateRegistration, sessionDuration } from './store.mjs';
 
 const cookieName = 'timber_session';
 export function readSessionCookie(request) {
@@ -66,6 +66,10 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     request.user = user;
     next();
   }
+  function requireAdmin(request, response, next) {
+    if (!isAdministrator(request.user)) return fail(response, 403, 'FORBIDDEN', '관리자만 접근할 수 있습니다.');
+    next();
+  }
   function requireMaster(request, response, next) {
     if (request.user.role !== 'master') return fail(response, 403, 'FORBIDDEN', '마스터 계정만 접근할 수 있습니다.');
     next();
@@ -121,10 +125,10 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   app.get('/api/members/home', requireUser, async (request, response) => {
     response.json({ user: publicUser(request.user), message: '승인된 회원 전용 공간입니다.' });
   });
-  app.get('/api/admin/users', requireUser, requireMaster, async (_request, response) => {
+  app.get('/api/admin/users', requireUser, requireAdmin, async (_request, response) => {
     response.json({ users: await store.listMembers() });
   });
-  app.patch('/api/admin/users/:id', requireUser, requireMaster, async (request, response) => {
+  app.patch('/api/admin/users/:id', requireUser, requireAdmin, async (request, response) => {
     const id = Number(request.params.id);
     const status = request.body?.status;
     if (!Number.isSafeInteger(id) || id < 1 || !['approved', 'rejected'].includes(status)) {
@@ -133,10 +137,17 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     if (!await store.review(id, status, request.user.id)) return fail(response, 409, 'ALREADY_REVIEWED', '이미 처리되었거나 존재하지 않는 가입 요청입니다.');
     response.json({ user: publicUser(await store.findById(id)) });
   });
+  app.patch('/api/admin/users/:id/administrator', requireUser, requireMaster, async (request, response) => {
+    const id = Number(request.params.id);
+    const enabled = request.body?.enabled;
+    if (!Number.isSafeInteger(id) || id < 1 || typeof enabled !== 'boolean') return fail(response, 400, 'VALIDATION', '회원과 관리자 지정 여부를 확인해 주세요.');
+    if (id === request.user.id || !await store.setAdministrator(id, enabled)) return fail(response, 409, 'ADMIN_ASSIGNMENT', '승인된 일반 회원 또는 지정 관리자만 권한을 변경할 수 있습니다. 최고관리자는 변경할 수 없습니다.');
+    response.json({ user: publicUser(await store.findById(id)) });
+  });
   attachments.registerRoutes(app, requireUser);
   registerBoardRoutes(app, store, requireUser, attachments);
-  registerNoticeRoutes(app, store, requireUser, requireMaster, attachments);
-  registerResearchResultsRoutes(app, store, requireUser, requireMaster);
+  registerNoticeRoutes(app, store, requireUser, requireAdmin, attachments);
+  registerResearchResultsRoutes(app, store, requireUser, requireAdmin);
   app.use('/api', (_request, response) => fail(response, 404, 'NOT_FOUND', '요청한 API를 찾을 수 없습니다.'));
   app.use((error, _request, response, _next) => {
     if (response.headersSent) return response.destroy();

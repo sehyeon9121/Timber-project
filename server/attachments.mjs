@@ -1,3 +1,4 @@
+import { isAdministrator } from './store.mjs';
 import express from 'express';
 import { randomUUID } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
@@ -33,7 +34,7 @@ export function createAttachments(store, storage = createFileStorage(), callback
   const fail = (res, status, code, message) => res.status(status).json({ code, message });
   const available = file => storage && (!file || file.backend === storage.backend);
   async function parent(kind, id) { return kind === 'posts' ? store.findPost(id) : store.findNotice(id); }
-  function canEdit(kind, post, user) { return Boolean(user && (kind === 'notices' || post.category === 'forms' ? user.role === 'master' : post.authorId === user.id || Boolean(post.category && user.role === 'master'))); }
+  function canEdit(kind, post, user) { return Boolean(user && (kind === 'notices' || post.category === 'forms' ? isAdministrator(user) : post.authorId === user.id || Boolean(post.category && isAdministrator(user)))); }
   async function finish(file) {
     const info = await storage.inspect(file);
     if (info.size !== file.size || info.contentType.split(';')[0] !== file.content_type) throw new Error('FILE_MISMATCH');

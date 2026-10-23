@@ -6,7 +6,7 @@ import { Link } from '@/components/atoms/Link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useBoardResource } from '@/hooks/useBoardResource';
-import { authErrorMessage } from '@/lib/auth-api';
+import { isAdministrator, authErrorMessage } from '@/lib/auth-api';
 import type { BoardPost } from '@/lib/board-api';
 import { resourceCategory, resourceHref } from '@/lib/resource-library';
 import { boardDivisions } from '@/lib/board-api';
@@ -30,7 +30,7 @@ export function BoardEditorPage({ notice = false }: { notice?: boolean }) {
         <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>
         <Button className={styles.secondary} onClick={reload}>{ko ? '다시 시도' : 'Try again'}</Button>
         <Link href={basePath} className={styles.secondary}>{ko ? '목록으로' : 'Back to board'}</Link>
-      </> : (adminOnly ? user?.role !== 'master' : id && post?.authorId !== user?.id && !(post?.category && user?.role === 'master')) ? <>
+      </> : (adminOnly ? !isAdministrator(user) : id && post?.authorId !== user?.id && !(post?.category && isAdministrator(user))) ? <>
         <div role="alert" className={styles.error}>{adminOnly ? (ko ? '관리자만 공지사항과 서식을 작성·수정할 수 있습니다.' : 'Only administrators can create or edit notices and forms.') : (ko ? '본인이 작성한 글만 수정할 수 있습니다.' : 'You can only edit your own posts.')}</div>
         <Link href={basePath} className={styles.secondary}>{ko ? '목록으로' : 'Back to board'}</Link>
       </> : <BoardPostForm key={post?.id ?? 'new'} post={post} initialDivision={initialDivision} initialCategory={initialCategory} notice={notice} />}

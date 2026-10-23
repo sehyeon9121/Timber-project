@@ -4,10 +4,16 @@ export interface User {
   username: string;
   email: string;
   affiliation: string;
+  lab: string;
   role: 'member' | 'master';
+  isAdmin: boolean;
   status: 'pending' | 'approved' | 'rejected';
   createdAt: string;
   reviewedAt: string | null;
+}
+
+export function isAdministrator(user: Pick<User, 'role' | 'isAdmin'> | null | undefined) {
+  return Boolean(user && (user.role === 'master' || user.isAdmin));
 }
 
 export class ApiError extends Error {
@@ -57,7 +63,8 @@ const englishErrors: Record<string, string> = {
   EMAIL_EXISTS: 'This email has already been registered.',
   USERNAME_EXISTS: 'This username is already in use.',
   UNAUTHENTICATED: 'Please sign in to continue.',
-  FORBIDDEN: 'Only the master account can access this page.',
+  FORBIDDEN: 'You do not have administrator permission for this action.',
+  ADMIN_ASSIGNMENT: 'Only approved members can be assigned or removed as administrators. The master account cannot be changed.',
   RATE_LIMIT: 'Too many attempts. Please try again later.',
   BUSY: 'The server is busy. Please try again shortly.',
   ALREADY_REVIEWED: 'This request has already been reviewed or no longer exists.',

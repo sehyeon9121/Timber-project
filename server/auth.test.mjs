@@ -1,13 +1,62 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { createApp } from './app.mjs';
-import { createStore, hashPassword, verifyPassword, storeSchema } from './store.mjs';
+import { createStore, hashPassword, verifyPassword, storeSchema, validateRegistration, publicUser } from './store.mjs';
 import { getDevelopmentOrigins } from './origins.mjs';
 import { siteOrigin } from '../api/index.mjs';
+
+test('institution is required and laboratory is independently validated and optional', () => {
+  const input = { name: '연구원', username: 'researcher', email: 'test@example.test', affiliation: ' 대학교 ', lab: ' 목구조 연구실 ', password: 'test-password' };
+  assert.equal(validateRegistration(input).affiliation, '대학교');
+  assert.equal(validateRegistration(input).lab, '목구조 연구실');
+  assert.equal(validateRegistration({ ...input, lab: undefined }).lab, '');
+  assert.equal(validateRegistration({ ...input, lab: '   ' }).lab, '');
+  assert.equal(validateRegistration({ ...input, lab: '가'.repeat(120) }).lab.length, 120);
+  for (const lab of [null, [], {}, 123, '가'.repeat(121)]) assert.ok(validateRegistration({ ...input, lab }).error);
+  for (const affiliation of ['', ' ', '가', '가'.repeat(121)]) assert.ok(validateRegistration({ ...input, affiliation }).error);
+});
+
+for (const backend of ['sqlite', 'libsql']) test(`${backend}: adding laboratory preserves legacy affiliations, credentials, sessions and new laboratory data`, async t => {
+  const directory = mkdtempSync(join(tmpdir(), 'timber-lab-upgrade-'));
+  const path = join(directory, 'old.sqlite');
+  const legacy = new DatabaseSync(path);
+  legacy.exec(storeSchema.replace("      lab TEXT NOT NULL DEFAULT '',\n", ''));
+  const hash = await hashPassword('legacy-password');
+  const affiliation = '대학교 / 기존 연구실 (원문 보존)';
+  legacy.prepare("INSERT INTO users (name, username, email, affiliation, password_hash, role, status) VALUES (?, ?, ?, ?, ?, 'master', 'approved')")
+    .run('기존 회원', 'legacy', 'legacy@example.test', affiliation, hash);
+  legacy.close();
+  const open = async () => backend === 'sqlite' ? createStore(path) : (await import('./remote-store.mjs')).createRemoteStore({ url: (await import('node:url')).pathToFileURL(path).href });
+  const store = await open();
+  t.after(async () => {
+    store.close();
+    assert.ok(resolve(directory).startsWith(resolve(tmpdir())) && directory.includes('timber-lab-upgrade-'));
+    await rm(directory, { recursive: true, maxRetries: 10, retryDelay: 100 });
+  });
+  const old = await store.findByUsername('legacy');
+  assert.equal(old.affiliation, affiliation);
+  assert.equal(old.lab, '');
+  assert.equal(old.password_hash, hash);
+  assert.ok(await verifyPassword('legacy-password', old.password_hash));
+  const token = await store.createSession(old.id);
+  assert.equal((await store.sessionUser(token)).affiliation, affiliation);
+  const created = await store.addUser({ name: '신규 회원', username: 'newmember', email: 'new@example.test', affiliation: '연구기관', lab: '연구실' }, 'unused');
+  const second = await open();
+  try {
+    assert.equal((await second.findById(old.id)).affiliation, affiliation);
+    assert.equal((await second.sessionUser(token)).id, old.id);
+    assert.equal((await second.findById(created.id)).lab, '연구실');
+    const profile = (await second.listMembers()).find(user => user.id === created.id);
+    assert.equal(profile.affiliation, '연구기관');
+    assert.equal(profile.lab, '연구실');
+    assert.equal(publicUser(await second.findById(old.id)).lab, '');
+  } finally { second.close(); }
+});
 
 test('approval-based membership and master authorization', async t => {
   const directory = mkdtempSync(join(tmpdir(), 'timber-auth-test-'));
@@ -54,14 +103,17 @@ test('approval-based membership and master authorization', async t => {
       assert.equal(rejected.status, 400);
       assert.equal(rejected.data.message, '비밀번호는 6~128자로 입력해 주세요.');
     }
-    const registered = await request('/auth/signup', 'POST', { name: 'Member', username: 'member', email: ' MEMBER@example.com ', affiliation: 'Research lab', password, role: 'master', status: 'approved' });
+    const registered = await request('/auth/signup', 'POST', { name: 'Member', username: 'member', email: ' MEMBER@example.com ', affiliation: ' Research institute ', lab: ' Timber lab ', password, role: 'master', isAdmin: true, is_admin: 1, status: 'approved' });
     assert.equal(registered.status, 201);
     assert.equal(registered.data.status, 'pending');
     assert.equal(registered.cookie, null);
     const user = store.findByEmail('member@example.com');
     memberId = user.id;
     assert.equal(user.role, 'member');
+    assert.equal(user.is_admin, 0);
     assert.equal(user.username, 'member');
+    assert.equal(user.affiliation, 'Research institute');
+    assert.equal(user.lab, 'Timber lab');
     assert.equal(user.status, 'pending');
     assert.notEqual(user.password_hash, password);
     assert.notEqual(user.password_hash, passwordHash);
@@ -177,6 +229,8 @@ test('legacy accounts gain usernames without losing data; master password change
   assert.equal(store.sessionUser(token), undefined);
   assert.ok(await verifyPassword('new-admin-password', store.findByUsername('ERS').password_hash));
   assert.equal(store.findByUsername('user2').password_hash, oldHash);
+  assert.equal(store.findByUsername('user2').affiliation, 'Lab');
+  assert.equal(store.findByUsername('user2').lab, '');
   store.close();
   const reopened = createStore(path);
   assert.equal(reopened.findByUsername('ERS').email, 'master@example.test');
