@@ -45,10 +45,10 @@ for (const backend of ['local', 'libsql']) {
       assert.equal((await request(path, 'HEAD')).status, 200);
       assert.equal((await request(`/${kind}`)).data.posts[0].viewCount, 0);
       for (const session of [null, pendingCookie]) {
-        assert.equal((await request(path, 'GET', session)).status, 401);
+        assert.equal((await request(path, 'GET', session)).status, kind === 'posts' ? 200 : 401);
         assert.equal((await request(path, 'PATCH', session, undefined, { title: 'Forged', body: 'Forged' })).status, 401);
         assert.equal((await request(path, 'DELETE', session)).status, 401);
-        assert.equal((await request(viewPath, 'POST', session)).status, 401);
+        if (kind === 'notices') assert.equal((await request(viewPath, 'POST', session)).status, 401);
       }
       assert.equal((await request(viewPath, 'POST', cookie, 'https://untrusted.example')).status, 403);
       assert.equal((await request(`/${kind}/invalid/views`, 'POST')).status, 404);

@@ -225,7 +225,7 @@ test('private requests query the session once and recheck it on subsequent reque
   const member = store.addUser({ name: 'Member', username: 'Member', email: 'member@example.test', affiliation: 'Test' }, 'unused-test-hash');
   store.review(member.id, 'approved', master.id);
   const token = store.createSession(member.id);
-  const post = store.createPost({ title: 'Activity', body: 'Private content' }, member.id);
+  const post = store.createPost({ title: 'Resource', body: 'Private content', category: 'reports' }, member.id);
   const notice = store.createNotice({ title: 'Notice', body: 'Private content', pinned: false }, master.id);
   let sessionQueries = 0;
   const sessionUser = store.sessionUser.bind(store);
@@ -248,22 +248,22 @@ test('private requests query the session once and recheck it on subsequent reque
     assert.equal(sessionQueries, 1, `${path} should query the session once`);
     return { status: response.status, data };
   }
-  for (const path of ['/board/posts', `/board/posts/${post.id}`, '/board/notices', `/board/notices/${notice.id}`, '/members/home']) {
+  for (const path of ['/board/posts?category=reports', `/board/posts/${post.id}`, '/board/notices', `/board/notices/${notice.id}`, '/members/home']) {
     assert.equal((await request(path)).status, 200);
     assert.equal((await request(path, null)).status, 401);
     assert.equal((await request(path, '0'.repeat(64))).status, 401);
   }
   assert.equal((await request('/admin/users')).status, 403);
   store.deleteSession(token);
-  for (const path of ['/board/posts', '/board/notices']) {
+  for (const path of ['/board/posts?category=reports', '/board/notices']) {
     const denied = await request(path);
     assert.equal(denied.status, 401);
     assert.equal(denied.data.code, 'UNAUTHENTICATED');
   }
   const freshToken = store.createSession(member.id);
-  assert.equal((await request('/board/posts', freshToken)).status, 200);
+  assert.equal((await request('/board/posts?category=reports', freshToken)).status, 200);
   store.db.prepare("UPDATE users SET status = 'rejected' WHERE id = ?").run(member.id);
-  assert.equal((await request('/board/posts', freshToken)).status, 401);
+  assert.equal((await request('/board/posts?category=reports', freshToken)).status, 401);
   assert.equal((await request('/board/notices', freshToken)).status, 401);
 });
 

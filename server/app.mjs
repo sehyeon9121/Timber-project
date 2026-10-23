@@ -33,8 +33,12 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     }
     next();
   });
-  // Every board read and write requires an approved member session.
-  app.use('/api/board', requireUser, express.json({ limit: '64kb' }));
+  // Activity reads are public; resource and notice handlers enforce membership.
+  app.use('/api/board', async (request, _response, next) => {
+    request.user = await store.sessionUser(readSessionCookie(request));
+    next();
+  }, express.json({ limit: '64kb' }));
+  app.use('/api/board/notices', requireUser);
   app.use('/api', express.json({ limit: '8kb' }));
   app.use('/api/auth', (request, response, next) => {
     if (!['/login', '/signup'].includes(request.path) || request.method !== 'POST') return next();
@@ -57,7 +61,7 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
   async function requireUser(request, response, next) {
     // Reuse authentication from earlier middleware within this request only.
     if (request.user) return next();
-    const user = await store.sessionUser(readSessionCookie(request));
+    const user = Object.hasOwn(request, 'user') ? request.user : await store.sessionUser(readSessionCookie(request));
     if (!user) return fail(response, 401, 'UNAUTHENTICATED', '로그인이 필요합니다.');
     request.user = user;
     next();

@@ -84,11 +84,11 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
       assert.equal(detail.post.attachments[0].pathname, undefined);
     }
   });
-  await t.test('member downloads work; anonymous and inactive users cannot read or upload; ownership stays enforced', async () => {
+  await t.test('activity downloads are public; anonymous and inactive users cannot upload; ownership stays enforced', async () => {
     for (const who of ['anonymous', 'pending']) {
       const download = await request(`${path}/${file.id}/content`, 'GET', undefined, who);
-      assert.equal(download.status, 401);
-      assert.equal((await download.json()).code, 'UNAUTHENTICATED');
+      assert.equal(download.status, 200);
+      assert.equal(Buffer.from(await download.arrayBuffer()).toString(), '자료');
       assert.equal((await request(path, 'POST', { name: 'a.txt', size: 1 }, who)).status, 401);
       assert.equal((await request(`${path}/${file.id}`, 'DELETE', undefined, who)).status, 401);
       assert.equal((await request(`${path}/${file.id}/content`, 'PUT', Buffer.from('자료'), who)).status, 401);
@@ -155,9 +155,8 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: attachment lifecyc
     assert.equal(member.post.attachments.length, 0);
     for (const who of ['anonymous', 'pending']) {
       const detail = await (await request(`/board/posts/${post.id}`, 'GET', undefined, who)).json();
-      assert.equal(detail.post, undefined);
-      assert.equal(detail.code, 'UNAUTHENTICATED');
-      assert.equal((await request(`${folder}/${own.post.attachments[0].id}/content`, 'GET', undefined, who)).status, 401);
+      assert.deepEqual(detail.post.attachments, []);
+      assert.equal((await request(`${folder}/${own.post.attachments[0].id}/content`, 'GET', undefined, who)).status, 404);
     }
     assert.equal((await request(`/board/posts/${post.id}`, 'DELETE')).status, 200);
     assert.equal((await store.listAttachments('posts', post.id, true)).length, 0);

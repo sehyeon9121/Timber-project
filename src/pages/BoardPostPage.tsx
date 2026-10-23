@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AuthLayout } from '@/components/templates/AuthLayout';
 import { BoardAttachments } from '@/components/organisms/BoardAttachments';
 import { Button } from '@/components/atoms/Button';
@@ -7,7 +7,7 @@ import { Link } from '@/components/atoms/Link';
 import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useBoardResource } from '@/hooks/useBoardResource';
-import { authApi, authErrorMessage } from '@/lib/auth-api';
+import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import type { BoardPost } from '@/lib/board-api';
 import { resourceInfo, resourceHref } from '@/lib/resource-library';
 import { boardDate, boardDivisionLabel, boardListHref } from '@/lib/board-api';
@@ -27,8 +27,8 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
   const ko = language === 'KO';
   const post = data?.post;
   const isAuthor = Boolean(post && user && post.authorId === user.id);
-  const adminOnly = notice || Boolean(post?.category);
-  const canEdit = adminOnly ? user?.role === 'master' : isAuthor;
+  const adminOnly = notice || post?.category === 'forms';
+  const canEdit = adminOnly ? user?.role === 'master' : isAuthor || Boolean(post?.category && user?.role === 'master');
   const canDelete = Boolean(post && user && (adminOnly ? user.role === 'master' : isAuthor || user.role === 'master'));
   async function remove() {
     if (!post || !canDelete || deleting) return;
@@ -38,6 +38,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
     catch (cause) { setDeleteError(cause); }
     finally { setDeleting(false); }
   }
+  if (error instanceof ApiError && error.code === 'UNAUTHENTICATED') return <Navigate to="/login" replace />;
   return <AuthLayout wide title={post?.title || (notice ? (ko ? '연구단 공지사항' : 'Research Notices') : (ko ? '게시글' : 'Post'))} description={notice ? (ko ? '연구단 운영과 일정에 관한 관리자 공지입니다.' : 'Official notices about research group operations and schedules.') : (post?.category ? resourceInfo[post.category].description[ko ? 0 : 1] : (ko ? '연구단과 각 세부의 활동 소식을 공유합니다.' : 'Activities and updates from the research group and its divisions.'))}>
     {loading ? <p role="status">{ko ? '게시글을 불러오는 중…' : 'Loading post…'}</p>
       : error ? <>

@@ -6,6 +6,7 @@ import { FileDropzone } from '@/components/molecules/FileDropzone';
 import { Button } from '@/components/atoms/Button';
 import { Link } from '@/components/atoms/Link';
 import { BoardAttachments } from '@/components/organisms/BoardAttachments';
+import { useAuth } from '@/contexts/auth-context';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { authApi, authErrorMessage, ApiError } from '@/lib/auth-api';
 import { attachmentFileError, attachmentPath, attachmentSize, uploadAttachment } from '@/lib/attachments-api';
@@ -21,6 +22,7 @@ import styles from '@/styles/board.module.css';
 export interface BoardPostFormProps { post?: BoardPost; initialDivision?: number | null; notice?: boolean; initialCategory?: ResourceCategory }
 export function BoardPostForm({ post, initialDivision, initialCategory, notice = false }: BoardPostFormProps) {
   const { language } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [title, setTitle] = useState(post?.title ?? '');
   const [body, setBody] = useState(post?.body ?? '');
@@ -107,7 +109,7 @@ export function BoardPostForm({ post, initialDivision, initialCategory, notice =
     <textarea id="post-body" name="body" className={styles.textarea} value={body}
       onChange={event => setBody(event.target.value)} required={!notice} maxLength={10000} disabled={busy} aria-describedby="post-body-hint" />
     <small id="post-body-hint" className={styles.hint}>
-      {body.length.toLocaleString()} / 10,000 {ko ? '자 · 승인된 회원만 볼 수 있습니다.' : 'characters · Visible only to approved members.'}
+      {body.length.toLocaleString()} / 10,000 {category || notice ? (ko ? '자 · 승인된 회원만 볼 수 있습니다.' : 'characters · Visible only to approved members.') : (ko ? '자 · 누구나 볼 수 있습니다.' : 'characters · Visible to everyone.')}
     </small>
   </div>;
   return <>
@@ -151,7 +153,7 @@ export function BoardPostForm({ post, initialDivision, initialCategory, notice =
         <div className={styles.textareaField}>
           <label htmlFor="post-category">{ko ? '자료실' : 'Library'}</label>
           <select id="post-category" className={styles.select} value={category} onChange={event => setCategory(event.target.value as ResourceCategory)} disabled={busy}>
-            {resourceCategories.map(item => <option key={item} value={item}>{resourceInfo[item].label[ko ? 0 : 1]}</option>)}
+            {resourceCategories.map(item => <option key={item} value={item} disabled={item === 'forms' && user?.role !== 'master'}>{resourceInfo[item].label[ko ? 0 : 1]}</option>)}
           </select>
           <small className={styles.hint}>{resourceInfo[category].description[ko ? 0 : 1]}</small>
         </div>

@@ -33,7 +33,7 @@ export function createAttachments(store, storage = createFileStorage(), callback
   const fail = (res, status, code, message) => res.status(status).json({ code, message });
   const available = file => storage && (!file || file.backend === storage.backend);
   async function parent(kind, id) { return kind === 'posts' ? store.findPost(id) : store.findNotice(id); }
-  function canEdit(kind, post, user) { return Boolean(user && (kind === 'notices' || post.category ? user.role === 'master' : post.authorId === user.id)); }
+  function canEdit(kind, post, user) { return Boolean(user && (kind === 'notices' || post.category === 'forms' ? user.role === 'master' : post.authorId === user.id || Boolean(post.category && user.role === 'master'))); }
   async function finish(file) {
     const info = await storage.inspect(file);
     if (info.size !== file.size || info.contentType.split(';')[0] !== file.content_type) throw new Error('FILE_MISMATCH');
@@ -86,6 +86,7 @@ export function createAttachments(store, storage = createFileStorage(), callback
       const { kind } = request.params;
       const id = Number(request.params.id);
       const post = ['posts', 'notices'].includes(kind) && Number.isSafeInteger(id) && id > 0 ? await parent(kind, id) : null;
+      if (post && (kind === 'notices' || post.category) && !request.user) return fail(response, 401, 'UNAUTHENTICATED', '로그인이 필요합니다.');
       if (!post) return fail(response, 404, 'POST_NOT_FOUND', '게시글을 찾을 수 없습니다.');
       if (request.method !== 'GET' && request.method !== 'HEAD' && !canEdit(kind, post, request.user)) {
         return fail(response, 403, 'POST_FORBIDDEN', '글 수정 권한이 있어야 첨부파일을 변경할 수 있습니다.');

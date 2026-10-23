@@ -50,7 +50,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: library categories
     assert.equal(list.posts[0].excerpt, draft.body);
     assert.deepEqual(list.posts[0].attachments, []);
   }
-  await t.test('only approved members read; only administrators publish or change library documents', async () => {
+  await t.test('members write reports, materials and minutes; only administrators write forms', async () => {
     for (const session of [false, accounts.pending.cookie, accounts.rejected.cookie, 'timber_session=' + '0'.repeat(64)]) {
       for (const category of Object.keys(posts)) {
         assert.equal((await request(`?category=${category}`, 'GET', undefined, session)).status, 401);
@@ -63,16 +63,35 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: library categories
       const id = posts[category].id;
       assert.equal((await request(`?category=${category}`, 'GET', undefined, member)).status, 200);
       assert.equal((await request(`/${id}`, 'GET', undefined, member)).status, 200);
-      assert.equal((await request('', 'POST', { ...draft, category, role: 'master', authorId: user.id }, member)).status, 403);
+      const created = await request('', 'POST', { ...draft, category, meetingDate: category === 'minutes' ? '2026-10-23' : '', role: 'master', authorId: user.id }, member);
+      assert.equal(created.status, category === 'forms' ? 403 : 201);
+      if (category !== 'forms') {
+        const own = (await created.json()).post;
+        assert.equal(own.authorId, accounts.approved.id);
+        assert.equal((await request(`/${own.id}`, 'PATCH', { ...draft, category: 'forms' }, member)).status, 403);
+        assert.equal((await request(`/${own.id}`, 'PATCH', { ...draft, title: '회원이 수정' }, member)).status, 200);
+        const folder = `/${own.id}/attachments`;
+        const reserved = await request(folder, 'POST', { name: '회원자료.txt', size: 6 }, member);
+        assert.equal(reserved.status, 201);
+        const file = (await reserved.json()).attachment;
+        assert.equal((await request(`${folder}/${file.id}/content`, 'PUT', Buffer.from('자료'), member)).status, 200);
+        assert.equal((await request(`${folder}/${file.id}/complete`, 'POST', undefined, member)).status, 200);
+        const downloaded = await request(`${folder}/${file.id}/content`, 'GET', undefined, member);
+        assert.equal(downloaded.status, 200);
+        assert.equal(await downloaded.text(), '자료');
+        assert.equal((await request(`${folder}/${file.id}/content`, 'GET', undefined, false)).status, 401);
+        assert.equal((await request(`${folder}/${file.id}`, 'DELETE', undefined, member)).status, 200);
+        assert.equal((await request(`/${own.id}`, 'DELETE', undefined, member)).status, 200);
+      }
       assert.equal((await request(`/${id}`, 'PATCH', { ...draft, category: null }, member)).status, 403);
       assert.equal((await request(`/${id}`, 'DELETE', undefined, member)).status, 403);
     }
-    // Old member-authored documents also become administrator-managed.
-    const legacy = await store.createPost({ ...draft, category: 'materials' }, accounts.approved.id);
+    // Even an old member-authored form remains administrator-managed.
+    const legacy = await store.createPost({ ...draft, category: 'forms' }, accounts.approved.id);
     assert.equal((await request(`/${legacy.id}`, 'PATCH', draft, member)).status, 403);
     assert.equal((await request(`/${legacy.id}`, 'DELETE', undefined, member)).status, 403);
     assert.equal((await request(`/${legacy.id}/attachments`, 'POST', { name: 'a.txt', size: 1 }, member)).status, 403);
-    assert.equal((await request(`/${legacy.id}`, 'PATCH', { ...draft, title: '관리자가 수정' })).status, 200);
+    assert.equal((await request(`/${legacy.id}`, 'PATCH', { ...draft, title: '관리자가 수정', category: 'forms' })).status, 200);
     assert.equal((await request(`/${legacy.id}`, 'DELETE')).status, 200);
     const activity = await store.createPost({ ...draft }, accounts.approved.id);
     assert.equal((await request(`/${activity.id}`, 'PATCH', { ...draft, category: 'forms' }, member)).status, 403);
@@ -98,7 +117,7 @@ for (const backend of ['sqlite', 'libsql']) test(`${backend}: library categories
   const reserved = await request(folder, 'POST', { name: '회의록 양식.txt', size: 6 });
   assert.equal(reserved.status, 201);
   const file = (await reserved.json()).attachment;
-  await t.test('library file writes and upload tokens require an administrator', async () => {
+  await t.test('form file writes and upload tokens require an administrator', async () => {
     const session = accounts.approved.cookie;
     for (const [suffix, method, body] of [
       [folder, 'POST', { name: 'a.txt', size: 1 }],
