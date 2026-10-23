@@ -56,7 +56,7 @@ export const siteNavigation: SiteMenuGroup[] = [
     ],
   },
   {
-    id: 'board', label: { ko: '게시판', en: 'Member Board' }, membersOnly: true,
+    id: 'board', label: { ko: '게시판', en: 'Board' },
     items: [
       { label: { ko: '연구단 공지사항', en: 'Research Notices' }, href: '/board/notices' },
     ],

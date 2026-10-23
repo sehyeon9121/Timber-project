@@ -17,7 +17,7 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     if (!post) fail(response, 404, 'POST_NOT_FOUND', '공지사항을 찾을 수 없습니다. 삭제되었을 수 있습니다.');
     return post;
   }
-  app.get('/api/board/notices', requireUser, async (request, response) => {
+  app.get('/api/board/notices', async (request, response) => {
     const page = Number(request.query.page ?? 1);
     const query = request.query.q ?? '';
     if (!Number.isSafeInteger(page) || page < 1 || page > 1000000 || typeof query !== 'string' || query.length > 120) {
@@ -30,11 +30,11 @@ export function registerNoticeRoutes(app, store, requireUser, requireMaster, att
     response.json({ posts, page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
-  app.get('/api/board/notices/:id', requireUser, async (request, response) => {
+  app.get('/api/board/notices/:id', async (request, response) => {
     const post = await findNotice(request, response);
     if (post) response.json({ post: await attachments.enrich('notices', post, request.user) });
   });
-  app.post('/api/board/notices/:id/views', requireUser, async (request, response) => {
+  app.post('/api/board/notices/:id/views', async (request, response) => {
     const post = await findNotice(request, response);
     if (!post) return;
     const enriched = await attachments.enrich('notices', post, request.user);

@@ -5,6 +5,7 @@ import { BoardPagination } from '@/components/molecules/BoardPagination';
 import { Button } from '@/components/atoms/Button';
 import { Link } from '@/components/atoms/Link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/auth-context';
 import { useBoardResource } from '@/hooks/useBoardResource';
 import { authErrorMessage } from '@/lib/auth-api';
 import { boardDivisions, boardDivisionLabel, boardListHref, boardPageWithArchive } from '@/lib/board-api';
@@ -14,6 +15,7 @@ import styles from '@/styles/board.module.css';
 
 export function BoardPage() {
   const { language } = useLanguage();
+  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const selected = searchParams.get('division');
   const division = boardDivisions.find(item => String(item) === selected) ?? null;
@@ -67,9 +69,9 @@ export function BoardPage() {
       </form>
       <div className={styles.toolbar}>
         <p className={styles.toolbarText} role="status">{list ? (ko ? `${q ? '검색 결과' : '총'} ${list.total}건` : `${list.total} posts${q ? ' found' : ''}`) : (ko ? '게시글 목록' : 'Posts')}</p>
-        <Link href={division !== null ? `/board/new?division=${division}` : '/board/new'} className={styles.primary}>
+        {user && <Link href={division !== null ? `/board/new?division=${division}` : '/board/new'} className={styles.primary}>
           {ko ? '글쓰기' : 'Write a post'}
-        </Link>
+        </Link>}
       </div>
       {loading ? <p className={styles.listStatus} role="status">{ko ? '게시글을 불러오는 중…' : 'Loading posts…'}</p>
         : error ? <>

@@ -58,7 +58,7 @@ export function HomePage() {
             id={theme.id}
             title={theme.title}
             description={theme.description}
-            backgroundImage={theme.backgroundImage || '/images/leeseunglab/hero-background.jpg'}
+            backgroundImage={theme.backgroundImage || '/images/leeseunglab/hero-background-upscaled.webp'}
             href={theme.href}
             index={index}
           />
@@ -70,7 +70,7 @@ export function HomePage() {
       <ShowcaseSection
         title={t('home.showcase.title')}
         subtitle={t('home.showcase.subtitle')}
-        image="/images/leeseunglab/hero-background.jpg"
+        image="/images/leeseunglab/hero-background-upscaled.webp"
         imageAlt="Showcase"
         boxTitle={t('home.showcase.boxTitle')}
         boxDescription={t('home.showcase.boxDesc')}

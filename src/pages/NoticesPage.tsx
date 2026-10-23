@@ -38,7 +38,7 @@ export function NoticesPage() {
       {q && <Button type="button" className={styles.secondary} onClick={() => setParams({})}>{ko ? '초기화' : 'Reset'}</Button>}
     </form>
     <div className={styles.toolbar}>
-      <span className={styles.toolbarText}>{data ? (ko ? `${q ? '검색 결과' : '전체'} ${data.total}개의 공지` : `${data.total} notices${q ? ' found' : ''}`) : (ko ? '회원 전용 공지' : 'Members-only notices')}</span>
+      <span className={styles.toolbarText}>{data ? (ko ? `${q ? '검색 결과' : '전체'} ${data.total}개의 공지` : `${data.total} notices${q ? ' found' : ''}`) : (ko ? '연구단 공지사항' : 'Research Notices')}</span>
       {user?.role === 'master' && <Link href="/board/notices/new" className={styles.primary}>{ko ? '공지사항 작성' : 'Write a notice'}</Link>}
     </div>
     {loading ? <p role="status">{ko ? '공지사항을 불러오는 중…' : 'Loading notices…'}</p> : error ? <>

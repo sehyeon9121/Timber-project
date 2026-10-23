@@ -41,8 +41,10 @@ for (const backend of ['local', 'libsql']) {
     });
 
     for (const cookie of [null, pendingCookie, 'timber_session=' + '0'.repeat(64)]) {
-      for (const [path, method] of [['/board/notices', 'GET'], ['/board/notices/1', 'GET'], ['/board/notices', 'POST'], ['/board/notices/1', 'PATCH'], ['/board/notices/1', 'DELETE']]) {
-        assert.equal((await request(path, method, method === 'GET' ? undefined : { title: 'Private', body: 'Private' }, cookie)).status, 401);
+      assert.equal((await request('/board/notices', 'GET', undefined, cookie)).status, 200);
+      assert.equal((await request('/board/notices/1', 'GET', undefined, cookie)).status, 404);
+      for (const [path, method] of [['/board/notices', 'POST'], ['/board/notices/1', 'PATCH'], ['/board/notices/1', 'DELETE']]) {
+        assert.equal((await request(path, method, { title: 'Public', body: 'Public' }, cookie)).status, 401);
       }
     }
     assert.equal((await request('/board/notices', 'POST', { title: 'Forged', body: 'Body', role: 'master', authorId: admin.id }, memberCookie)).status, 403);
@@ -52,6 +54,12 @@ for (const backend of ['local', 'libsql']) {
     assert.equal(notice.authorId, admin.id);
     assert.equal(notice.title, '회의 일정');
     assert.equal(notice.pinned, 1);
+    for (const cookie of [null, pendingCookie, 'timber_session=' + '0'.repeat(64)]) {
+      const detail = await request(`/board/notices/${notice.id}`, 'GET', undefined, cookie);
+      assert.equal(detail.status, 200);
+      assert.equal(detail.data.post.body, notice.body);
+      assert.ok(!('password_hash' in detail.data.post));
+    }
     assert.equal((await request(`/board/notices/${notice.id}`, 'GET', undefined, memberCookie)).data.post.body, '첫 줄\n<script>alert(1)</script>');
     for (const method of ['PATCH', 'DELETE']) assert.equal((await request(`/board/notices/${notice.id}`, method, { title: 'Forged', body: 'Body' }, memberCookie)).status, 403);
     assert.equal((await store.findNotice(notice.id)).title, '회의 일정');

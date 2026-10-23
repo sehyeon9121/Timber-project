@@ -117,7 +117,7 @@ test('libSQL migration preserves accounts, passwords, permissions, posts, and se
     assert.equal((await second.findById(created.id)).status, 'approved');
   });
   await t.test('board writes persist, ownership is enforced, and sessions work across instances', async () => {
-    assert.equal((await request('/board/posts')).status, 401);
+    assert.equal((await request('/board/posts')).status, 200);
     assert.equal((await second.sessionUser(memberCookie.split('=')[1])).id, author.id);
     const created = await request('/board/posts', 'POST', { title: 'Cloud board', body: 'Persistent body', division: 4 }, memberCookie);
     assert.equal(created.status, 201);

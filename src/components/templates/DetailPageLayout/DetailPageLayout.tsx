@@ -41,7 +41,7 @@ export function DetailPageLayout({
         title={title}
         subtitle={subtitle}
         heroDescription={heroDescription}
-        backgroundImage={noHeroImage ? undefined : (heroImage || '/images/leeseunglab/hero-background.jpg')}
+        backgroundImage={noHeroImage ? undefined : (heroImage || '/images/leeseunglab/hero-background-upscaled.webp')}
         imageFit={heroImageFit}
         height={heroHeight}
         heroMaxHeight={heroMaxHeight}

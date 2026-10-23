@@ -105,14 +105,14 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/members" element={<ProtectedRoute><MembersPage /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute masterOnly><AdminPage /></ProtectedRoute>} />
-        <Route path="/board" element={<ProtectedRoute><BoardPage /></ProtectedRoute>} />
-        <Route path="/board/activities/:id" element={<ProtectedRoute><ActivityDetailPage /></ProtectedRoute>} />
-        <Route path="/board/notices" element={<ProtectedRoute><NoticesPage /></ProtectedRoute>} />
+        <Route path="/board" element={<BoardPage />} />
+        <Route path="/board/activities/:id" element={<ActivityDetailPage />} />
+        <Route path="/board/notices" element={<NoticesPage />} />
         <Route path="/board/notices/new" element={<ProtectedRoute masterOnly><BoardEditorPage notice /></ProtectedRoute>} />
-        <Route path="/board/notices/:id" element={<ProtectedRoute><BoardPostPage notice /></ProtectedRoute>} />
+        <Route path="/board/notices/:id" element={<BoardPostPage notice />} />
         <Route path="/board/notices/:id/edit" element={<ProtectedRoute masterOnly><BoardEditorPage notice /></ProtectedRoute>} />
         <Route path="/board/new" element={<ProtectedRoute><BoardEditorPage /></ProtectedRoute>} />
-        <Route path="/board/:id" element={<ProtectedRoute><BoardPostPage /></ProtectedRoute>} />
+        <Route path="/board/:id" element={<BoardPostPage />} />
         <Route path="/board/:id/edit" element={<ProtectedRoute><BoardEditorPage /></ProtectedRoute>} />
         </Routes>
       </AnimatePresence>

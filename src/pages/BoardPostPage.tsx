@@ -36,7 +36,7 @@ export function BoardPostPage({ notice = false }: { notice?: boolean }) {
     catch (cause) { setDeleteError(cause); }
     finally { setDeleting(false); }
   }
-  return <AuthLayout wide title={post?.title || (notice ? (ko ? '연구단 공지사항' : 'Research Notices') : (ko ? '게시글' : 'Post'))} description={notice ? (ko ? '연구단 운영과 일정에 관한 관리자 공지입니다.' : 'Official notices about research group operations and schedules.') : (ko ? '승인된 회원에게만 공개되는 게시글입니다.' : 'This post is visible only to approved members.')}>
+  return <AuthLayout wide title={post?.title || (notice ? (ko ? '연구단 공지사항' : 'Research Notices') : (ko ? '게시글' : 'Post'))} description={notice ? (ko ? '연구단 운영과 일정에 관한 관리자 공지입니다.' : 'Official notices about research group operations and schedules.') : (ko ? '연구단과 각 세부의 활동 소식을 공유합니다.' : 'Activities and updates from the research group and its divisions.')}>
     {loading ? <p role="status">{ko ? '게시글을 불러오는 중…' : 'Loading post…'}</p>
       : error ? <>
         <div className={styles.error} role="alert">{authErrorMessage(error, language)}</div>

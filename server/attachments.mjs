@@ -33,7 +33,7 @@ export function createAttachments(store, storage = createFileStorage(), callback
   const fail = (res, status, code, message) => res.status(status).json({ code, message });
   const available = file => storage && (!file || file.backend === storage.backend);
   async function parent(kind, id) { return kind === 'posts' ? store.findPost(id) : store.findNotice(id); }
-  function canEdit(kind, post, user) { return kind === 'notices' ? user.role === 'master' : post.authorId === user.id; }
+  function canEdit(kind, post, user) { return Boolean(user && (kind === 'notices' ? user.role === 'master' : post.authorId === user.id)); }
   async function finish(file) {
     const info = await storage.inspect(file);
     if (info.size !== file.size || info.contentType.split(';')[0] !== file.content_type) throw new Error('FILE_MISMATCH');
@@ -138,7 +138,7 @@ export function createAttachments(store, storage = createFileStorage(), callback
         response.json({ ok: true });
       } catch { fail(response, 400, 'ATTACHMENT_VALIDATION', '업로드된 파일을 확인할 수 없습니다. 다시 첨부해 주세요.'); }
     });
-    app.get(`${base}/:fileId/content`, requireUser, access, ensureStorage, async (request, response) => {
+    app.get(`${base}/:fileId/content`, access, ensureStorage, async (request, response) => {
       const file = request.file;
       if (file.state !== 'ready') return fail(response, 404, 'ATTACHMENT_NOT_FOUND', '업로드가 완료되지 않은 파일입니다.');
       const stream = await storage.read(file);

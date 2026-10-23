@@ -33,7 +33,11 @@ export async function createApp(store, { origins = getDevelopmentOrigins(), secu
     }
     next();
   });
-  app.use('/api/board', requireUser, express.json({ limit: '64kb' }));
+  // Public board reads still recognize signed-in authors for editing attachments.
+  app.use('/api/board', async (request, _response, next) => {
+    request.user = await store.sessionUser(readSessionCookie(request));
+    next();
+  }, express.json({ limit: '64kb' }));
   app.use('/api', express.json({ limit: '8kb' }));
   app.use('/api/auth', (request, response, next) => {
     if (!['/login', '/signup'].includes(request.path) || request.method !== 'POST') return next();

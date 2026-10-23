@@ -18,7 +18,7 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     if (!post) fail(response, 404, 'POST_NOT_FOUND', '게시글을 찾을 수 없습니다. 삭제되었을 수 있습니다.');
     return post;
   }
-  app.get('/api/board/posts', requireUser, async (request, response) => {
+  app.get('/api/board/posts', async (request, response) => {
     const page = Number(request.query.page ?? 1);
     const query = request.query.q ?? '';
     if (typeof query !== 'string' || query.length > 120) {
@@ -39,11 +39,11 @@ export function registerBoardRoutes(app, store, requireUser, attachments) {
     response.json({ posts, page,
       pageSize: boardPageSize, total, totalPages: Math.max(1, Math.ceil(total / boardPageSize)) });
   });
-  app.get('/api/board/posts/:id', requireUser, async (request, response) => {
+  app.get('/api/board/posts/:id', async (request, response) => {
     const post = await findPost(request, response);
     if (post) response.json({ post: await attachments.enrich('posts', post, request.user) });
   });
-  app.post('/api/board/posts/:id/views', requireUser, async (request, response) => {
+  app.post('/api/board/posts/:id/views', async (request, response) => {
     const post = await findPost(request, response);
     if (!post) return;
     const enriched = await attachments.enrich('posts', post, request.user);
