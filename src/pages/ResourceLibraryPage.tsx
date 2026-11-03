@@ -45,7 +45,7 @@ export function ResourceLibraryPage() {
         </form>
         <div className={board.toolbar}><p className={board.toolbarText} role="status">{ko ? `${q ? '검색 결과' : '총'} ${data?.total ?? 0}건` : `${data?.total ?? 0} documents`}</p>{user && (category !== 'forms' || isAdministrator(user)) && <Link className={board.primary} to={`/board/new?category=${category}`}><Plus size={16} aria-hidden="true" /> {ko ? `${info.label[0]} 등록` : 'Add document'}</Link>}</div>
         {loading ? <p className={board.listStatus} role="status">{ko ? '문서를 불러오는 중…' : 'Loading documents…'}</p> : error ? <div><p className={board.error} role="alert">{authErrorMessage(error, language)}</p><Button className={board.secondary} onClick={reload}>{ko ? '다시 시도' : 'Try again'}</Button></div> : data && <>
-          {q && !data.total ? <p className={board.listStatus}>{ko ? '검색어와 일치하는 문서가 없습니다.' : 'No matching documents.'}</p> : <ResourcePostList posts={data.posts} category={category} ko={ko} />}
+          {q && !data.total ? <p className={board.listStatus}>{ko ? '검색어와 일치하는 문서가 없습니다.' : 'No matching documents.'}</p> : <ResourcePostList posts={data.posts} category={category} ko={ko} startNumber={data.total - (page - 1) * data.pageSize} />}
           <BoardPagination page={page} totalPages={data.totalPages} language={language} onPageChange={next => setParams({ tab: category, ...(q ? { q } : {}), page: String(next) })} />
         </>}
       </section>
